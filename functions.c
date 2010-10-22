@@ -390,33 +390,26 @@ int is_flush(struct card *hand)
     return 1;
 }
 
-int is_street(struct card *hand)
+int is_straight(struct card *hand)
 {
     karten_sortierer(hand);
     int i;
+    if(hand[1].w==10 && hand[2].w==bube && hand[3].w==dame && hand[4].w==konig && hand[0].w==ass)
+    {
+        return 2;
+    }
     for(i=0;i<4;i++)
     {
         if(hand[i].w+1!=hand[i+1].w)
         {
             return 0;
         }
-//        karten_zeiger(hand);
     }
     return 1;
 }
 
 struct card *karten_sortierer(struct card *hand)
 {
-//    int i, a[5];
-//    for(i=0;i<5;i++)
-//    {
-//        a[i]=hand[i].w;
-//    }
-//    qsort(a, 5, sizeof(int), comp_cards)
-//    for(i=0;i<5;i++)
-//    {
-//        printf("%d",a[i]);
-//    }
     int i, j, temp;
     for(i=0;i<4;i++)
     {
@@ -430,11 +423,5 @@ struct card *karten_sortierer(struct card *hand)
             }
         }
     }
-//    karten_zeiger(hand);
     return(hand);
 }
-
-//comp_cards(int *p, int *q)
-//{
-//    return (*p-*q)
-//}
