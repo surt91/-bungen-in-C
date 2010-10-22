@@ -52,7 +52,6 @@ void schreibe_zeichen(char c,int n)
 double wurzel4(int k)
 {
     return sqrt(sqrt(k));
-    //return -1;
 }
 
 // Funktion zur Berechnung eines Polynoms zweiten Grades
@@ -278,6 +277,7 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr)
     return;
 }
 
+// gibt eine Pokerhand
 struct card *karten_geber(struct card *hand)
 {
     int karte[5], i;
@@ -312,7 +312,7 @@ struct card *karten_geber(struct card *hand)
     }
     return hand;
 }
-
+// Zeigt eine Pokerhand an
 void karten_zeiger(struct card *hand)
 {
     int i;
@@ -344,7 +344,7 @@ void karten_zeiger(struct card *hand)
     }
     printf("\n\n");
 }
-
+// überprüft, ob ein Fullhouse auf der Hand ist
 int is_fullhouse(struct card *hand)
 {
     int i,n=1,l,m=1;
@@ -376,7 +376,7 @@ int is_fullhouse(struct card *hand)
     }
     return 0;
 }
-
+// überprüft, ob ein Flush auf der Hand ist
 int is_flush(struct card *hand)
 {
     int i;
@@ -389,7 +389,7 @@ int is_flush(struct card *hand)
     }
     return 1;
 }
-
+// überprüft, ob eine Straße auf der Hand ist
 int is_straight(struct card *hand)
 {
     karten_sortierer(hand);
@@ -407,7 +407,7 @@ int is_straight(struct card *hand)
     }
     return 1;
 }
-
+// sortiert eine Pokerhand aufsteigend, (ass, zwei, drei...)
 struct card *karten_sortierer(struct card *hand)
 {
     int i, j, temp;
