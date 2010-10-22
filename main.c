@@ -266,7 +266,7 @@ void aufg_6_17()
     scanf("%d",&toggle);
     if(toggle)
     {
-        printf("\n\nWelches Datum soll gepackt werden? (Tag.Monat.Jahr)\n");
+        printf("\n\nWelches Datum soll gepackt werden? (dd.mm.yy)\n");
         scanf("%d.%d.%d", &tag, &monat, &jahr);
         jahr%=100;
         printf("\nBinär: ");d2b(tag,5);d2b(monat,4);d2b(jahr,7);
@@ -297,21 +297,65 @@ void aufg_6_17()
 void aufg_6_23()
 {
     struct card hand[5];
-    int i;
+//    int i;
     karten_geber(hand);
-    for(i=0;i<5;i++)
-    {
-        printf("\nFarbe: %d, Wert: %d ", hand[i].f, hand[i].w);
-    }
+    karten_zeiger(hand);
 }
 
-int main()
+void aufg_6_24()
+{
+    struct card hand[5];
+    int i, flush=0, fullhouse=0, street=0, runden=0, nieten=0, limit;
+    printf("Wieviele Runden sollen gegeben werden?\n");
+    scanf("%d", &limit);
+    for(i=0;i<limit;i++)
+    {
+        karten_geber(hand);
+        if(is_flush(hand))
+        {
+            flush++;
+            runden++;
+            printf("Flush!");
+            karten_zeiger(hand);
+        }
+        else if(is_fullhouse(hand))
+        {
+            fullhouse++;
+            runden++;
+            printf("Fullhouse!");
+            karten_zeiger(hand);
+        }
+        else if(is_street(hand))
+        {
+            street++;
+            runden++;
+            printf("Straße!");
+            karten_zeiger(hand);
+        }
+        else
+        {
+            runden++;
+        }
+    }
+    printf("In %d Runden wurden\n %4d Flushs\n %4d Fullhouses\n %4d Straßen\n %4d Nieten\nverteilt", runden, flush, fullhouse, street, nieten);
+}
+
+int main(int argc, char **argv)
 {
     int aufgnr, kapitel;
-    printf("Welches Kapitel?\n");
-    scanf("%d", &kapitel);
-    printf("Welche Übungsaufgabe?\n");
-    scanf("%d", &aufgnr);
+    srand( (unsigned) time(NULL) ) ;
+    if(argc != 3)
+    {
+        printf("Welches Kapitel?\n");
+        scanf("%d", &kapitel);
+        printf("Welche Übungsaufgabe?\n");
+        scanf("%d", &aufgnr);
+    }
+    else
+    {
+        kapitel=atoi(argv[1]);
+        aufgnr =atoi(argv[2]);
+    }
     switch (kapitel)
     {
         case 4:
@@ -384,6 +428,9 @@ int main()
                     break;
                 case 23:
                     aufg_6_23();
+                    break;
+                case 24:
+                    aufg_6_24();
                     break;
             }
             break;

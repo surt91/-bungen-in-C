@@ -280,10 +280,8 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr)
 
 struct card *karten_geber(struct card *hand)
 {
-    //struct card hand[5];
     int karte[5], i;
-    srand( (unsigned) time(NULL) ) ;
-
+//    srand( (unsigned) time(NULL) ) ;
     for(i=0;i<5;i++)
     {
         do
@@ -295,28 +293,104 @@ struct card *karten_geber(struct card *hand)
         {
             hand[i].f=herz;
             hand[i].w=karte[i];
-//            printf("\nHerz %d", hand[i].w);
         }
         else if(karte[i] <= 26)
         {
             hand[i].f=pik;
             hand[i].w=karte[i]-13;
-//            printf("\nPik %d", hand[i].w);
         }
         else if(karte[i] <= 39)
         {
             hand[i].f=karo;
             hand[i].w=karte[i]-26;
-//            printf("\nKaro %d", hand[i].w);
         }
         else if(karte[i] <= 52)
         {
             hand[i].f=kreuz;
             hand[i].w=karte[i]-39;
-//            printf("\nKreuz %d", hand[i].w);
         }
-        //printf("\n%d, %d -- %d", hand[i].f, hand[i].w, karte[i]);
     }
     return hand;
 }
 
+void karten_zeiger(struct card *hand)
+{
+    int i;
+    for(i=0;i<5;i++)
+    {
+        switch (hand[i].f)
+        {
+            case herz:  printf("\nHerz  "); break;
+            case pik:   printf("\nPik   "); break;
+            case karo:  printf("\nKaro  "); break;
+            case kreuz: printf("\nKreuz "); break;
+        }
+        switch (hand[i].w)
+        {
+            case 1: printf("Ass"); break;
+            case 2: printf("Zwei"); break;
+            case 3: printf("Drei"); break;
+            case 4: printf("Vier"); break;
+            case 5: printf("Fünf"); break;
+            case 6: printf("Sechs"); break;
+            case 7: printf("Sieben"); break;
+            case 8: printf("Acht"); break;
+            case 9: printf("Neun"); break;
+            case 10: printf("Zehn"); break;
+            case 11: printf("Bube"); break;
+            case 12: printf("Dame"); break;
+            case 13: printf("König"); break;
+        }
+    }
+    printf("\n\n");
+}
+
+int is_fullhouse(struct card *hand)
+{
+    int i,n=1,l,m=1;
+    for(i=1;i<5;i++)
+    {
+        if(hand[0].w==hand[i].w)
+        {
+            n++;
+        }
+    }
+    if( (n==2) || (n==3) )
+    {
+        i=1;
+        while(hand[0].w==hand[i].w)
+        {
+            i++;
+        }
+        for(l=i+1;l<5;l++)
+        {
+            if(hand[i].w==hand[l].w)
+            {
+                m++;
+            }
+        }
+    }
+    if( ( (m==2) && (n==3) ) || ( (m==3) && (n==2) ) )
+    {
+        return 1;
+    }
+    return 0;
+}
+
+int is_flush(struct card *hand)
+{
+    int i;
+    for(i=1;i<5;i++)
+    {
+        if(hand[0].f!=hand[i].f)
+        {
+            return 0;
+        }
+    }
+    return 1;
+}
+
+int is_street(struct card *hand)
+{
+    return 0;
+}
