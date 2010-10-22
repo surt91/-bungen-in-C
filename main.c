@@ -305,31 +305,41 @@ void aufg_6_23()
 void aufg_6_24()
 {
     struct card hand[5];
-    int i, flush=0, fullhouse=0, street=0, runden=0, nieten=0, limit;
+    int i, flush=0, fullhouse=0, street=0, royal_flush=0, runden=0, nieten=0, limit;
     printf("Wieviele Runden sollen gegeben werden?\n");
     scanf("%d", &limit);
     for(i=0;i<limit;i++)
     {
         karten_geber(hand);
-        if(is_flush(hand))
+        if(is_street(hand))
+        {
+            if(is_flush(hand))
+            {
+                royal_flush++;
+                runden++;
+                printf("#%4d: Royal Flush!", runden);
+                karten_zeiger(hand);
+            }
+            else
+            {
+                street++;
+                runden++;
+                printf("#%4d: Straße!", runden);
+                karten_zeiger(hand);
+            }
+        }
+        else if(is_flush(hand))
         {
             flush++;
             runden++;
-            printf("Flush!");
+            printf("#%4d: Flush!", runden);
             karten_zeiger(hand);
         }
         else if(is_fullhouse(hand))
         {
             fullhouse++;
             runden++;
-            printf("Fullhouse!");
-            karten_zeiger(hand);
-        }
-        else if(is_street(hand))
-        {
-            street++;
-            runden++;
-            printf("Straße!");
+            printf("#%4d: Fullhouse!", runden);
             karten_zeiger(hand);
         }
         else
@@ -337,7 +347,7 @@ void aufg_6_24()
             runden++;
         }
     }
-    printf("In %d Runden wurden\n %4d Flushs\n %4d Fullhouses\n %4d Straßen\n %4d Nieten\nverteilt", runden, flush, fullhouse, street, nieten);
+    printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Royal Flush\n %4d Nieten\nverteilt", runden, street, flush, fullhouse, royal_flush, nieten);
 }
 
 int main(int argc, char **argv)

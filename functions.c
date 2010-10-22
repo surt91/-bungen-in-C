@@ -392,5 +392,49 @@ int is_flush(struct card *hand)
 
 int is_street(struct card *hand)
 {
-    return 0;
+    karten_sortierer(hand);
+    int i;
+    for(i=0;i<4;i++)
+    {
+        if(hand[i].w+1!=hand[i+1].w)
+        {
+            return 0;
+        }
+//        karten_zeiger(hand);
+    }
+    return 1;
 }
+
+struct card *karten_sortierer(struct card *hand)
+{
+//    int i, a[5];
+//    for(i=0;i<5;i++)
+//    {
+//        a[i]=hand[i].w;
+//    }
+//    qsort(a, 5, sizeof(int), comp_cards)
+//    for(i=0;i<5;i++)
+//    {
+//        printf("%d",a[i]);
+//    }
+    int i, j, temp;
+    for(i=0;i<4;i++)
+    {
+        for(j=4;i<j;j--)
+        {
+            if(hand[j-1].w>hand[j].w)
+            {
+                temp = hand[j-1].w;
+                hand[j-1].w = hand[j].w;
+                hand[j].w = temp;
+            }
+        }
+    }
+//    karten_zeiger(hand);
+    return(hand);
+}
+
+//comp_cards(int *p, int *q)
+//{
+//    return (*p-*q)
+//}

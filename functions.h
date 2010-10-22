@@ -51,5 +51,7 @@ void karten_zeiger(struct card *hand);
 int is_fullhouse(struct card *hand);
 int is_flush(struct card *hand);
 int is_street(struct card *hand);
+struct card *karten_sortierer(struct card *hand);
+//int comp_cards(int *p, int *q);
 
 #endif //FUNCTIONS_H
