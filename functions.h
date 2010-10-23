@@ -32,7 +32,9 @@ int zyklischer_shift(short a,int n);
 //6.9
 int spiegel(short a);
 //6.12
-int max(int x,int y,int z,int w);
+int max4(int x,int y,int z,int w);
+int max2(int x,int y);
+int min2(int x,int y);
 //6.16
 int roulette();
 int roulette_gewinn_faktor(int k,int kugel);
@@ -58,6 +60,6 @@ void polynom_anzeige(int *polynom, int grad);
 long long polynom_naiv(int *polynom, int x, int grad);
 long long polynom_horner(int *polynom, int x, int grad);
 //7.9
-int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int grad);
+int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
 
 #endif //FUNCTIONS_H

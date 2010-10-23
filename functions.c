@@ -236,9 +236,17 @@ int spiegel(short a)
 }
 
 // findet das Maximum von vier Werten
-int max(x,y,z,w)
+int max4(x,y,z,w)
 {
     return( (x>y) ? ((x>z) ? ((x>w) ?  x : w ) : (z>w) ? z : w) : (y>z) ? ((y>w) ? y : z) : (w>z) ? w : z );
+}
+int max2(int x,int y)
+{
+	return( (x>y) ? x : y );
+}
+int min2(int x,int y)
+{
+	return( (x<y) ? x : y );
 }
 
 // liefert eine Zahl zwischen 0 und 35
@@ -437,26 +445,26 @@ struct card *karten_sortierer(struct card *hand)
 int *polynom_eingabe(int *polynom, int *grad)
 {
 	int i;
-	printf("Welchen Grad soll das zu errechnende Polynom haben?\n");
+	printf("Welchen Grad soll das Polynom haben?\n");
 	scanf("%d",grad);
 	// erstellt ein Array variabler Länge
 	polynom = (int *) calloc(*grad, sizeof(int));
-	for(i=0;i<=*grad;i++)
+	for(i=*grad;i>=0;i--)
 	{
-		printf("a%d (%d. Koeffizient)?\n", *grad-i, i+1);
+		printf("a%d (%d. Koeffizient (vor x^%d))?\n", i, *grad-i+1, i);
 		scanf("%d", &polynom[i]);
 	}
+	printf("Dein Polynom:\n");
 	polynom_anzeige(polynom, *grad);
 	return (polynom);
 }
 void polynom_anzeige(int *polynom, int grad)
 {
 	int i;
-	printf("Dein Polynom:\n");
 	printf("f(x)= ");
-	for(i=0;i<grad;i++)
+	for(i=grad;i>0;i--)
 	{
-		printf("%dx^%d + ", polynom[i], grad-i);
+		printf("%dx^%d + ", polynom[i], i);
 	}
 	printf("%d\n\n",polynom[i]);
 }
@@ -465,7 +473,7 @@ long long polynom_naiv(int *polynom, int x, int grad)
 {
 	int i;
 	long long ergebnis=0;
-	for(i=0;i<=grad;i++)
+	for(i=grad;i>=0;i--)
 	{
 		ergebnis += (power(x, grad-i)*polynom[i]);
 	}
@@ -478,8 +486,8 @@ long long polynom_horner(int *polynom, int x, int grad)
 	long long ergebnis=0;
 	//a0 + x(a1 + x(a2 + x(....(a_grad-1 + x(a_grad))...)))
 	//letzte Klammer (-> a_grad)
-	ergebnis = polynom[0];
-	for(i=1;i<=grad;i++)
+	ergebnis = polynom[grad];
+	for(i=grad-1;i>=0;i--)
 	{
 		ergebnis *= x;
 		ergebnis += polynom[i];
@@ -488,7 +496,33 @@ long long polynom_horner(int *polynom, int x, int grad)
 }
 
 // addiert zwei Polynome
-int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int grad)
+int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2)
 {
-	
+	int i, grad_max, grad_min;
+	if(grad1==grad2)
+	{
+		grad_min = grad_max = grad1;
+	}
+	else
+	{
+		grad_max = max2(grad1, grad2);
+		grad_min = min2(grad1, grad2);
+	}
+	*grad_ergebnis=grad_max;
+	ergebnis_poly = (int *) calloc(*grad_ergebnis, sizeof(int));
+	for(i=0;i<=grad_min;i++)
+	{
+		ergebnis_poly[i]=poly1[i]+poly2[i];
+	}
+	if(grad1==grad2)
+		;
+	else if (grad1>grad2)
+		for(;i<=grad_max;i++)
+			ergebnis_poly[i]=poly1[i];
+	else if (grad1<grad2)
+		for(;i<=grad_max;i++)
+			ergebnis_poly[i]=poly2[i];
+	else
+		return;
+	return (ergebnis_poly);
 }
