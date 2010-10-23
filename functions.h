@@ -61,5 +61,7 @@ long long polynom_naiv(int *polynom, int x, int grad);
 long long polynom_horner(int *polynom, int x, int grad);
 //7.9
 int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
+//7.10
+int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
 
 #endif //FUNCTIONS_H

@@ -422,16 +422,24 @@ int is_straight(struct card *hand)
 // sortiert eine Pokerhand aufsteigend, (ass, zwei, drei...)
 struct card *karten_sortierer(struct card *hand)
 {
-    int i, j, temp;
-    // Bubble sort, effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
+    int i, j, temp, n=0;
+    // Bubble Sort; effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
+    // n ist ein Zähler, der feststellt, ob in der Sortierschleife etwas umgestellt wurde, falls nicht, bricht die Schleife ab
+    // marginale Geschwindigkeitsvorteile. durch overhead eventuell sogar Nachteile
 	for(i=0;i<4;i++)
+	{
         for(j=4;i<j;j--)
             if(hand[j-1].w>hand[j].w)
             {
                 temp = hand[j-1].w;
                 hand[j-1].w = hand[j].w;
                 hand[j].w = temp;
+                n++;
             }
+            if(n==0)
+				break;
+			n=0;
+    }
     return(hand);
 }
 
@@ -524,5 +532,17 @@ int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_erge
 			ergebnis_poly[i]=poly2[i];
 	else
 		return;
+	return (ergebnis_poly);
+}
+
+// multipliziert zwei Polynome
+int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2)
+{
+	int i, j;
+	*grad_ergebnis = grad1 + grad2; //Potenzgesetzte ftw!
+	ergebnis_poly = (int *) calloc(*grad_ergebnis, sizeof(int));
+	for(i=0;i<=grad1;i++)
+		for(j=0;j<=grad2;j++)
+			ergebnis_poly[i+j] += poly1[i] * poly2[j];
 	return (ergebnis_poly);
 }
