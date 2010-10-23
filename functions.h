@@ -53,7 +53,7 @@ void karten_zeiger(struct card *hand);
 int is_fullhouse(struct card *hand);
 int is_flush(struct card *hand);
 int is_straight(struct card *hand);
-struct card *karten_sortierer(struct card *hand);
+struct card *karten_sortierer(struct card *hand); //auch 7.11
 //7.8
 int *polynom_eingabe(int *polynom, int *grad);
 void polynom_anzeige(int *polynom, int grad);
@@ -63,5 +63,7 @@ long long polynom_horner(int *polynom, int x, int grad);
 int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
 //7.10
 int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
+//7.15
+int ist_palindrom(char *string);
 
 #endif //FUNCTIONS_H

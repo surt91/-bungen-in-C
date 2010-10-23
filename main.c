@@ -406,6 +406,17 @@ void aufg_7_10()
 	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
 }
 
+void aufg_7_15()
+{
+	char string[101];
+	printf("Welcher String soll auf Palindromität untersucht werden (max 100 Zeichen).\n");
+	scanf("%s", string);
+	if(ist_palindrom(string))
+		printf("\"%s\" ist ein Palindrom\n", string);
+	else
+		printf("\"%s\" ist kein Palindrom\n", string);
+}
+
 int main(int argc, char **argv)
 {
     int aufgnr, kapitel;
@@ -510,6 +521,9 @@ int main(int argc, char **argv)
                     break;
                 case 10:
                     aufg_7_10();
+                    break;
+                case 15:
+                    aufg_7_15();
                     break;
 			}
             break;

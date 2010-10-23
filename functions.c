@@ -546,3 +546,16 @@ int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *gra
 			ergebnis_poly[i+j] += poly1[i] * poly2[j];
 	return (ergebnis_poly);
 }
+
+// findet heraus, ob der Parameter String ein Palindrom ist
+int ist_palindrom(char *string)
+{
+	int i, laenge;
+	laenge = strlen(string);
+	for(i=0;i<(laenge-1)/2;i++)
+	{
+		if(string[i]!=string[laenge-1-i])
+			return 0;
+	}
+	return 1;
+}
