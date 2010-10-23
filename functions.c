@@ -25,7 +25,7 @@ void summe_g_ug(int n, int *sum_g, int *sum_ug)
 {
     int i;
     for(i=0; i<n; *sum_ug+=2*i+1 , *sum_g+=2*(i+1) , i++)
-        ;
+		;
     return;
 }
 // Funktion für die n-te Potenz
@@ -33,6 +33,12 @@ int power(int x,int n)
 {
     int i;
     long long y=x;
+    if(n==0)
+		return 1;
+	if(n==1)
+		return x;
+	if(n<=0)
+		return -1;
     for(i=2;i<=n; i++)
     {
         y=x*y;
@@ -115,7 +121,7 @@ void primfaktoren(zahl)
 void muenzwurf(int wuerfe, int *kopf, int *zahl)
 {
     int i,ergebnis=0; // 1 = Kopf; 0 = Zahl
-    srand( (unsigned) time(NULL) ) ;
+    //srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
     for(i=0;i<wuerfe;i++)
     {
         ergebnis=rand()%2;
@@ -135,7 +141,7 @@ void muenzwurf(int wuerfe, int *kopf, int *zahl)
 int monteCarloGeburtstagsProblem(k)
 {
     int monat, verteilung[12], i, treffer=0, n;
-    srand( (unsigned) time(NULL) ) ;
+    //srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
     for(i=0;i<12;i++)
     {
         verteilung[i]=0;
@@ -232,15 +238,13 @@ int spiegel(short a)
 // findet das Maximum von vier Werten
 int max(x,y,z,w)
 {
-    int max;
-    max=(x>y) ? ((x>z) ? ((x>w) ?  x : w ) : (z>w) ? z : w) : (y>z) ? ((y>w) ? y : z) : (w>z) ? w : z;
-    return max;
+    return( (x>y) ? ((x>z) ? ((x>w) ?  x : w ) : (z>w) ? z : w) : (y>z) ? ((y>w) ? y : z) : (w>z) ? w : z );
 }
 
 // liefert eine Zahl zwischen 0 und 35
 int roulette()
 {
-    srand( (unsigned) time(NULL) ) ;
+    //srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
     return (rand()%36);
 }
 
@@ -281,7 +285,7 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr)
 struct card *karten_geber(struct card *hand)
 {
     int karte[5], i;
-//    srand( (unsigned) time(NULL) ) ;
+//    srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
     for(i=0;i<5;i++)
     {
         do
@@ -327,7 +331,7 @@ void karten_zeiger(struct card *hand)
         }
         switch (hand[i].w)
         {
-            case 1: printf("Ass"); break;
+            case ass: printf("Ass"); break;
             case 2: printf("Zwei"); break;
             case 3: printf("Drei"); break;
             case 4: printf("Vier"); break;
@@ -337,9 +341,9 @@ void karten_zeiger(struct card *hand)
             case 8: printf("Acht"); break;
             case 9: printf("Neun"); break;
             case 10: printf("Zehn"); break;
-            case 11: printf("Bube"); break;
-            case 12: printf("Dame"); break;
-            case 13: printf("König"); break;
+            case bube: printf("Bube"); break;
+            case dame: printf("Dame"); break;
+            case konig: printf("König"); break;
         }
     }
     printf("\n\n");
@@ -411,17 +415,80 @@ int is_straight(struct card *hand)
 struct card *karten_sortierer(struct card *hand)
 {
     int i, j, temp;
-    for(i=0;i<4;i++)
-    {
+    // Bubble sort, effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
+	for(i=0;i<4;i++)
         for(j=4;i<j;j--)
-        {
             if(hand[j-1].w>hand[j].w)
             {
                 temp = hand[j-1].w;
                 hand[j-1].w = hand[j].w;
                 hand[j].w = temp;
             }
-        }
-    }
     return(hand);
+}
+
+// für qsort
+//int cmp_integer(const void *wert1, const void *wert2) {
+//   return (*(int*)wert1 – *(int*)wert2);
+//}
+// bsp:  qsort(test_array, MAX, sizeof(int), cmp_integer);
+
+// Nimmt Eingaben zur Erstellung eines Polynoms entgegen
+int *polynom_eingabe(int *polynom, int *grad)
+{
+	int i;
+	printf("Welchen Grad soll das zu errechnende Polynom haben?\n");
+	scanf("%d",grad);
+	// erstellt ein Array variabler Länge
+	polynom = (int *) calloc(*grad, sizeof(int));
+	for(i=0;i<=*grad;i++)
+	{
+		printf("a%d (%d. Koeffizient)?\n", *grad-i, i+1);
+		scanf("%d", &polynom[i]);
+	}
+	polynom_anzeige(polynom, *grad);
+	return (polynom);
+}
+void polynom_anzeige(int *polynom, int grad)
+{
+	int i;
+	printf("Dein Polynom:\n");
+	printf("f(x)= ");
+	for(i=0;i<grad;i++)
+	{
+		printf("%dx^%d + ", polynom[i], grad-i);
+	}
+	printf("%d\n\n",polynom[i]);
+}
+// Errechnet ein Polynom n-ten Grades
+long long polynom_naiv(int *polynom, int x, int grad)
+{
+	int i;
+	long long ergebnis=0;
+	for(i=0;i<=grad;i++)
+	{
+		ergebnis += (power(x, grad-i)*polynom[i]);
+	}
+	return (ergebnis);
+}
+// Errechnet ein Polynom n-ten Grades nach dem Horner Schema
+long long polynom_horner(int *polynom, int x, int grad)
+{
+	int i;
+	long long ergebnis=0;
+	//a0 + x(a1 + x(a2 + x(....(a_grad-1 + x(a_grad))...)))
+	//letzte Klammer (-> a_grad)
+	ergebnis = polynom[0];
+	for(i=1;i<=grad;i++)
+	{
+		ergebnis *= x;
+		ergebnis += polynom[i];
+	}
+	return (ergebnis);
+}
+
+// addiert zwei Polynome
+int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int grad)
+{
+	
 }

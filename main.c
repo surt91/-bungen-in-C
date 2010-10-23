@@ -298,6 +298,7 @@ void aufg_6_23()
 {
     struct card hand[5];
     karten_geber(hand);
+    karten_sortierer(hand);
     karten_zeiger(hand);
 }
 
@@ -364,6 +365,26 @@ void aufg_6_24()
         }
     }
     printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt", runden, straight, flush, fullhouse, straight_flush, royal_flush);
+}
+
+void aufg_7_8()
+{
+	int *polynom=0, grad, i, x, fvonx;
+	polynom=polynom_eingabe(polynom, &grad);
+	printf("Welchen Wert soll x haben?\n");
+	scanf("%d", &x);
+	//fvonx=polynom_naiv(polynom, x, grad);
+	fvonx=polynom_horner(polynom, x, grad);
+	printf("\nf(%d) = %lld\n", x, fvonx);
+}
+
+void aufg_7_9()
+{
+	int *erstes_polynom, *zweites_polynom, *ergebnis_polynom, grad_eins, grad_zwei;
+	erstes_polynom = polynom_eingabe(erstes_polynom, &grad_eins);
+	zweites_polynom = polynom_eingabe(zweites_polynom, &grad_zwein);
+	ergebnis_polynom = polynom_addierer(ergebnis_polynom, erstes_polynom, zweites_polynom, grad);
+	
 }
 
 int main(int argc, char **argv)
@@ -459,6 +480,16 @@ int main(int argc, char **argv)
                     aufg_6_24();
                     break;
             }
+		case 7:
+            switch (aufgnr)
+            {
+                case 8:
+                    aufg_7_8();
+                    break;
+                case 9:
+                    aufg_7_9();
+                    break;
+			}
             break;
     }
     return 0;

@@ -52,5 +52,12 @@ int is_fullhouse(struct card *hand);
 int is_flush(struct card *hand);
 int is_straight(struct card *hand);
 struct card *karten_sortierer(struct card *hand);
+//7.8
+int *polynom_eingabe(int *polynom, int *grad);
+void polynom_anzeige(int *polynom, int grad);
+long long polynom_naiv(int *polynom, int x, int grad);
+long long polynom_horner(int *polynom, int x, int grad);
+//7.9
+int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int grad);
 
 #endif //FUNCTIONS_H
