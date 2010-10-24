@@ -22,6 +22,7 @@ void aufg_4_13()
 void aufg_4_17()
 {
     int sum_g=0, sum_ug=0, n;
+ 
     printf("Die ersten wieviel geraden/ungeraden Zahlen sollen aufaddiert werden?\n");
     scanf("%d", &n);
     summe_g_ug(n, &sum_g, &sum_ug);
@@ -42,7 +43,26 @@ void aufg_4_25()
             k++;
         }
     }
-    printf(" sind die ersten %d Fibonacci Zahlen, die auch Primzahlen sind",k);
+    printf("sind die ersten %d Fibonacci Zahlen, die auch Primzahlen sind\n",k);
+}
+void aufg_4_26()
+{    unsigned n,i, *fibo_array=0, prim_max;
+    short *prim_array;
+    printf("Wieviele Fibonacci-Primzahlen sollen ausgegeben werden?\n");
+    scanf("%d", &n);
+    fibo_array = (unsigned *) calloc(n+1, sizeof(unsigned));
+    fibonacci_array(n, fibo_array);
+    prim_max=fibo_array[n];
+    prim_array = (short *) calloc(prim_max, sizeof(short));
+    primzahl(prim_max, prim_array);
+    for(i=1;i<=n;i++)
+    {
+		if(!prim_array[fibo_array[i]])
+			printf("%d, ", fibo_array[i]);
+	}
+	free(prim_array);
+	free(fibo_array);
+    printf("sind die Primzahlen unter den ersten %d Fibonacci Zahlen\n",n);
 }
 
 void aufg_5_2()
@@ -99,10 +119,12 @@ void aufg_5_8()
 
 void aufg_5_12()
 {
-    int k,q;
+    int k,q, *array;
     printf("Die wievielte Fibonacci Zahl soll überprüft werden?\n");
     scanf("%d",&k);
-    q=fibonacci(k);
+    array = (int *) calloc(k+1, sizeof(int));
+    array=fibonacci_array(k, array);
+    q=array[k];
     if(q<0)
     {
 		printf("Bitte gebe eine ganze Zahl größer gleich 1 an.\n");
@@ -425,6 +447,7 @@ void aufg_7_15()
 	else
 		printf("\"%s\" ist kein Palindrom\n", string);
 	free(string);
+	return;
 }
 
 int main(int argc, char **argv)
@@ -459,6 +482,9 @@ int main(int argc, char **argv)
                     break;
                 case 25:
                     aufg_4_25();
+                    break;
+                case 26:
+                    aufg_4_26();
                     break;
             }
             break;

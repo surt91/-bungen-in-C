@@ -86,6 +86,21 @@ int fibonacci(n)
     }
     return j;
 }
+// Funktion zur Berechnung der ersten n Fibonacci-Zahlen (als Array, das >= n sein muss)
+int *fibonacci_array(int n, int *fibo_array)
+{
+    int i,tmp=0;
+    if(n<1)
+        return ;
+    fibo_array[0]=0;
+    fibo_array[1]=0;
+    fibo_array[2]=1;
+    for(i=3;i<=n;i++)
+    {
+		fibo_array[i]=fibo_array[i-2]+fibo_array[i-1];
+    }
+    return fibo_array;
+}
 
 // Funktion die testet, ob eine Primzahl vorliegt
 int ist_prim(test)
@@ -115,11 +130,11 @@ void prim_ermitteln(unsigned long max)
     primzahl(max, array);
     prim_liste = prim_array_bereinigen(array, max, &laenge);
     prim_ausgabe(prim_liste, laenge);
+    free(array);
 }
 // Primzahlenermittlung mit Array
 void primzahl(unsigned max, short *a)
 {
-
     unsigned pot,wurzpot, i, n;
     short *c;
     pot=sqrt(max);
@@ -140,6 +155,7 @@ void primzahl(unsigned max, short *a)
             for(i=n+n;i<=max;i=i+n)
                 if(a[i]!=1)
                     a[i]=1;
+    free(c);
     return;
 }
 unsigned *prim_array_bereinigen(short *alt_array, unsigned alt_array_laenge, unsigned *neu_array_laenge)
@@ -161,7 +177,6 @@ unsigned *prim_array_bereinigen(short *alt_array, unsigned alt_array_laenge, uns
             n++;
         }
     }
-    free(alt_array);
     return neu_array;
 }
 unsigned prim_max(unsigned *prim_liste, unsigned letzte)
@@ -191,6 +206,7 @@ int ist_prim_array(test)
 	array = (short *) calloc(test, sizeof(short));
 	primzahl(test, array);
 	prim_liste = prim_array_bereinigen(array, test, &laenge);
+	free(array);
 	if(prim_max(prim_liste, laenge) == test)
 		return 1;
 	else

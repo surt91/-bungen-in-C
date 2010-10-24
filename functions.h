@@ -17,6 +17,7 @@ double wurzel4(int k);
 int f(int x,int a,int b,int c);
 //5.12
 int fibonacci(int n);
+int *fibonacci_array(int n, int *fibo_array);
 int ist_prim(int test);
 void prim_ermitteln(unsigned long max);
 void primzahl(unsigned max, short *a);
