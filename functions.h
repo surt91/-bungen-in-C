@@ -64,6 +64,6 @@ int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_erge
 //7.10
 int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
 //7.15
-int ist_palindrom(char *string);
+int ist_palindrom(char *string, size_t laenge);
 
 #endif //FUNCTIONS_H

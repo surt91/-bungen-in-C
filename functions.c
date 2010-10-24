@@ -548,13 +548,24 @@ int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *gra
 }
 
 // findet heraus, ob der Parameter String ein Palindrom ist
-int ist_palindrom(char *string)
+int ist_palindrom(char *string, size_t laenge)
 {
-	int i, laenge;
+	int i, j;
+	char *neu_string;
 	laenge = strlen(string);
+	neu_string = (char *) calloc(laenge, sizeof(char));
+	for(j=i=0;string[i]!='\0';i++)
+	{
+        if(string[i]!=' ')
+            neu_string[j++]=string[i];
+        else
+			laenge--;
+		if(neu_string[j-1]<97)
+			neu_string[j-1] += 32;
+	}
 	for(i=0;i<(laenge-1)/2;i++)
 	{
-		if(string[i]!=string[laenge-1-i])
+		if(neu_string[i]!=neu_string[laenge-1-i])
 			return 0;
 	}
 	return 1;

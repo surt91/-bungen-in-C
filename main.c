@@ -408,10 +408,15 @@ void aufg_7_10()
 
 void aufg_7_15()
 {
-	char string[101];
-	printf("Welcher String soll auf Palindromität untersucht werden (max 100 Zeichen).\n");
-	scanf("%s", string);
-	if(ist_palindrom(string))
+	char *string;
+	size_t laenge=100;
+	string = (char *) calloc(laenge, sizeof(char));
+	printf("Welcher String soll auf Palindromität untersucht werden.\n");
+	//scanf("%s", string);
+	laenge=getline(&string, &laenge, stdin);
+	string[laenge-1]= '\0';
+	printf("\"%s\", %d Buchstaben\n", string, laenge-1);
+	if(ist_palindrom(string, laenge))
 		printf("\"%s\" ist ein Palindrom\n", string);
 	else
 		printf("\"%s\" ist kein Palindrom\n", string);
