@@ -18,6 +18,12 @@ int f(int x,int a,int b,int c);
 //5.12
 int fibonacci(int n);
 int ist_prim(int test);
+void prim_ermitteln(unsigned long max);
+void primzahl(unsigned max, short *a);
+unsigned *prim_array_bereinigen(short *alt_array, unsigned alt_array_laenge, unsigned *neu_array_laenge);
+unsigned prim_max(unsigned *prim_liste, unsigned letzte);
+void prim_ausgabe(unsigned *prim_liste, unsigned anzahl_prim);
+int ist_prim_array(int test);
 //5.14
 void primfaktoren(int zahl);
 //5.18

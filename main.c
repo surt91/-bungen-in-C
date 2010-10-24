@@ -102,8 +102,13 @@ void aufg_5_12()
     int k,q;
     printf("Die wievielte Fibonacci Zahl soll überprüft werden?\n");
     scanf("%d",&k);
-    q=fibonacci(k+1);
-    if(ist_prim(q))
+    q=fibonacci(k);
+    if(q<0)
+    {
+		printf("Bitte gebe eine ganze Zahl größer gleich 1 an.\n");
+		return;
+	}
+    if(ist_prim_array(q))
     {
         printf("Die %d. Fibonacci Zahl %d ist eine Primzahl\n", k, q);
     }
@@ -412,7 +417,6 @@ void aufg_7_15()
 	size_t laenge=100;
 	string = (char *) calloc(laenge, sizeof(char));
 	printf("Welcher String soll auf Palindromität untersucht werden.\n");
-	//scanf("%s", string);
 	laenge=getline(&string, &laenge, stdin);
 	string[laenge-1]= '\0';
 	printf("\"%s\", %d Buchstaben\n", string, laenge-1);
@@ -420,6 +424,7 @@ void aufg_7_15()
 		printf("\"%s\" ist ein Palindrom\n", string);
 	else
 		printf("\"%s\" ist kein Palindrom\n", string);
+	free(string);
 }
 
 int main(int argc, char **argv)
