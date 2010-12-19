@@ -566,6 +566,28 @@ void aufg_7_20()
 	matrix_anzeige(matrix_out);
 	return;
 }
+void aufg_7_21()
+{
+	int faktor, k, l;
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Elementare Zeilenumformung: Eine Zeile k mit dem mu-fachen einer anderen Zeile l addieren.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	printf("Welche Zeile soll verändert werden? (Achtung: 1ste Zeile = 0)?\n");
+	scanf("%d",&k);
+	printf("Welche Zeile soll darauf addiert werden?\n");
+	scanf("%d",&l);
+	printf("Mit welchem mu soll die addierte Zeile vorher multipliziert werden??\n");
+	scanf("%d",&faktor);
+	
+	matrix_out = matrix_z_Q(matrix_in, k, l, faktor);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 
 int main(int argc, char **argv)
 {
@@ -697,6 +719,9 @@ int main(int argc, char **argv)
                     break;
                 case 20:
                     aufg_7_20();
+                    break;
+                case 21:
+                    aufg_7_21();
                     break;
 			}
             break;

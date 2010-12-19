@@ -812,7 +812,22 @@ struct mat matrix_z_S(struct mat matrix_in, int k, int faktor)
 	return matrix_out;
 }
 //Addition des mu-fachen der l-ten zeile zur k-ten Zeile
-//int *matrix_z_Q
+struct mat matrix_z_Q(struct mat matrix_in, int k, int l, int faktor)
+{
+	int i, j;
+	struct mat matrix_out;
+	matrix_out.zeilen = matrix_in.zeilen;
+	matrix_out.spalten = matrix_in.spalten;
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
+	for(i=0;i<matrix_out.zeilen;i++)
+		for(j=0;j<matrix_out.spalten;j++)
+			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
+
+	for(j=0;j<matrix_in.spalten;j++)
+		matrix_out.matrix[k* matrix_out.spalten+j] += matrix_in.matrix[l* matrix_in.spalten+j]*faktor;
+
+	return matrix_out;
+}
 //Vertauschen der k-ten und l-ten Zeile
 //int *matrix_z_P
 
