@@ -190,7 +190,7 @@ void aufg_6_8()
     scanf("%d", &n);
     printf("%d\n", zyklischer_shift(a,n));
     d2b(zyklischer_shift(a,n),16);
-
+	printf("\n");
     return;
 }
 
@@ -202,6 +202,7 @@ void aufg_6_9()
     d2b(a,16);
     printf("\nGespiegelt ergibt sich %d\n",spiegel(a));
     d2b(spiegel(a),16);
+    printf("\n");
     return;
 }
 
@@ -327,6 +328,7 @@ void aufg_6_23()
     karten_geber(hand);
     karten_sortierer(hand);
     karten_zeiger(hand);
+    return;
 }
 
 void aufg_6_24()
@@ -391,7 +393,8 @@ void aufg_6_24()
             runden++;
         }
     }
-    printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt", runden, straight, flush, fullhouse, straight_flush, royal_flush);
+    printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
+    return;
 }
 
 void aufg_7_8()
@@ -402,7 +405,8 @@ void aufg_7_8()
 	scanf("%d", &x);
 	//fvonx=polynom_naiv(polynom, x, grad);
 	fvonx=polynom_horner(polynom, x, grad);
-	printf("\nf(%d) = %lld\n", x, fvonx);
+	printf("\nf(%d) = %d\n", x, fvonx);
+	return;
 }
 
 void aufg_7_9()
@@ -417,6 +421,7 @@ void aufg_7_9()
 	ergebnis_polynom = polynom_addierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
 	printf("Das addierte Polynom(%d. Grad):\n", grad_ergebnis);
 	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
+	return;
 }
 
 void aufg_7_10()
@@ -431,8 +436,20 @@ void aufg_7_10()
 	ergebnis_polynom = polynom_multiplizierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
 	printf("Das multiplizierte Polynom (%d. Grad):\n", grad_ergebnis);
 	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
+	return;
 }
 
+void aufg_7_11()
+{
+	int *polynom_in, *polynom_out, grad_in, grad_out;
+	printf("Ein Polynom ableiten.\n");
+	printf("Wie lautet das Polynom?\n");
+	polynom_in = polynom_eingabe(polynom_in, &grad_in);
+	polynom_out = polynom_ableiter(polynom_out, polynom_in, &grad_out, grad_in);
+	printf("Das differenzierte Polynom (%d. Grad):\n", grad_out);
+	polynom_anzeige(polynom_out, grad_out);
+	return;
+}
 void aufg_7_15()
 {
 	char *string;
@@ -441,7 +458,7 @@ void aufg_7_15()
 	printf("Welcher String soll auf Palindromität untersucht werden.\n");
 	laenge=getline(&string, &laenge, stdin);
 	string[laenge-1]= '\0';
-	printf("\"%s\", %d Buchstaben\n", string, laenge-1);
+	printf("\"%s\", %d Buchstaben\n", string, (int)laenge-1);
 	if(ist_palindrom(string, laenge))
 		printf("\"%s\" ist ein Palindrom\n", string);
 	else
@@ -450,10 +467,80 @@ void aufg_7_15()
 	return;
 }
 
+void aufg_7_16()
+{
+	int *matrix, *matrixT, zeilen, spalten;
+	printf("Eine Matrix Transponieren.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix = matrix_eingabe(matrix, &zeilen, &spalten);
+	printf("Deine Matrix:\n");
+	matrix_anzeige(matrix, zeilen, spalten);
+	matrixT = matrix_transponieren(matrixT, matrix, &zeilen, &spalten);
+	printf("Die %d x %d transponierte Matrix lautet:\n", zeilen, spalten);
+	matrix_anzeige(matrixT, zeilen, spalten);
+	return;
+}
+void aufg_7_17()
+{
+	int *matrix1, *matrix2, *matrix_out, zeilen=0, spalten=0;
+	printf("Zwei Matrizen addieren.\n");
+	printf("Wie lautet die erste Matrix?\n");
+	matrix1 = matrix_eingabe(matrix1, &zeilen, &spalten);
+	printf("Die erste Matrix:\n");
+	matrix_anzeige(matrix1, zeilen, spalten);
+	printf("Wie lautet die zweite Matrix?\n");
+	matrix2 = matrix_eingabe(matrix2, &zeilen, &spalten);
+	printf("Die zweite Matrix:\n");
+	matrix_anzeige(matrix2, zeilen, spalten);
+	
+	matrix_out = matrix_addieren(matrix_out, matrix1, matrix2, zeilen, spalten);
+	printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
+	matrix_anzeige(matrix_out, zeilen, spalten);
+	return;
+}
+void aufg_7_18()
+{
+	int *matrix, *matrix_out, zeilen=0, spalten=0, faktor;
+	printf("Eine Matrix mit einem Skalar multiplizieren.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix = matrix_eingabe(matrix, &zeilen, &spalten);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix, zeilen, spalten);
+	printf("Wie lautet der Skalar?\n");
+	scanf("%d",&faktor);
+	
+	matrix_out = matrix_skalaprodukt(matrix_out, matrix, faktor, zeilen, spalten);
+	printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
+	matrix_anzeige(matrix_out, zeilen, spalten);
+	return;
+}
+void aufg_7_19()
+{
+	int *matrix1, *matrix2, *matrix_out, zeilen1=0, spalten1=0, zeilen2=0, spalten2=0, faktor;
+	printf("Eine Matrix mit einer Matrix multiplizieren.\n");
+	printf("Wie lautet die erste Matrix?\n");
+	matrix1 = matrix_eingabe(matrix1, &zeilen1, &spalten1);
+	printf("Die erste Matrix:\n");
+	matrix_anzeige(matrix1, zeilen1, spalten1);
+	printf("Wie lautet die zweite Matrix?\n");
+	matrix2 = matrix_eingabe(matrix2, &zeilen2, &spalten2);
+	printf("Die zweite Matrix:\n");
+	matrix_anzeige(matrix2, zeilen2, spalten2);
+	
+	matrix_out = matrix_matrixprodukt(matrix_out, matrix1, zeilen1, spalten1, matrix2, zeilen2, spalten2);
+	if(matrix_out==0)
+		return;
+	printf("Die %d x %d Matrix lautet:\n", zeilen1, spalten2);
+	matrix_anzeige(matrix_out, zeilen1, spalten2);
+	return;
+}
+
 int main(int argc, char **argv)
 {
     int aufgnr, kapitel;
     srand( (unsigned) time(NULL) ) ;
+    if(*argv[1]=='?')
+		help();
     if(argc != 3)
     {
         printf("Welches Kapitel?\n");
@@ -546,6 +633,7 @@ int main(int argc, char **argv)
                     aufg_6_24();
                     break;
             }
+            break;
 		case 7:
             switch (aufgnr)
             {
@@ -558,11 +646,70 @@ int main(int argc, char **argv)
                 case 10:
                     aufg_7_10();
                     break;
+                case 11:
+                    aufg_7_11();
+                    break;
                 case 15:
                     aufg_7_15();
+                    break;
+                case 16:
+                    aufg_7_16();
+                    break;
+                case 17:
+                    aufg_7_17();
+                    break;
+                case 18:
+                    aufg_7_18();
+                    break;
+                case 19:
+                    aufg_7_19();
                     break;
 			}
             break;
     }
     return 0;
 }
+
+
+void help()
+{
+	printf("Mögliche Operationen:\n");
+	printf("Kap:\tAufg:\t//Kommentar\n");
+	printf("4\t5\t//Mehrwertsteuer\n");
+	printf("4\t13\t//Summe n+n+1+n+2+...+2n\n");
+	printf("4\t17\t//Summe aller Un-/Geraden Zahlen\n");
+	printf("4\t25\t//Fibonacci && Primzahl\n");
+	printf("4\t26\t//wie 25, mit Primzahlensieb\n");
+	printf("-------------\n");
+	printf("5\t2\t//potenzieren\n");
+	printf("5\t3\t//großes H\n");
+	printf("5\t4\t//vierte Wurzel\n");
+	printf("5\t8\t//ax^2+bx+c\n");
+	printf("5\t12\t//Fibonacci Zahl auf Prim prüfen\n");
+	printf("5\t14\t//Primfaktoren\n");
+	printf("5\t18\t//Münzwurf\n");
+	printf("5\t19\t//Geburtstagsproblem\n");
+	printf("-------------\n");
+	printf("6\t2\t//Reziproke\n");
+	printf("6\t8\t//16 Bit shift (zyklisch)\n");
+	printf("6\t9\t//16 Bit spiegeln\n");
+	printf("6\t12\t//Maximum von vier Zahlen\n");
+	printf("6\t16\t//Roulette\n");
+	printf("6\t17\t//Datum binär packen\n");
+	printf("6\t23\t//Pokerhand\n");
+	printf("6\t24\t//Viele Pokerrunden\n");
+	printf("-------------\n");
+	printf("7\t8\t//Polynom berechnen\n");
+	printf("7\t9\t//Polynome addieren\n");
+	printf("7\t10\t//Polynome multiplizieren\n");
+	printf("7\t11\t//Polynom ableiten\n");
+	printf("7\t15\t//100 Zeichen Palindromität prüfen\n");
+	printf("7\t16\t//Matrix transponieren\n");
+	printf("7\t17\t//Matrix addieren\n");
+	printf("7\t18\t//Matrix mit Skalar multiplizieren\n");
+	printf("7\t19\t//Matrix mit Matrix multiplizieren\n");
+	printf("\n");
+	printf("Verwendug:\n");
+	printf("[Programm] [Kapitel] [Aufgabe]\n");
+}
+	

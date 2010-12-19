@@ -8,6 +8,8 @@
 #include <time.h>
 #include "functions.h"
 
+void help();
+
 #endif
 
 
