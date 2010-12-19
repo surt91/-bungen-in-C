@@ -769,7 +769,7 @@ struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor)
 	struct mat matrix_out;
 	matrix_out.zeilen = matrix_in.zeilen;
 	matrix_out.spalten = matrix_in.spalten;
-	matrix_out.matrix = (int *) calloc(matrix_in.zeilen * matrix_in.spalten, sizeof(int));
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
 	for(i=0;i<matrix_in.zeilen;i++)
 		for(j=0;j<matrix_in.spalten;j++)
 			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j]*faktor;
@@ -796,7 +796,21 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 	return matrix_out;
 }
 //Multiplikation der k-ten Zeile mit einem Skalar
-//int *matrix_z_S(int *matrix_out, int *matrix_in, int zeilen, int spalten
+struct mat matrix_z_S(struct mat matrix_in, int k, int faktor)
+{
+	int i, j;
+	struct mat matrix_out;
+	matrix_out.zeilen = matrix_in.zeilen;
+	matrix_out.spalten = matrix_in.spalten;
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
+	for(i=0;i<matrix_in.zeilen;i++)
+		for(j=0;j<matrix_in.spalten;j++)
+			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
+	for(j=0;j<matrix_in.spalten;j++)
+		matrix_out.matrix[k* matrix_out.spalten+j] = matrix_in.matrix[k* matrix_in.spalten+j]*faktor;
+
+	return matrix_out;
+}
 //Addition des mu-fachen der l-ten zeile zur k-ten Zeile
 //int *matrix_z_Q
 //Vertauschen der k-ten und l-ten Zeile

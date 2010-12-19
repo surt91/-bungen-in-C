@@ -86,5 +86,6 @@ struct mat matrix_transponieren(struct mat matrix_in);
 struct mat matrix_addieren(struct mat matrix1, struct mat matrix2);
 struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor);
 struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2);
+struct mat matrix_z_S(struct mat matrix_in, int k, int faktor);
 
 #endif //FUNCTIONS_H

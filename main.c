@@ -546,6 +546,26 @@ void aufg_7_19()
 	matrix_anzeige(matrix_out);
 	return;
 }
+void aufg_7_20()
+{
+	int faktor,k;
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Elementare Zeilenumformung: Eine Zeile mit einem Skalar multiplizieren.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	printf("Welche Zeile soll mit dem Skalar multipliziert werden (Achtung: 1ste Zeile = 0)?\n");
+	scanf("%d",&k);
+	printf("Wie lautet der Skalar?\n");
+	scanf("%d",&faktor);
+	
+	matrix_out = matrix_z_S(matrix_in, k, faktor);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 
 int main(int argc, char **argv)
 {
@@ -614,7 +634,6 @@ int main(int argc, char **argv)
                 case 19:
                     aufg_5_19();
                     break;
-
             }
             break;
         case 6:
@@ -675,6 +694,9 @@ int main(int argc, char **argv)
                     break;
                 case 19:
                     aufg_7_19();
+                    break;
+                case 20:
+                    aufg_7_20();
                     break;
 			}
             break;
