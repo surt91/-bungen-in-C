@@ -704,88 +704,92 @@ int ist_palindrom(char *string, size_t laenge)
 }
 
 // Nimmt Eingaben zur Erstellung einer Matrix
-int *matrix_eingabe(int *matrix, int *zeilen, int *spalten)
+struct mat matrix_eingabe(struct mat matrix_out)
 {
 	int i, j;
-	if(*zeilen == 0 || *spalten == 0){
+	if(matrix_out.zeilen == 0 || matrix_out.spalten == 0){
 		printf("Anzahl Zeilen der Matrix?\n");
-		scanf("%d",zeilen);
+		scanf("%d",&matrix_out.zeilen);
 		printf("Anzahl Spalten der Matrix?\n");
-		scanf("%d",spalten);
+		scanf("%d",&matrix_out.spalten);
 	}
 	// erstellt ein Array variabler Länge
-	matrix = (int *) calloc(*zeilen * *spalten, sizeof(int));
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
 	printf("Zeilen und Spalten beginnen bei Null und Enden bei #Zeilen-1 bzw. #Spalten-1\n");
-	for(i=0;i< *zeilen ;i++)
-		for(j=0;j< *spalten ;j++)
+	for(i=0;i< matrix_out.zeilen ;i++)
+		for(j=0;j< matrix_out.spalten ;j++)
 		{
 			printf("%d-te Zeile, %d-te Spalte\n", i, j);
-			scanf("%d", &matrix[i * *spalten + j]);
+			scanf("%d", &matrix_out.matrix[i * matrix_out.spalten + j]);
 		}
-	return (matrix);
+	return (matrix_out);
 }
-void matrix_anzeige(int *matrix, int zeilen, int spalten)
+void matrix_anzeige(struct mat matrix_in)
 {
 	int i, j;
-	for(i=0;i<zeilen;i++)
+	for(i=0;i<matrix_in.zeilen;i++)
 	{
 		printf("| ");
-		for(j=0;j<spalten;j++)
+		for(j=0;j<matrix_in.spalten;j++)
 		{
-			printf("%d ", matrix[i*spalten+j]);
+			printf("%d ", matrix_in.matrix[i* matrix_in.spalten+j]);
 		}
 		printf("|\n");
 	}
 }
-int *matrix_transponieren(int *matrix_out, int *matrix_in, int *zeilen, int *spalten)
-{
-	int i, j, tmp;
-	matrix_out = (int *) calloc(*zeilen * *spalten, sizeof(int));
-	for(i=0;i<*zeilen;i++)
-		for(j=0;j<*spalten;j++)
-			matrix_out[j* *zeilen+i] = matrix_in[i* *spalten+j];
-
-	tmp=*spalten;
-	*spalten= *zeilen;
-	*zeilen=tmp;
-	return matrix_out;
-}
-int *matrix_addieren(int *matrix_out, int *matrix1, int *matrix2, int zeilen, int spalten)
+//~ int *matrix_transponieren(int *matrix_out, int *matrix_in, int *zeilen, int *spalten)
+//~ {
+	//~ int i, j, tmp;
+	//~ matrix_out = (int *) calloc(*zeilen * *spalten, sizeof(int));
+	//~ for(i=0;i<*zeilen;i++)
+		//~ for(j=0;j<*spalten;j++)
+			//~ matrix_out[j* *zeilen+i] = matrix_in[i* *spalten+j];
+//~ 
+	//~ tmp=*spalten;
+	//~ *spalten= *zeilen;
+	//~ *zeilen=tmp;
+	//~ return matrix_out;
+//~ }
+//~ int *matrix_addieren(int *matrix_out, int *matrix1, int *matrix2, int zeilen, int spalten)
+//~ {
+	//~ int i, j;
+	//~ *matrix_out.zeilen = *matrix_in.zeilen;
+	//~ *matrix_out.spalten = *matrix_in.spalten;
+	//~ matrix_out.matrix = (int *) calloc(*matrix_out.zeilen * *matrix_out.spalten, sizeof(int));
+	//~ for(i=0;i<zeilen;i++)
+		//~ for(j=0;j<spalten;j++)
+			//~ matrix_out[i* spalten+j] = matrix1[i* spalten+j]+matrix2[i* spalten+j];
+//~ 
+	//~ return matrix_out;
+//~ }
+struct mat matrix_skalaprodukt(struct mat matrix_out, struct mat matrix_in, int faktor)
 {
 	int i, j;
-	matrix_out = (int *) calloc(zeilen * spalten, sizeof(int));
-	for(i=0;i<zeilen;i++)
-		for(j=0;j<spalten;j++)
-			matrix_out[i* spalten+j] = matrix1[i* spalten+j]+matrix2[i* spalten+j];
+	matrix_out.zeilen = matrix_in.zeilen;
+	matrix_out.spalten = matrix_in.spalten;
+	matrix_out.matrix = (int *) calloc(matrix_in.zeilen * matrix_in.spalten, sizeof(int));
+	for(i=0;i<matrix_in.zeilen;i++)
+		for(j=0;j<matrix_in.spalten;j++)
+			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j]*faktor;
 
 	return matrix_out;
 }
-int *matrix_skalaprodukt(int *matrix_out, int *matrix_in, int faktor, int zeilen, int spalten)
-{
-	int i, j;
-	matrix_out = (int *) calloc(zeilen * spalten, sizeof(int));
-	for(i=0;i<zeilen;i++)
-		for(j=0;j<spalten;j++)
-			matrix_out[i* spalten+j] = matrix_in[i* spalten+j]*faktor;
-
-	return matrix_out;
-}
-int *matrix_matrixprodukt(int *matrix_out, int *matrix1, int zeilen1, int spalten1, int *matrix2, int zeilen2, int spalten2)
-{
-	int i, j, k;
-	if(spalten1 != zeilen2)
-	{
-		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Domension der Zeilen der zweiten Matrix überein.\n");
-		return 0;
-	}
-	matrix_out = (int *) calloc(zeilen1 * spalten2, sizeof(int));
-	for(i=0;i<zeilen1;i++)
-		for(j=0;j<spalten2;j++)
-			for(k=0;k<spalten1;k++)
-				matrix_out[i*spalten2+j] += matrix2[k*spalten2+j]*matrix1[i*spalten1+k];
-
-	return matrix_out;
-}
+//~ int *matrix_matrixprodukt(int *matrix_out, int *matrix1, int zeilen1, int spalten1, int *matrix2, int zeilen2, int spalten2)
+//~ {
+	//~ int i, j, k;
+	//~ if(spalten1 != zeilen2)
+	//~ {
+		//~ printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Domension der Zeilen der zweiten Matrix überein.\n");
+		//~ return 0;
+	//~ }
+	//~ matrix_out = (int *) calloc(zeilen1 * spalten2, sizeof(int));
+	//~ for(i=0;i<zeilen1;i++)
+		//~ for(j=0;j<spalten2;j++)
+			//~ for(k=0;k<spalten1;k++)
+				//~ matrix_out[i*spalten2+j] += matrix2[k*spalten2+j]*matrix1[i*spalten1+k];
+//~ 
+	//~ return matrix_out;
+//~ }
 //Multiplikation der k-ten Zeile mit einem Skalar
 //int *matrix_z_S(int *matrix_out, int *matrix_in, int zeilen, int spalten
 //Addition des mu-fachen der l-ten zeile zur k-ten Zeile

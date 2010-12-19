@@ -467,73 +467,76 @@ void aufg_7_15()
 	return;
 }
 
-void aufg_7_16()
-{
-	int *matrix, *matrixT, zeilen, spalten;
-	printf("Eine Matrix Transponieren.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix = matrix_eingabe(matrix, &zeilen, &spalten);
-	printf("Deine Matrix:\n");
-	matrix_anzeige(matrix, zeilen, spalten);
-	matrixT = matrix_transponieren(matrixT, matrix, &zeilen, &spalten);
-	printf("Die %d x %d transponierte Matrix lautet:\n", zeilen, spalten);
-	matrix_anzeige(matrixT, zeilen, spalten);
-	return;
-}
-void aufg_7_17()
-{
-	int *matrix1, *matrix2, *matrix_out, zeilen=0, spalten=0;
-	printf("Zwei Matrizen addieren.\n");
-	printf("Wie lautet die erste Matrix?\n");
-	matrix1 = matrix_eingabe(matrix1, &zeilen, &spalten);
-	printf("Die erste Matrix:\n");
-	matrix_anzeige(matrix1, zeilen, spalten);
-	printf("Wie lautet die zweite Matrix?\n");
-	matrix2 = matrix_eingabe(matrix2, &zeilen, &spalten);
-	printf("Die zweite Matrix:\n");
-	matrix_anzeige(matrix2, zeilen, spalten);
-	
-	matrix_out = matrix_addieren(matrix_out, matrix1, matrix2, zeilen, spalten);
-	printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
-	matrix_anzeige(matrix_out, zeilen, spalten);
-	return;
-}
+//~ void aufg_7_16()
+//~ {
+	//~ int *matrix, *matrixT, zeilen, spalten;
+	//~ printf("Eine Matrix Transponieren.\n");
+	//~ printf("Wie lautet die Matrix?\n");
+	//~ matrix = matrix_eingabe(matrix, &zeilen, &spalten);
+	//~ printf("Deine Matrix:\n");
+	//~ matrix_anzeige(matrix, zeilen, spalten);
+	//~ matrixT = matrix_transponieren(matrixT, matrix, &zeilen, &spalten);
+	//~ printf("Die %d x %d transponierte Matrix lautet:\n", zeilen, spalten);
+	//~ matrix_anzeige(matrixT, zeilen, spalten);
+	//~ return;
+//~ }
+//~ void aufg_7_17()
+//~ {
+	//~ int *matrix1, *matrix2, *matrix_out, zeilen=0, spalten=0;
+	//~ printf("Zwei Matrizen addieren.\n");
+	//~ printf("Wie lautet die erste Matrix?\n");
+	//~ matrix1 = matrix_eingabe(matrix1, &zeilen, &spalten);
+	//~ printf("Die erste Matrix:\n");
+	//~ matrix_anzeige(matrix1, zeilen, spalten);
+	//~ printf("Wie lautet die zweite Matrix?\n");
+	//~ matrix2 = matrix_eingabe(matrix2, &zeilen, &spalten);
+	//~ printf("Die zweite Matrix:\n");
+	//~ matrix_anzeige(matrix2, zeilen, spalten);
+	//~ 
+	//~ matrix_out = matrix_addieren(matrix_out, matrix1, matrix2, zeilen, spalten);
+	//~ printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
+	//~ matrix_anzeige(matrix_out, zeilen, spalten);
+	//~ return;
+//~ }
 void aufg_7_18()
 {
-	int *matrix, *matrix_out, zeilen=0, spalten=0, faktor;
+	int faktor;
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen=0;
+	matrix_in.spalten=0;
 	printf("Eine Matrix mit einem Skalar multiplizieren.\n");
 	printf("Wie lautet die Matrix?\n");
-	matrix = matrix_eingabe(matrix, &zeilen, &spalten);
+	matrix_in = matrix_eingabe(matrix_in);
 	printf("Die Matrix:\n");
-	matrix_anzeige(matrix, zeilen, spalten);
+	matrix_anzeige(matrix_in);
 	printf("Wie lautet der Skalar?\n");
 	scanf("%d",&faktor);
 	
-	matrix_out = matrix_skalaprodukt(matrix_out, matrix, faktor, zeilen, spalten);
-	printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
-	matrix_anzeige(matrix_out, zeilen, spalten);
+	matrix_out = matrix_skalaprodukt(matrix_out, matrix_in, faktor);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_7_19()
-{
-	int *matrix1, *matrix2, *matrix_out, zeilen1=0, spalten1=0, zeilen2=0, spalten2=0, faktor;
-	printf("Eine Matrix mit einer Matrix multiplizieren.\n");
-	printf("Wie lautet die erste Matrix?\n");
-	matrix1 = matrix_eingabe(matrix1, &zeilen1, &spalten1);
-	printf("Die erste Matrix:\n");
-	matrix_anzeige(matrix1, zeilen1, spalten1);
-	printf("Wie lautet die zweite Matrix?\n");
-	matrix2 = matrix_eingabe(matrix2, &zeilen2, &spalten2);
-	printf("Die zweite Matrix:\n");
-	matrix_anzeige(matrix2, zeilen2, spalten2);
-	
-	matrix_out = matrix_matrixprodukt(matrix_out, matrix1, zeilen1, spalten1, matrix2, zeilen2, spalten2);
-	if(matrix_out==0)
-		return;
-	printf("Die %d x %d Matrix lautet:\n", zeilen1, spalten2);
-	matrix_anzeige(matrix_out, zeilen1, spalten2);
-	return;
-}
+//~ void aufg_7_19()
+//~ {
+	//~ int *matrix1, *matrix2, *matrix_out, zeilen1=0, spalten1=0, zeilen2=0, spalten2=0, faktor;
+	//~ printf("Eine Matrix mit einer Matrix multiplizieren.\n");
+	//~ printf("Wie lautet die erste Matrix?\n");
+	//~ matrix1 = matrix_eingabe(matrix1, &zeilen1, &spalten1);
+	//~ printf("Die erste Matrix:\n");
+	//~ matrix_anzeige(matrix1, zeilen1, spalten1);
+	//~ printf("Wie lautet die zweite Matrix?\n");
+	//~ matrix2 = matrix_eingabe(matrix2, &zeilen2, &spalten2);
+	//~ printf("Die zweite Matrix:\n");
+	//~ matrix_anzeige(matrix2, zeilen2, spalten2);
+	//~ 
+	//~ matrix_out = matrix_matrixprodukt(matrix_out, matrix1, zeilen1, spalten1, matrix2, zeilen2, spalten2);
+	//~ if(matrix_out==0)
+		//~ return;
+	//~ printf("Die %d x %d Matrix lautet:\n", zeilen1, spalten2);
+	//~ matrix_anzeige(matrix_out, zeilen1, spalten2);
+	//~ return;
+//~ }
 
 int main(int argc, char **argv)
 {
@@ -652,18 +655,18 @@ int main(int argc, char **argv)
                 case 15:
                     aufg_7_15();
                     break;
-                case 16:
-                    aufg_7_16();
-                    break;
-                case 17:
-                    aufg_7_17();
-                    break;
+                //~ case 16:
+                    //~ aufg_7_16();
+                    //~ break;
+                //~ case 17:
+                    //~ aufg_7_17();
+                    //~ break;
                 case 18:
                     aufg_7_18();
                     break;
-                case 19:
-                    aufg_7_19();
-                    break;
+                //~ case 19:
+                    //~ aufg_7_19();
+                    //~ break;
 			}
             break;
     }
