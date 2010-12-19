@@ -480,24 +480,28 @@ void aufg_7_16()
 	matrix_anzeige(matrix_out);
 	return;
 }
-//~ void aufg_7_17()
-//~ {
-	//~ int *matrix1, *matrix2, *matrix_out, zeilen=0, spalten=0;
-	//~ printf("Zwei Matrizen addieren.\n");
-	//~ printf("Wie lautet die erste Matrix?\n");
-	//~ matrix1 = matrix_eingabe(matrix1, &zeilen, &spalten);
-	//~ printf("Die erste Matrix:\n");
-	//~ matrix_anzeige(matrix1, zeilen, spalten);
-	//~ printf("Wie lautet die zweite Matrix?\n");
-	//~ matrix2 = matrix_eingabe(matrix2, &zeilen, &spalten);
-	//~ printf("Die zweite Matrix:\n");
-	//~ matrix_anzeige(matrix2, zeilen, spalten);
-	//~ 
-	//~ matrix_out = matrix_addieren(matrix_out, matrix1, matrix2, zeilen, spalten);
-	//~ printf("Die %d x %d Matrix lautet:\n", zeilen, spalten);
-	//~ matrix_anzeige(matrix_out, zeilen, spalten);
-	//~ return;
-//~ }
+void aufg_7_17()
+{
+	struct mat matrix1, matrix2, matrix_out;
+	matrix1.zeilen=0;
+	matrix1.spalten=0;
+	printf("Zwei Matrizen addieren.\n");
+	printf("Wie lautet die erste Matrix?\n");
+	matrix1 = matrix_eingabe(matrix1);
+	printf("Die erste Matrix:\n");
+	matrix_anzeige(matrix1);
+	matrix2.zeilen=matrix1.zeilen;
+	matrix2.spalten=matrix1.spalten;
+	printf("Wie lautet die zweite %d x %d Matrix?\n", matrix2.zeilen, matrix2.spalten);
+	matrix2 = matrix_eingabe(matrix2);
+	printf("Die zweite Matrix:\n");
+	matrix_anzeige(matrix2);
+	
+	matrix_out = matrix_addieren(matrix_out, matrix1, matrix2);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 void aufg_7_18()
 {
 	int faktor;
@@ -658,9 +662,9 @@ int main(int argc, char **argv)
                 case 16:
                     aufg_7_16();
                     break;
-                //~ case 17:
-                    //~ aufg_7_17();
-                    //~ break;
+                case 17:
+                    aufg_7_17();
+                    break;
                 case 18:
                     aufg_7_18();
                     break;

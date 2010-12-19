@@ -749,18 +749,18 @@ struct mat matrix_transponieren(struct mat matrix_out, struct mat matrix_in)
 
 	return matrix_out;
 }
-//~ int *matrix_addieren(int *matrix_out, int *matrix1, int *matrix2, int zeilen, int spalten)
-//~ {
-	//~ int i, j;
-	//~ *matrix_out.zeilen = *matrix_in.zeilen;
-	//~ *matrix_out.spalten = *matrix_in.spalten;
-	//~ matrix_out.matrix = (int *) calloc(*matrix_out.zeilen * *matrix_out.spalten, sizeof(int));
-	//~ for(i=0;i<zeilen;i++)
-		//~ for(j=0;j<spalten;j++)
-			//~ matrix_out[i* spalten+j] = matrix1[i* spalten+j]+matrix2[i* spalten+j];
-//~ 
-	//~ return matrix_out;
-//~ }
+struct mat matrix_addieren(struct mat matrix_out, struct mat matrix1, struct mat matrix2)
+{
+	int i, j;
+	matrix_out.zeilen = matrix1.zeilen;
+	matrix_out.spalten = matrix1.spalten;
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
+	for(i=0;i<matrix_out.zeilen;i++)
+		for(j=0;j<matrix_out.spalten;j++)
+			matrix_out.matrix[i* matrix_out.spalten+j] = matrix1.matrix[i* matrix1.spalten+j]+matrix2.matrix[i* matrix2.spalten+j];
+
+	return matrix_out;
+}
 struct mat matrix_skalaprodukt(struct mat matrix_out, struct mat matrix_in, int faktor)
 {
 	int i, j;
