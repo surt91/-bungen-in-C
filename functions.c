@@ -848,6 +848,21 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 
 	return matrix_out;
 }
-
-// ZEILENUMFORMUNG
-// rref
+// rref / Gaußsche Normalform
+//~ struct mat matrix_rref(struct mat matrix_in)
+//~ {
+	//~ int i, j, p, q;
+	//~ struct mat matrix_out;
+	//~ matrix_out.zeilen = matrix_in.zeilen;
+	//~ matrix_out.spalten = matrix_in.spalten;
+	//~ matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
+	//~ for(i=0;i<matrix_out.zeilen;i++)
+		//~ for(j=0;j<matrix_out.spalten;j++)
+			//~ matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
+			//~ 
+	//~ for(q=0;q<matrix_out.zeilen;q++)
+		//~ for(q=1;q<matrix_out.zeilen;q++)
+			//~ matrix_out = matrix_z_Q(matrix_out, p, q, matrix_out.matrix[p * matrix_out.spalten + q]/matrix_out.matrix[p-1 * matrix_out.spalten + q]);
+	//~ 
+	//~ return matrix_out;
+//~ }

@@ -608,6 +608,21 @@ void aufg_7_22()
 	matrix_anzeige(matrix_out);
 	return;
 }
+//~ void aufg_7_23()
+//~ {
+	//~ struct mat matrix_in, matrix_out;
+	//~ matrix_in.zeilen = matrix_in.spalten = 0;
+	//~ printf("Welche Matrix soll in Gaußsche Normalform gebracht werden?.\n");
+	//~ printf("Wie lautet die Matrix?\n");
+	//~ matrix_in = matrix_eingabe(matrix_in);
+	//~ printf("Die Matrix:\n");
+	//~ matrix_anzeige(matrix_in);
+	//~ 
+	//~ matrix_out = matrix_rref(matrix_in);
+	//~ printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	//~ matrix_anzeige(matrix_out);
+	//~ return;
+//~ }
 
 int main(int argc, char **argv)
 {
@@ -745,6 +760,12 @@ int main(int argc, char **argv)
                     break;
                 case 22:
                     aufg_7_22();
+                    break;
+                //~ case 23:
+                    //~ aufg_7_23();
+                    //~ break;
+                case 24:
+                    aufg_7_24();
                     break;
 			}
             break;
