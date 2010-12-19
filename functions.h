@@ -88,5 +88,6 @@ struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor);
 struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2);
 struct mat matrix_z_S(struct mat matrix_in, int k, int faktor);
 struct mat matrix_z_Q(struct mat matrix_in, int k, int l, int faktor);
+struct mat matrix_z_P(struct mat matrix_in, int k, int l);
 
 #endif //FUNCTIONS_H

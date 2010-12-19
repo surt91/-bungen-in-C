@@ -556,12 +556,12 @@ void aufg_7_20()
 	matrix_in = matrix_eingabe(matrix_in);
 	printf("Die Matrix:\n");
 	matrix_anzeige(matrix_in);
-	printf("Welche Zeile soll mit dem Skalar multipliziert werden (Achtung: 1ste Zeile = 0)?\n");
+	printf("Welche Zeile soll mit dem Skalar multipliziert werden?\n");
 	scanf("%d",&k);
 	printf("Wie lautet der Skalar?\n");
 	scanf("%d",&faktor);
 	
-	matrix_out = matrix_z_S(matrix_in, k, faktor);
+	matrix_out = matrix_z_S(matrix_in, k-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -576,14 +576,34 @@ void aufg_7_21()
 	matrix_in = matrix_eingabe(matrix_in);
 	printf("Die Matrix:\n");
 	matrix_anzeige(matrix_in);
-	printf("Welche Zeile soll verändert werden? (Achtung: 1ste Zeile = 0)?\n");
+	printf("Welche Zeile soll verändert werden??\n");
 	scanf("%d",&k);
 	printf("Welche Zeile soll darauf addiert werden?\n");
 	scanf("%d",&l);
 	printf("Mit welchem mu soll die addierte Zeile vorher multipliziert werden??\n");
 	scanf("%d",&faktor);
 	
-	matrix_out = matrix_z_Q(matrix_in, k, l, faktor);
+	matrix_out = matrix_z_Q(matrix_in, k-1, l-1, faktor);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
+void aufg_7_22()
+{
+	int k, l;
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Elementare Zeilenumformung: Eine Zeile k mit der Zeile l vertauschen.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	printf("erste Zeile k, die vertauscht werden soll?\n");
+	scanf("%d",&k);
+	printf("zweite Zeile l, die vertauscht werden soll?\n");
+	scanf("%d",&l);
+	
+	matrix_out = matrix_z_P(matrix_in, k-1, l-1);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -722,6 +742,9 @@ int main(int argc, char **argv)
                     break;
                 case 21:
                     aufg_7_21();
+                    break;
+                case 22:
+                    aufg_7_22();
                     break;
 			}
             break;
