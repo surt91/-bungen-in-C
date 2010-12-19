@@ -467,19 +467,19 @@ void aufg_7_15()
 	return;
 }
 
-//~ void aufg_7_16()
-//~ {
-	//~ int *matrix, *matrixT, zeilen, spalten;
-	//~ printf("Eine Matrix Transponieren.\n");
-	//~ printf("Wie lautet die Matrix?\n");
-	//~ matrix = matrix_eingabe(matrix, &zeilen, &spalten);
-	//~ printf("Deine Matrix:\n");
-	//~ matrix_anzeige(matrix, zeilen, spalten);
-	//~ matrixT = matrix_transponieren(matrixT, matrix, &zeilen, &spalten);
-	//~ printf("Die %d x %d transponierte Matrix lautet:\n", zeilen, spalten);
-	//~ matrix_anzeige(matrixT, zeilen, spalten);
-	//~ return;
-//~ }
+void aufg_7_16()
+{
+	struct mat matrix_in, matrix_out;
+	printf("Eine Matrix Transponieren.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Deine Matrix:\n");
+	matrix_anzeige(matrix_in);
+	matrix_out = matrix_transponieren(matrix_out, matrix_in);
+	printf("Die %d x %d transponierte Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 //~ void aufg_7_17()
 //~ {
 	//~ int *matrix1, *matrix2, *matrix_out, zeilen=0, spalten=0;
@@ -655,9 +655,9 @@ int main(int argc, char **argv)
                 case 15:
                     aufg_7_15();
                     break;
-                //~ case 16:
-                    //~ aufg_7_16();
-                    //~ break;
+                case 16:
+                    aufg_7_16();
+                    break;
                 //~ case 17:
                     //~ aufg_7_17();
                     //~ break;

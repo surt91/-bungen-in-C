@@ -737,19 +737,18 @@ void matrix_anzeige(struct mat matrix_in)
 		printf("|\n");
 	}
 }
-//~ int *matrix_transponieren(int *matrix_out, int *matrix_in, int *zeilen, int *spalten)
-//~ {
-	//~ int i, j, tmp;
-	//~ matrix_out = (int *) calloc(*zeilen * *spalten, sizeof(int));
-	//~ for(i=0;i<*zeilen;i++)
-		//~ for(j=0;j<*spalten;j++)
-			//~ matrix_out[j* *zeilen+i] = matrix_in[i* *spalten+j];
-//~ 
-	//~ tmp=*spalten;
-	//~ *spalten= *zeilen;
-	//~ *zeilen=tmp;
-	//~ return matrix_out;
-//~ }
+struct mat matrix_transponieren(struct mat matrix_out, struct mat matrix_in)
+{
+	int i, j, tmp;
+	matrix_out.zeilen = matrix_in.spalten;
+	matrix_out.spalten = matrix_in.zeilen;
+	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
+	for(i=0;i<matrix_in.zeilen;i++)
+		for(j=0;j<matrix_in.spalten;j++)
+			matrix_out.matrix[j* matrix_out.spalten+i] = matrix_in.matrix[i* matrix_in.spalten+j];
+
+	return matrix_out;
+}
 //~ int *matrix_addieren(int *matrix_out, int *matrix1, int *matrix2, int zeilen, int spalten)
 //~ {
 	//~ int i, j;
