@@ -737,9 +737,10 @@ void matrix_anzeige(struct mat matrix_in)
 		printf("|\n");
 	}
 }
-struct mat matrix_transponieren(struct mat matrix_out, struct mat matrix_in)
+struct mat matrix_transponieren(struct mat matrix_in)
 {
 	int i, j, tmp;
+	struct mat matrix_out;
 	matrix_out.zeilen = matrix_in.spalten;
 	matrix_out.spalten = matrix_in.zeilen;
 	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
@@ -749,9 +750,10 @@ struct mat matrix_transponieren(struct mat matrix_out, struct mat matrix_in)
 
 	return matrix_out;
 }
-struct mat matrix_addieren(struct mat matrix_out, struct mat matrix1, struct mat matrix2)
+struct mat matrix_addieren(struct mat matrix1, struct mat matrix2)
 {
 	int i, j;
+	struct mat matrix_out;
 	matrix_out.zeilen = matrix1.zeilen;
 	matrix_out.spalten = matrix1.spalten;
 	matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
@@ -761,9 +763,10 @@ struct mat matrix_addieren(struct mat matrix_out, struct mat matrix1, struct mat
 
 	return matrix_out;
 }
-struct mat matrix_skalaprodukt(struct mat matrix_out, struct mat matrix_in, int faktor)
+struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor)
 {
 	int i, j;
+	struct mat matrix_out;
 	matrix_out.zeilen = matrix_in.zeilen;
 	matrix_out.spalten = matrix_in.spalten;
 	matrix_out.matrix = (int *) calloc(matrix_in.zeilen * matrix_in.spalten, sizeof(int));
@@ -773,9 +776,10 @@ struct mat matrix_skalaprodukt(struct mat matrix_out, struct mat matrix_in, int 
 
 	return matrix_out;
 }
-struct mat matrix_matrixprodukt(struct mat matrix_out, struct mat matrix1, struct mat matrix2)
+struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 {
 	int i, j, k;
+	struct mat matrix_out;
 	if(matrix1.spalten != matrix2.zeilen)
 	{
 		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Domension der Zeilen der zweiten Matrix überein.\n");

@@ -476,7 +476,7 @@ void aufg_7_16()
 	matrix_in = matrix_eingabe(matrix_in);
 	printf("Deine Matrix:\n");
 	matrix_anzeige(matrix_in);
-	matrix_out = matrix_transponieren(matrix_out, matrix_in);
+	matrix_out = matrix_transponieren(matrix_in);
 	printf("Die %d x %d transponierte Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -497,7 +497,7 @@ void aufg_7_17()
 	printf("Die zweite Matrix:\n");
 	matrix_anzeige(matrix2);
 	
-	matrix_out = matrix_addieren(matrix_out, matrix1, matrix2);
+	matrix_out = matrix_addieren(matrix1, matrix2);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -515,7 +515,7 @@ void aufg_7_18()
 	printf("Wie lautet der Skalar?\n");
 	scanf("%d",&faktor);
 	
-	matrix_out = matrix_skalaprodukt(matrix_out, matrix_in, faktor);
+	matrix_out = matrix_skalaprodukt(matrix_in, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -540,7 +540,7 @@ void aufg_7_19()
 		return;
 	}
 
-	matrix_out = matrix_matrixprodukt(matrix_out, matrix1, matrix2);
+	matrix_out = matrix_matrixprodukt(matrix1, matrix2);
 		
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);

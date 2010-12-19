@@ -82,9 +82,9 @@ struct mat
 	};
 struct mat matrix_eingabe(struct mat matrix_out);
 void matrix_anzeige(struct mat matrix_in);
-struct mat matrix_transponieren(struct mat matrix_out, struct mat matrix_in);
-struct mat matrix_addieren(struct mat matrix_out, struct mat matrix1, struct mat matrix2);
-struct mat matrix_skalaprodukt(struct mat matrix_out, struct mat matrix_in, int faktor);
-struct mat matrix_matrixprodukt(struct mat matrix_out, struct mat matrix1, struct mat matrix2);
+struct mat matrix_transponieren(struct mat matrix_in);
+struct mat matrix_addieren(struct mat matrix1, struct mat matrix2);
+struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor);
+struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2);
 
 #endif //FUNCTIONS_H
