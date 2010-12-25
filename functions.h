@@ -76,7 +76,7 @@ int ist_palindrom(char *string, size_t laenge);
 //7.16
 struct mat
 	{
-		int *matrix;
+		double *matrix;
 		int zeilen;
 		int spalten;
 	};
@@ -84,11 +84,12 @@ struct mat matrix_eingabe(struct mat matrix_out);
 void matrix_anzeige(struct mat matrix_in);
 struct mat matrix_transponieren(struct mat matrix_in);
 struct mat matrix_addieren(struct mat matrix1, struct mat matrix2);
-struct mat matrix_skalaprodukt(struct mat matrix_in, int faktor);
+struct mat matrix_skalaprodukt(struct mat matrix_in, double faktor);
 struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2);
-struct mat matrix_z_S(struct mat matrix_in, int k, int faktor);
-struct mat matrix_z_Q(struct mat matrix_in, int k, int l, int faktor);
+struct mat matrix_z_S(struct mat matrix_in, int k, double faktor);
+struct mat matrix_z_Q(struct mat matrix_in, int k, int l, double faktor);
 struct mat matrix_z_P(struct mat matrix_in, int k, int l);
-//~ struct mat matrix_rref(struct mat matrix_in);
+struct mat matrix_rref(struct mat matrix_in);
+//~ double matrix_det(struct mat matrix_in);
 
 #endif //FUNCTIONS_H

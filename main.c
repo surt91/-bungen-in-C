@@ -504,7 +504,7 @@ void aufg_7_17()
 }
 void aufg_7_18()
 {
-	int faktor;
+	double faktor;
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
 	printf("Eine Matrix mit einem Skalar multiplizieren.\n");
@@ -548,7 +548,8 @@ void aufg_7_19()
 }
 void aufg_7_20()
 {
-	int faktor,k;
+	int k;
+	double faktor;
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
 	printf("Elementare Zeilenumformung: Eine Zeile mit einem Skalar multiplizieren.\n");
@@ -568,7 +569,8 @@ void aufg_7_20()
 }
 void aufg_7_21()
 {
-	int faktor, k, l;
+	int k, l;
+	double faktor;
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
 	printf("Elementare Zeilenumformung: Eine Zeile k mit dem mu-fachen einer anderen Zeile l addieren.\n");
@@ -608,21 +610,21 @@ void aufg_7_22()
 	matrix_anzeige(matrix_out);
 	return;
 }
-//~ void aufg_7_23()
-//~ {
-	//~ struct mat matrix_in, matrix_out;
-	//~ matrix_in.zeilen = matrix_in.spalten = 0;
-	//~ printf("Welche Matrix soll in Gaußsche Normalform gebracht werden?.\n");
-	//~ printf("Wie lautet die Matrix?\n");
-	//~ matrix_in = matrix_eingabe(matrix_in);
-	//~ printf("Die Matrix:\n");
-	//~ matrix_anzeige(matrix_in);
-	//~ 
-	//~ matrix_out = matrix_rref(matrix_in);
-	//~ printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	//~ matrix_anzeige(matrix_out);
-	//~ return;
-//~ }
+void aufg_7_23()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Welche Matrix soll in Gaußsche Normalform gebracht werden?.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	
+	matrix_out = matrix_rref(matrix_in);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 
 int main(int argc, char **argv)
 {
@@ -761,12 +763,12 @@ int main(int argc, char **argv)
                 case 22:
                     aufg_7_22();
                     break;
-                //~ case 23:
-                    //~ aufg_7_23();
-                    //~ break;
-                case 24:
-                    aufg_7_24();
+                case 23:
+                    aufg_7_23();
                     break;
+                //~ case 24:
+                    //~ aufg_7_24();
+                    //~ break;
 			}
             break;
     }
