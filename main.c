@@ -22,7 +22,7 @@ void aufg_4_13()
 void aufg_4_17()
 {
     int sum_g=0, sum_ug=0, n;
- 
+
     printf("Die ersten wieviel geraden/ungeraden Zahlen sollen aufaddiert werden?\n");
     scanf("%d", &n);
     summe_g_ug(n, &sum_g, &sum_ug);
@@ -496,7 +496,7 @@ void aufg_7_17()
 	matrix2 = matrix_eingabe(matrix2);
 	printf("Die zweite Matrix:\n");
 	matrix_anzeige(matrix2);
-	
+
 	matrix_out = matrix_addieren(matrix1, matrix2);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
@@ -514,7 +514,7 @@ void aufg_7_18()
 	matrix_anzeige(matrix_in);
 	printf("Wie lautet der Skalar?\n");
 	scanf("%d",&faktor);
-	
+
 	matrix_out = matrix_skalaprodukt(matrix_in, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
@@ -533,7 +533,7 @@ void aufg_7_19()
 	matrix2 = matrix_eingabe(matrix2);
 	printf("Die zweite Matrix:\n");
 	matrix_anzeige(matrix2);
-	
+
 	if(matrix1.spalten != matrix2.zeilen)
 	{
 		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Dimension der Zeilen der zweiten Matrix überein.\n");
@@ -541,7 +541,7 @@ void aufg_7_19()
 	}
 
 	matrix_out = matrix_matrixprodukt(matrix1, matrix2);
-		
+
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	return;
@@ -561,7 +561,7 @@ void aufg_7_20()
 	scanf("%d",&k);
 	printf("Wie lautet der Skalar?\n");
 	scanf("%d",&faktor);
-	
+
 	matrix_out = matrix_z_S(matrix_in, k-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
@@ -584,7 +584,7 @@ void aufg_7_21()
 	scanf("%d",&l);
 	printf("Mit welchem mu soll die addierte Zeile vorher multipliziert werden??\n");
 	scanf("%d",&faktor);
-	
+
 	matrix_out = matrix_z_Q(matrix_in, k-1, l-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
@@ -604,7 +604,7 @@ void aufg_7_22()
 	scanf("%d",&k);
 	printf("zweite Zeile l, die vertauscht werden soll?\n");
 	scanf("%d",&l);
-	
+
 	matrix_out = matrix_z_P(matrix_in, k-1, l-1);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
@@ -619,10 +619,22 @@ void aufg_7_23()
 	matrix_in = matrix_eingabe(matrix_in);
 	printf("Die Matrix:\n");
 	matrix_anzeige(matrix_in);
-	
-	matrix_out = matrix_rref(matrix_in);
+
+	matrix_out = matrix_gnf(matrix_in);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	return;
+}
+void aufg_7_24()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Für welche Matrix soll die Determinante berechnet werden?.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	printf("Die Determinante ist: %lg \n", matrix_det(matrix_in));
 	return;
 }
 
@@ -766,9 +778,9 @@ int main(int argc, char **argv)
                 case 23:
                     aufg_7_23();
                     break;
-                //~ case 24:
-                    //~ aufg_7_24();
-                    //~ break;
+                case 24:
+                    aufg_7_24();
+                    break;
 			}
             break;
     }
@@ -817,4 +829,4 @@ void help()
 	printf("Verwendug:\n");
 	printf("[Programm] [Kapitel] [Aufgabe]\n");
 }
-	
+

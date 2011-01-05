@@ -724,6 +724,23 @@ struct mat matrix_eingabe(struct mat matrix_out)
 		}
 	return (matrix_out);
 }
+// Erzeugt eine n x n Einheitsmatrix
+struct mat matrix_e(int n)
+{
+	int i, j;
+	struct mat matrix_out;
+	matrix_out.zeilen = matrix_out.spalten = n;
+	matrix_out.matrix = (double *) calloc(n * n, sizeof(double));
+	for(i=0;i<matrix_out.zeilen;i++)
+		for(j=0;j<matrix_out.spalten;j++)
+		{
+			if(i==j)
+				matrix_out.matrix[j* matrix_out.spalten+i] = 1;
+			else
+				matrix_out.matrix[j* matrix_out.spalten+i] = 0;
+		}
+}
+
 //~ struct mat matrix_auslesen(struct mat matrix_out)
 //~ {
 	//~ FILE *fp;
@@ -746,7 +763,7 @@ struct mat matrix_eingabe(struct mat matrix_out)
 			//~ matrix[n] = atoi(*zahl);
 			//~ n++;
 		//~ }
-//~ 
+//~
 	//~ fclose(fp);
 	//~ int i, j;
 	//~ if(matrix_out.zeilen == 0 || matrix_out.spalten == 0){
@@ -821,10 +838,6 @@ struct mat matrix_addieren(struct mat matrix1, struct mat matrix2)
 struct mat matrix_skalaprodukt(struct mat matrix_out, double faktor)
 {
 	int i, j;
-	//~ struct mat matrix_out;
-	//~ matrix_out.zeilen = matrix_in.zeilen;
-	//~ matrix_out.spalten = matrix_in.spalten;
-	//~ matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_out.matrix[i* matrix_out.spalten+j]*faktor;
@@ -854,13 +867,6 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 struct mat matrix_z_S(struct mat matrix_out, int k, double faktor)
 {
 	int i, j;
-	//~ struct mat matrix_out;
-	//~ matrix_out.zeilen = matrix_in.zeilen;
-	//~ matrix_out.spalten = matrix_in.spalten;
-	//~ matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
-	//~ for(i=0;i<matrix_in.zeilen;i++)
-		//~ for(j=0;j<matrix_in.spalten;j++)
-			//~ matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
 	for(j=0;j<matrix_out.spalten;j++)
 		matrix_out.matrix[k* matrix_out.spalten+j] = matrix_out.matrix[k* matrix_out.spalten+j]*faktor;
 
@@ -870,13 +876,6 @@ struct mat matrix_z_S(struct mat matrix_out, int k, double faktor)
 struct mat matrix_z_Q(struct mat matrix_out, int k, int l, double faktor)
 {
 	int i, j;
-	//~ struct mat matrix_out;
-	//~ matrix_out.zeilen = matrix_in.zeilen;
-	//~ matrix_out.spalten = matrix_in.spalten;
-	//~ matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
-	//~ for(i=0;i<matrix_out.zeilen;i++)
-		//~ for(j=0;j<matrix_out.spalten;j++)
-			//~ matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
 	if(k!=l)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[k* matrix_out.spalten+j] += matrix_out.matrix[l* matrix_out.spalten+j]*faktor;
@@ -903,84 +902,98 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 
 	return matrix_out;
 }
-// ref / Gaußsche Normalform
-struct mat matrix_rref(struct mat matrix_out)
+// ref / Gaußsche Normalform / Dreiecksform
+struct mat matrix_gnf(struct mat matrix_out)
 {
 	int i, j, p, q;
 	double tmp;
-	//~ struct mat matrix_out;
-	//~ matrix_out.zeilen = matrix_in.zeilen;
-	//~ matrix_out.spalten = matrix_in.spalten;
-	//~ matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
-	//~ for(i=0;i<matrix_out.zeilen;i++)
-		//~ for(j=0;j<matrix_out.spalten;j++)
-			//~ matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
-			
+
 	for(q=0;q<matrix_out.zeilen;q++)
 	{
 		for(p=q+1;p<matrix_out.zeilen;p++)
 		{
 			tmp = matrix_out.matrix[q * matrix_out.spalten + q];
-			if(tmp<0.000001 && tmp>-0.000001)
+			if(tmp<FLOATNULL && tmp>-FLOATNULL)
 			{
 				for(i=q;i<matrix_out.zeilen;i++)
 				{
 					tmp=matrix_out.matrix[i * matrix_out.spalten + q];
-					if(tmp>0.000001 || tmp<-0.000001)
+					if(tmp>FLOATNULL || tmp<-FLOATNULL)
 					{
 						matrix_out = matrix_z_P(matrix_out,i,q);
 						break;
 					}
 				}
-			} else
+			}
+			else
 			{
 				matrix_out = matrix_z_Q(matrix_out, p, q, -1 * matrix_out.matrix[p * matrix_out.spalten + q]/tmp);
 			}
 		}
 		tmp=matrix_out.matrix[q * matrix_out.spalten + q];
-		if(tmp>0.000001 || tmp<-0.000001)
+		if(tmp>FLOATNULL || tmp<-FLOATNULL)
 		{
 			matrix_out = matrix_z_S(matrix_out,q,1/tmp);
 		} else { tmp = 0; }
 	}
 	return matrix_out;
 }
+// Diagonalform
+struct mat matrix_dgf(struct mat matrix_out)
+{
+	// Auch das rechte obere Dreieck mit Nullen füllen (reduzierte Gaußsche Normalform)
+	int i, j, p, q;
+	double tmp;
+
+	matrix_out = matrix_gnf(matrix_out);
+
+}
+// invertieren
+struct mat matrix_invertieren(struct mat matrix_out)
+{
+	// An die zu invertierende Matrix (muss quadratisch und linear unabhängig sein) wird die Einheitsmatrix drangehängt. Die große Matrix wird danach auf Diagonalform gebracht. Die ehemalige einheitsmatrix wird wieder abgeschnitten. Fertig ist die invertierte.
+}
 // Determinante
-//~ double matrix_det(struct mat matrix_in)
-//~ {
-	//~ int i, j, p, q;
-	//~ double tmp;
-	//~ struct mat dreieck, tau;
-	//~ dreieck.zeilen = matrix_in.zeilen;
-	//~ dreieck.spalten = matrix_in.spalten;
-	//~ dreieck.matrix = (double *) calloc(dreieck.zeilen * dreieck.spalten, sizeof(double));
-	//~ for(i=0;i<dreieck.zeilen;i++)
-		//~ for(j=0;j<dreieck.spalten;j++)
-			//~ dreieck.matrix[i* dreieck.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
-			//~ 
-	//~ for(q=0;q<dreieck.zeilen;q++)
-	//~ {
-		//~ for(p=q+1;p<dreieck.zeilen;p++)
-		//~ {
-			//~ tmp = dreieck.matrix[q * dreieck.spalten + q];
-			//~ if(tmp<0.000001 && tmp>-0.000001)
-			//~ {
-				//~ for(i=q;i<dreieck.zeilen;i++)
-				//~ {
-					//~ tmp=dreieck.matrix[i * dreieck.spalten + q];
-					//~ if(tmp>0.000001 || tmp<-0.000001)
-					//~ {
-						//~ dreieck = matrix_z_P(dreieck,i,q);
-						//~ break;
-					//~ }
-				//~ }
-			//~ }
-			//~ else
-			//~ {
-				//~ dreieck = matrix_z_Q(dreieck, p, q, -1 * dreieck.matrix[p * dreieck.spalten + q]/tmp);
-			//~ }
-		//~ }
-	//~ }
-//~ 
-	//~ 
-//~ }
+double matrix_det(struct mat matrix_out)
+{
+	int i, j, p, q;
+	double det=1, tmp;
+
+	if(matrix_out.zeilen != matrix_out.spalten)
+		return 0;
+
+	for(q=0;q<matrix_out.zeilen;q++)
+	{
+		for(p=q+1;p<matrix_out.zeilen;p++)
+		{
+			tmp = matrix_out.matrix[q * matrix_out.spalten + q];
+			if(tmp<FLOATNULL && tmp>-FLOATNULL)
+			{
+				for(i=q;i<matrix_out.zeilen;i++)
+				{
+					tmp=matrix_out.matrix[i * matrix_out.spalten + q];
+					if(tmp>FLOATNULL || tmp<-FLOATNULL)
+					{
+						matrix_out = matrix_z_P(matrix_out,i,q);
+						det *= -1;
+						break;
+					}
+				}
+			}
+			else
+			{
+				matrix_out = matrix_z_Q(matrix_out, p, q, -1 * matrix_out.matrix[p * matrix_out.spalten + q]/tmp);
+			}
+		}
+		tmp=matrix_out.matrix[q * matrix_out.spalten + q];
+		if(tmp>FLOATNULL || tmp<-FLOATNULL)
+		{
+			matrix_out = matrix_z_S(matrix_out,q,1/tmp);
+			det *= tmp;
+		} else { tmp = 0; }
+	}
+
+	for(i=0;i<matrix_out.spalten;i++)
+		det *= matrix_out.matrix[i* matrix_out.spalten+i];
+	return det;
+}
