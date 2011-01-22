@@ -637,6 +637,37 @@ void aufg_7_24()
 	printf("Die Determinante ist: %lg \n", matrix_det(matrix_in));
 	return;
 }
+void aufg_7_25()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Welche Matrix soll auf Diagonalform gebracht werden?.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	matrix_out = matrix_dgf(matrix_in);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
+void aufg_7_26()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Welche Matrix soll auf Diagonalform gebracht werden?.\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	matrix_out = matrix_invertieren(matrix_in);
+	if (matrix_out.zeilen != 0)
+	{
+		printf("Die invertierte %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+		matrix_anzeige(matrix_out);
+	}
+	return;
+}
 
 int main(int argc, char **argv)
 {
@@ -781,6 +812,12 @@ int main(int argc, char **argv)
                 case 24:
                     aufg_7_24();
                     break;
+                case 25:
+                    aufg_7_25();
+                    break;
+                case 26:
+                    aufg_7_26();
+                    break;
 			}
             break;
     }
@@ -825,6 +862,13 @@ void help()
 	printf("7\t17\t//Matrix addieren\n");
 	printf("7\t18\t//Matrix mit Skalar multiplizieren\n");
 	printf("7\t19\t//Matrix mit Matrix multiplizieren\n");
+	printf("7\t20\t//el. Zeilenumformung\n");
+	printf("7\t21\t//el. Zeilenumformung\n");
+	printf("7\t22\t//el. Zeilenumformung\n");
+	printf("7\t23\t//Gaussche Normalform\n");
+	printf("7\t24\t//Determinante\n");
+	printf("7\t25\t//Dieagonalform\n");
+	printf("7\t26\t//Inverse\n");
 	printf("\n");
 	printf("Verwendug:\n");
 	printf("[Programm] [Kapitel] [Aufgabe]\n");

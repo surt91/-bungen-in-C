@@ -719,7 +719,7 @@ struct mat matrix_eingabe(struct mat matrix_out)
 	for(i=0;i< matrix_out.zeilen ;i++)
 		for(j=0;j< matrix_out.spalten ;j++)
 		{
-			printf("%d-te Zeile, %d-te Spalte\n", i, j);
+			printf("%d-te Zeile, %d-te Spalte\n", i+1, j+1);
 			scanf("%lf", &matrix_out.matrix[i * matrix_out.spalten + j]);
 		}
 	return (matrix_out);
@@ -739,6 +739,7 @@ struct mat matrix_e(int n)
 			else
 				matrix_out.matrix[j* matrix_out.spalten+i] = 0;
 		}
+	return matrix_out;
 }
 
 //~ struct mat matrix_auslesen(struct mat matrix_out)
@@ -850,7 +851,7 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 	struct mat matrix_out;
 	if(matrix1.spalten != matrix2.zeilen)
 	{
-		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Domension der Zeilen der zweiten Matrix überein.\n");
+		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Dimension der Zeilen der zweiten Matrix überein.\n");
 		return;
 	}
 	matrix_out.zeilen = matrix1.zeilen;
@@ -905,7 +906,7 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 // ref / Gaußsche Normalform / Dreiecksform
 struct mat matrix_gnf(struct mat matrix_out)
 {
-	int i, j, p, q;
+	int i, j, p, q, k;
 	double tmp;
 
 	for(q=0;q<matrix_out.zeilen;q++)
@@ -926,15 +927,18 @@ struct mat matrix_gnf(struct mat matrix_out)
 				}
 			}
 			else
-			{
 				matrix_out = matrix_z_Q(matrix_out, p, q, -1 * matrix_out.matrix[p * matrix_out.spalten + q]/tmp);
+		}
+		//tmp=matrix_out.matrix[q * matrix_out.spalten + q];
+		for(k=q;k<matrix_out.spalten;k++)
+		{
+			tmp=matrix_out.matrix[q * matrix_out.spalten + k];
+			if(tmp>FLOATNULL || tmp<-FLOATNULL)
+			{
+				matrix_out = matrix_z_S(matrix_out,q,1/tmp);
+				break;
 			}
 		}
-		tmp=matrix_out.matrix[q * matrix_out.spalten + q];
-		if(tmp>FLOATNULL || tmp<-FLOATNULL)
-		{
-			matrix_out = matrix_z_S(matrix_out,q,1/tmp);
-		} else { tmp = 0; }
 	}
 	return matrix_out;
 }
@@ -947,11 +951,60 @@ struct mat matrix_dgf(struct mat matrix_out)
 
 	matrix_out = matrix_gnf(matrix_out);
 
+	for(i=matrix_out.zeilen;i>=0;i--)
+		for(j=0;j<matrix_out.spalten;j++)
+			if(matrix_out.matrix[i* matrix_out.spalten+j] != 1)
+				continue;
+			else
+				for(p=0;p<matrix_out.zeilen;p++)
+					matrix_out=matrix_z_Q(matrix_out, p, i, -matrix_out.matrix[p* matrix_out.spalten+j]);
+return matrix_out;
 }
 // invertieren
-struct mat matrix_invertieren(struct mat matrix_out)
+struct mat matrix_invertieren(struct mat matrix_in)
 {
 	// An die zu invertierende Matrix (muss quadratisch und linear unabhängig sein) wird die Einheitsmatrix drangehängt. Die große Matrix wird danach auf Diagonalform gebracht. Die ehemalige einheitsmatrix wird wieder abgeschnitten. Fertig ist die invertierte.
+	int i, j;
+	double det;
+	struct mat einheit;
+	einheit=matrix_e(matrix_in.zeilen);
+	struct mat tmp, matrix_out, tmp2;
+	tmp2.spalten = matrix_in.spalten;
+	tmp2.zeilen = matrix_in.zeilen;
+	tmp2.matrix = (double *) calloc(tmp2.zeilen * tmp2.spalten, sizeof(double));
+	for(i=0;i<tmp2.zeilen;i++)
+		for(j=0;j<tmp2.spalten;j++)
+			tmp2.matrix[i* tmp2.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
+
+	det = matrix_det(tmp2);
+
+	if(det < -FLOATNULL || det > FLOATNULL)
+	{
+		tmp.spalten = matrix_in.spalten*2;
+		tmp.zeilen = matrix_in.zeilen;
+		tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+		matrix_out.spalten = matrix_in.spalten;
+		matrix_out.zeilen = matrix_in.zeilen;
+		matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+
+		for(i=0;i<matrix_in.zeilen;i++)
+			for(j=0;j<matrix_in.spalten;j++)
+				tmp.matrix[i* tmp.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
+
+		for(i=0;i<matrix_in.zeilen;i++)
+			for(j=0;j<matrix_in.spalten;j++)
+				tmp.matrix[i* tmp.spalten+j+matrix_in.spalten] = einheit.matrix[i* einheit.spalten+j];
+		tmp = matrix_dgf(tmp);;
+		for(i=0;i<matrix_in.zeilen;i++)
+			for(j=0;j<matrix_in.spalten;j++)
+				matrix_out.matrix[i* matrix_in.spalten +j] = tmp.matrix[i* tmp.spalten + (j+matrix_in.spalten)];
+		return matrix_out;
+	}
+	else
+	{
+		printf("Die Matrix ist nicht invertierbar.\n");
+		return;
+	}
 }
 // Determinante
 double matrix_det(struct mat matrix_out)
