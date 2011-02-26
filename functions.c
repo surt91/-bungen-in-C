@@ -89,9 +89,9 @@ int fibonacci(n)
 // Funktion zur Berechnung der ersten n Fibonacci-Zahlen (als Array, das >= n sein muss)
 int *fibonacci_array(int n, int *fibo_array)
 {
-    int i,tmp=0;
+    int i;
     if(n<1)
-        return ;
+        return 0;
     fibo_array[0]=0;
     fibo_array[1]=0;
     fibo_array[2]=1;
@@ -648,7 +648,7 @@ int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_erge
 		for(;i<=grad_max;i++)
 			ergebnis_poly[i]=poly2[i];
 	else
-		return;
+		return 0;
 	return (ergebnis_poly);
 }
 
@@ -673,6 +673,24 @@ int *polynom_ableiter(int *poly_out, int *poly_in, int *grad_out, int grad_in)
 	for(i=0;i<=*grad_out;i++)
 		poly_out[i]=(poly_in[i+1]*(i+1));
 	return (poly_out);
+}
+
+// Monte Carlo Pi
+double pi(int versuche)
+{
+	int i;
+	double x,y, betrag, treffer=0;
+	for(i=0;i<versuche;i++)
+	{
+		x = rand();
+		x /= RAND_MAX;
+		y = rand();
+		y /= RAND_MAX;
+		betrag = x*x + y*y;
+		if(betrag<=1)
+			treffer++;
+	}
+	return(treffer/versuche*4);
 }
 
 // findet heraus, ob der Parameter String ein Palindrom ist
@@ -789,12 +807,12 @@ void matrix_anzeige(struct mat matrix_in)
 	int i, j;
 	for(i=0;i<matrix_in.zeilen;i++)
 	{
-		printf("| ");
+		printf(" ");
 		for(j=0;j<matrix_in.spalten;j++)
 		{
-			printf("%.3g ", matrix_in.matrix[i* matrix_in.spalten+j]);
+			printf(" % #5.3f ", matrix_in.matrix[i* matrix_in.spalten+j]);
 		}
-		printf("|\n");
+		printf("\n");
 	}
 }
 //~ void matrix_schreiben(struct mat matrix_in)
@@ -812,7 +830,7 @@ void matrix_anzeige(struct mat matrix_in)
 //~ }
 struct mat matrix_transponieren(struct mat matrix_in)
 {
-	int i, j, tmp;
+	int i, j;
 	struct mat matrix_out;
 	matrix_out.zeilen = matrix_in.spalten;
 	matrix_out.spalten = matrix_in.zeilen;
@@ -867,7 +885,7 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 //Multiplikation der k-ten Zeile mit einem Skalar
 struct mat matrix_z_S(struct mat matrix_out, int k, double faktor)
 {
-	int i, j;
+	int j;
 	for(j=0;j<matrix_out.spalten;j++)
 		matrix_out.matrix[k* matrix_out.spalten+j] = matrix_out.matrix[k* matrix_out.spalten+j]*faktor;
 
@@ -876,7 +894,7 @@ struct mat matrix_z_S(struct mat matrix_out, int k, double faktor)
 //Addition des mu-fachen der l-ten zeile zur k-ten Zeile
 struct mat matrix_z_Q(struct mat matrix_out, int k, int l, double faktor)
 {
-	int i, j;
+	int j;
 	if(k!=l)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[k* matrix_out.spalten+j] += matrix_out.matrix[l* matrix_out.spalten+j]*faktor;
@@ -906,7 +924,7 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 // ref / Gaußsche Normalform / Dreiecksform
 struct mat matrix_gnf(struct mat matrix_out)
 {
-	int i, j, p, q, k;
+	int i, p, q, k;
 	double tmp;
 
 	for(q=0;q<matrix_out.zeilen;q++)
@@ -946,18 +964,22 @@ struct mat matrix_gnf(struct mat matrix_out)
 struct mat matrix_dgf(struct mat matrix_out)
 {
 	// Auch das rechte obere Dreieck mit Nullen füllen (reduzierte Gaußsche Normalform)
-	int i, j, p, q;
+	int i, j, p;
 	double tmp;
 
 	matrix_out = matrix_gnf(matrix_out);
 
 	for(i=matrix_out.zeilen;i>=0;i--)
 		for(j=0;j<matrix_out.spalten;j++)
-			if(matrix_out.matrix[i* matrix_out.spalten+j] != 1)
+		{
+			tmp=matrix_out.matrix[i* matrix_out.spalten+j];
+			if(tmp>1+FLOATNULL || tmp<1-FLOATNULL)
+			//~ if(matrix_out.matrix[i* matrix_out.spalten+j] != 1)
 				continue;
 			else
 				for(p=0;p<matrix_out.zeilen;p++)
 					matrix_out=matrix_z_Q(matrix_out, p, i, -matrix_out.matrix[p* matrix_out.spalten+j]);
+		}
 return matrix_out;
 }
 // invertieren
@@ -1009,7 +1031,7 @@ struct mat matrix_invertieren(struct mat matrix_in)
 // Determinante
 double matrix_det(struct mat matrix_out)
 {
-	int i, j, p, q;
+	int i, p, q;
 	double det=1, tmp;
 
 	if(matrix_out.zeilen != matrix_out.spalten)
@@ -1049,4 +1071,74 @@ double matrix_det(struct mat matrix_out)
 	for(i=0;i<matrix_out.spalten;i++)
 		det *= matrix_out.matrix[i* matrix_out.spalten+i];
 	return det;
+}
+// Zeile/Spalte streichen
+struct mat matrix_streichen(struct mat matrix_in, int i, int j)
+{
+	int p, q, n, m;
+	struct mat tmp;
+
+	tmp.spalten = matrix_in.spalten - 1;
+	tmp.zeilen = matrix_in.zeilen - 1;
+	tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+
+	for(m=0,q=0;q<matrix_in.zeilen;q++,m++)
+	{
+		if(q==j)
+				{
+					m--;
+					continue;
+				}
+		for(n=0,p=0;p<matrix_in.spalten;p++,n++)
+			{
+				if(p==i)
+				{
+					n--;
+					continue;
+				}
+
+				tmp.matrix[m* tmp.spalten+n] = matrix_in.matrix[q* matrix_in.spalten+p];
+			}
+	}
+	return(tmp);
+}
+// Adjunkte Matrix finden
+struct mat matrix_adjunkte(struct mat matrix_in)
+{
+	int i, j;
+	double det=0;
+	struct mat tmp, matrix_out;
+	matrix_out.spalten = matrix_in.spalten;
+	matrix_out.zeilen = matrix_in.zeilen;
+	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+
+	if(matrix_out.zeilen != matrix_out.spalten)
+		return;
+
+	for(i=0;i<matrix_in.zeilen;i++)
+		for(j=0;j<matrix_in.spalten;j++)
+		{
+			det = matrix_det(matrix_streichen(matrix_in,i,j));
+			if(i%2==1)
+				det*=-1;
+			if(j%2==1)
+				det*=-1;
+			matrix_out.matrix[i* matrix_in.spalten+j]=det;
+		}
+	return matrix_out;
+}
+// invertieren mit Adjunkter
+struct mat matrix_invertieren_adjunkte(struct mat matrix_in)
+{
+	double det;
+	struct mat tmp;
+	tmp.spalten = matrix_in.spalten;
+	tmp.zeilen = matrix_in.zeilen;
+	tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+
+	tmp=matrix_adjunkte(matrix_in);
+	det=matrix_det(matrix_in);
+	det=1/det;
+
+	return(matrix_skalaprodukt(tmp,det));
 }

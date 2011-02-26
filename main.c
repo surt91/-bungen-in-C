@@ -46,11 +46,11 @@ void aufg_4_25()
     printf("sind die ersten %d Fibonacci Zahlen, die auch Primzahlen sind\n",k);
 }
 void aufg_4_26()
-{    unsigned n,i, *fibo_array=0, prim_max;
+{   int n,i, *fibo_array=0, prim_max;
     short *prim_array;
     printf("Wieviele Fibonacci-Primzahlen sollen ausgegeben werden?\n");
     scanf("%d", &n);
-    fibo_array = (unsigned *) calloc(n+1, sizeof(unsigned));
+    fibo_array = (int *) calloc(n+1, sizeof(int));
     fibonacci_array(n, fibo_array);
     prim_max=fibo_array[n];
     prim_array = (short *) calloc(prim_max, sizeof(short));
@@ -399,7 +399,7 @@ void aufg_6_24()
 
 void aufg_7_8()
 {
-	int *polynom=0, grad, i, x, fvonx;
+	int *polynom=0, grad, x, fvonx;
 	polynom=polynom_eingabe(polynom, &grad);
 	printf("Welchen Wert soll x haben?\n");
 	scanf("%d", &x);
@@ -448,6 +448,16 @@ void aufg_7_11()
 	polynom_out = polynom_ableiter(polynom_out, polynom_in, &grad_out, grad_in);
 	printf("Das differenzierte Polynom (%d. Grad):\n", grad_out);
 	polynom_anzeige(polynom_out, grad_out);
+	return;
+}
+
+void aufg_7_12()
+{
+	int versuche;
+	printf("Hier ermitteln wir Pi, indem wir Dartpfeile auf eine Kreisscheibe werfen. Weil wir nicht gut sind im Dart, treffen wir gleichverteilt. Anhand der Treffer können wir dann Pi ermitteln.\n");
+	printf("Wieviele Dartpfeile sollen geworfen werden?\n");
+	scanf("%d", &versuche);
+	printf("Mit %d Dartpfeilen haben wir Pi als %.9lf ermittelt:\n", versuche, pi(versuche));
 	return;
 }
 void aufg_7_15()
@@ -513,7 +523,7 @@ void aufg_7_18()
 	printf("Die Matrix:\n");
 	matrix_anzeige(matrix_in);
 	printf("Wie lautet der Skalar?\n");
-	scanf("%d",&faktor);
+	scanf("%lf",&faktor);
 
 	matrix_out = matrix_skalaprodukt(matrix_in, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
@@ -560,7 +570,7 @@ void aufg_7_20()
 	printf("Welche Zeile soll mit dem Skalar multipliziert werden?\n");
 	scanf("%d",&k);
 	printf("Wie lautet der Skalar?\n");
-	scanf("%d",&faktor);
+	scanf("%lf",&faktor);
 
 	matrix_out = matrix_z_S(matrix_in, k-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
@@ -583,7 +593,7 @@ void aufg_7_21()
 	printf("Welche Zeile soll darauf addiert werden?\n");
 	scanf("%d",&l);
 	printf("Mit welchem mu soll die addierte Zeile vorher multipliziert werden??\n");
-	scanf("%d",&faktor);
+	scanf("%lf",&faktor);
 
 	matrix_out = matrix_z_Q(matrix_in, k-1, l-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
@@ -627,7 +637,7 @@ void aufg_7_23()
 }
 void aufg_7_24()
 {
-	struct mat matrix_in, matrix_out;
+	struct mat matrix_in;
 	matrix_in.zeilen = matrix_in.spalten = 0;
 	printf("Für welche Matrix soll die Determinante berechnet werden?.\n");
 	printf("Wie lautet die Matrix?\n");
@@ -668,19 +678,48 @@ void aufg_7_26()
 	}
 	return;
 }
+void aufg_7_27()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Zu welche Matrix soll die Adjunkte gefunden werden?\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	matrix_out = matrix_adjunkte(matrix_in);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
+void aufg_7_28()
+{
+	struct mat matrix_in, matrix_out;
+	matrix_in.zeilen = matrix_in.spalten = 0;
+	printf("Zu welcher Matrix soll die Inverse mit der Adjunkten ermittelt werden?\n");
+	printf("Wie lautet die Matrix?\n");
+	matrix_in = matrix_eingabe(matrix_in);
+	printf("Die Matrix:\n");
+	matrix_anzeige(matrix_in);
+	matrix_out = matrix_invertieren_adjunkte(matrix_in);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	matrix_anzeige(matrix_out);
+	return;
+}
 
 int main(int argc, char **argv)
 {
-    int aufgnr, kapitel;
+    int aufgnr=0, kapitel=0;
     srand( (unsigned) time(NULL) ) ;
-    if(*argv[1]=='?')
-		help();
+    //~ if(*argv[1]=='?')
+		//~ help();
     if(argc != 3)
     {
-        printf("Welches Kapitel?\n");
-        scanf("%d", &kapitel);
-        printf("Welche Übungsaufgabe?\n");
-        scanf("%d", &aufgnr);
+		help();
+        //~ printf("Welches Kapitel?\n");
+        //~ scanf("%d", &kapitel);
+        //~ printf("Welche Übungsaufgabe?\n");
+        //~ scanf("%d", &aufgnr);
     }
     else
     {
@@ -782,6 +821,9 @@ int main(int argc, char **argv)
                 case 11:
                     aufg_7_11();
                     break;
+                case 12:
+                    aufg_7_12();
+                    break;
                 case 15:
                     aufg_7_15();
                     break;
@@ -817,6 +859,12 @@ int main(int argc, char **argv)
                     break;
                 case 26:
                     aufg_7_26();
+                    break;
+                case 27:
+                    aufg_7_27();
+                    break;
+                case 28:
+                    aufg_7_28();
                     break;
 			}
             break;
@@ -857,6 +905,7 @@ void help()
 	printf("7\t9\t//Polynome addieren\n");
 	printf("7\t10\t//Polynome multiplizieren\n");
 	printf("7\t11\t//Polynom ableiten\n");
+	printf("7\t12\t//Monte Carlo Pi\n");
 	printf("7\t15\t//100 Zeichen Palindromität prüfen\n");
 	printf("7\t16\t//Matrix transponieren\n");
 	printf("7\t17\t//Matrix addieren\n");
@@ -867,8 +916,10 @@ void help()
 	printf("7\t22\t//el. Zeilenumformung\n");
 	printf("7\t23\t//Gaussche Normalform\n");
 	printf("7\t24\t//Determinante\n");
-	printf("7\t25\t//Dieagonalform\n");
+	printf("7\t25\t//Diagonalform\n");
 	printf("7\t26\t//Inverse\n");
+	printf("7\t27\t//Adjunkte\n");
+	printf("7\t28\t//Inverse mit Adjunkter\n");
 	printf("\n");
 	printf("Verwendug:\n");
 	printf("[Programm] [Kapitel] [Aufgabe]\n");

@@ -73,6 +73,8 @@ int *polynom_addierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_erge
 //7.10
 int *polynom_multiplizierer(int *ergebnis_poly, int *poly1, int *poly2, int *grad_ergebnis, int grad1, int grad2);
 int *polynom_ableiter(int *poly_out, int *poly_in, int *grad_out, int grad_in);
+//7.12
+double pi(int versuche);
 //7.15
 int ist_palindrom(char *string, size_t laenge);
 //7.16
@@ -95,5 +97,8 @@ struct mat matrix_gnf(struct mat matrix_in);
 struct mat matrix_dgf(struct mat matrix_out);
 struct mat matrix_invertieren(struct mat matrix_in);
 double matrix_det(struct mat matrix_in);
+struct mat matrix_streichen(struct mat matrix_in, int i, int j);
+struct mat matrix_adjunkte(struct mat matrix_in);
+struct mat matrix_invertieren_adjunkte(struct mat matrix_in);
 
 #endif //FUNCTIONS_H
