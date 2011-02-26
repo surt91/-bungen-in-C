@@ -968,16 +968,14 @@ struct mat matrix_dgf(struct mat matrix_out)
 	double tmp;
 
 	matrix_out = matrix_gnf(matrix_out);
-
 	for(i=matrix_out.zeilen;i>=0;i--)
 		for(j=0;j<matrix_out.spalten;j++)
 		{
 			tmp=matrix_out.matrix[i* matrix_out.spalten+j];
-			if(tmp>1+FLOATNULL || tmp<1-FLOATNULL)
-			//~ if(matrix_out.matrix[i* matrix_out.spalten+j] != 1)
+			if(tmp>1+FLOATNULL || tmp<1-FLOATNULL) //Element ungleich 1, sprich: kein Pivotelement
 				continue;
 			else
-				for(p=0;p<matrix_out.zeilen;p++)
+				for(p=0;p<i;p++)
 					matrix_out=matrix_z_Q(matrix_out, p, i, -matrix_out.matrix[p* matrix_out.spalten+j]);
 		}
 return matrix_out;
