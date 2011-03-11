@@ -477,250 +477,25 @@ void aufg_7_15()
 	return;
 }
 
-void aufg_7_16()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Eine Matrix Transponieren.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Deine Matrix:\n");
-	matrix_anzeige(matrix_in);
-	matrix_out = matrix_transponieren(matrix_in);
-	printf("Die %d x %d transponierte Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_17()
-{
-	struct mat matrix1, matrix2, matrix_out;
-	matrix1.zeilen = matrix1.spalten =  matrix2.zeilen = matrix2.spalten = 0;
-	printf("Zwei Matrizen addieren.\n");
-	printf("Wie lautet die erste Matrix?\n");
-	matrix1 = matrix_eingabe(matrix1);
-	printf("Die erste Matrix:\n");
-	matrix_anzeige(matrix1);
-	matrix2.zeilen=matrix1.zeilen;
-	matrix2.spalten=matrix1.spalten;
-	printf("Wie lautet die zweite %d x %d Matrix?\n", matrix2.zeilen, matrix2.spalten);
-	matrix2 = matrix_eingabe(matrix2);
-	printf("Die zweite Matrix:\n");
-	matrix_anzeige(matrix2);
 
-	matrix_out = matrix_addieren(matrix1, matrix2);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_18()
-{
-	double faktor;
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Eine Matrix mit einem Skalar multiplizieren.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	printf("Wie lautet der Skalar?\n");
-	scanf("%lf",&faktor);
-
-	matrix_out = matrix_skalaprodukt(matrix_in, faktor);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_19()
-{
-	struct mat matrix1, matrix2, matrix_out;
-	matrix1.zeilen = matrix1.spalten =  matrix2.zeilen = matrix2.spalten = 0;
-	printf("Eine Matrix mit einer Matrix multiplizieren.\n");
-	printf("Wie lautet die erste Matrix?\n");
-	matrix1 = matrix_eingabe(matrix1);
-	printf("Die erste Matrix:\n");
-	matrix_anzeige(matrix1);
-	printf("Wie lautet die zweite Matrix?\n");
-	matrix2 = matrix_eingabe(matrix2);
-	printf("Die zweite Matrix:\n");
-	matrix_anzeige(matrix2);
-
-	if(matrix1.spalten != matrix2.zeilen)
-	{
-		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Dimension der Zeilen der zweiten Matrix überein.\n");
-		return;
-	}
-
-	matrix_out = matrix_matrixprodukt(matrix1, matrix2);
-
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_20()
-{
-	int k;
-	double faktor;
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Elementare Zeilenumformung: Eine Zeile mit einem Skalar multiplizieren.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	printf("Welche Zeile soll mit dem Skalar multipliziert werden?\n");
-	scanf("%d",&k);
-	printf("Wie lautet der Skalar?\n");
-	scanf("%lf",&faktor);
-
-	matrix_out = matrix_z_S(matrix_in, k-1, faktor);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_21()
-{
-	int k, l;
-	double faktor;
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Elementare Zeilenumformung: Eine Zeile k mit dem mu-fachen einer anderen Zeile l addieren.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	printf("Welche Zeile soll verändert werden??\n");
-	scanf("%d",&k);
-	printf("Welche Zeile soll darauf addiert werden?\n");
-	scanf("%d",&l);
-	printf("Mit welchem mu soll die addierte Zeile vorher multipliziert werden??\n");
-	scanf("%lf",&faktor);
-
-	matrix_out = matrix_z_Q(matrix_in, k-1, l-1, faktor);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_22()
-{
-	int k, l;
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Elementare Zeilenumformung: Eine Zeile k mit der Zeile l vertauschen.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	printf("erste Zeile k, die vertauscht werden soll?\n");
-	scanf("%d",&k);
-	printf("zweite Zeile l, die vertauscht werden soll?\n");
-	scanf("%d",&l);
-
-	matrix_out = matrix_z_P(matrix_in, k-1, l-1);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_23()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Welche Matrix soll in Gaußsche Normalform gebracht werden?.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-
-	matrix_out = matrix_gnf(matrix_in);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_24()
-{
-	struct mat matrix_in;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Für welche Matrix soll die Determinante berechnet werden?.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	printf("Die Determinante ist: %lg \n", matrix_det(matrix_in));
-	return;
-}
-void aufg_7_25()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Welche Matrix soll auf Diagonalform gebracht werden?.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	matrix_out = matrix_dgf(matrix_in);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_26()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Welche Matrix soll auf Diagonalform gebracht werden?.\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	matrix_out = matrix_invertieren(matrix_in);
-	if (matrix_out.zeilen != 0)
-	{
-		printf("Die invertierte %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-		matrix_anzeige(matrix_out);
-	}
-	return;
-}
-void aufg_7_27()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Zu welche Matrix soll die Adjunkte gefunden werden?\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	matrix_out = matrix_adjunkte(matrix_in);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
-void aufg_7_28()
-{
-	struct mat matrix_in, matrix_out;
-	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Zu welcher Matrix soll die Inverse mit der Adjunkten ermittelt werden?\n");
-	printf("Wie lautet die Matrix?\n");
-	matrix_in = matrix_eingabe(matrix_in);
-	printf("Die Matrix:\n");
-	matrix_anzeige(matrix_in);
-	matrix_out = matrix_invertieren_adjunkte(matrix_in);
-	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
-	matrix_anzeige(matrix_out);
-	return;
-}
 
 int main(int argc, char **argv)
 {
     int aufgnr=0, kapitel=0;
     srand( (unsigned) time(NULL) ) ;
-    //~ if(*argv[1]=='?')
-		//~ help();
+
     if(argc != 3)
     {
-		help();
-        //~ printf("Welches Kapitel?\n");
-        //~ scanf("%d", &kapitel);
-        //~ printf("Welche Übungsaufgabe?\n");
-        //~ scanf("%d", &aufgnr);
-    }
+		if(argc == 2)
+		{
+			help(atoi(argv[1]));
+		}
+		else
+		{
+			help(0);
+			todo();
+		}
+	}
     else
     {
         kapitel=atoi(argv[1]);
@@ -728,6 +503,49 @@ int main(int argc, char **argv)
     }
     switch (kapitel)
     {
+        case 1:
+            switch (aufgnr)
+            {
+				case 1:
+                    aufg_1_1();
+                    break;
+                case 2:
+                    aufg_1_2();
+                    break;
+                case 3:
+                    aufg_1_3();
+                    break;
+                case 4:
+                    aufg_1_4();
+                    break;
+                case 5:
+                    aufg_1_5();
+                    break;
+                case 6:
+                    aufg_1_6();
+                    break;
+                case 7:
+                    aufg_1_7();
+                    break;
+                case 8:
+                    aufg_1_8();
+                    break;
+                case 9:
+                    aufg_1_9();
+                    break;
+                case 10:
+                    aufg_1_10();
+                    break;
+                case 11:
+                    aufg_1_11();
+                    break;
+                case 12:
+                    aufg_1_12();
+                    break;
+                case 13:
+                    aufg_1_13();
+                    break;
+			}
         case 4:
             switch (aufgnr)
             {
@@ -827,101 +645,92 @@ int main(int argc, char **argv)
                 case 15:
                     aufg_7_15();
                     break;
-                case 16:
-                    aufg_7_16();
-                    break;
-                case 17:
-                    aufg_7_17();
-                    break;
-                case 18:
-                    aufg_7_18();
-                    break;
-                case 19:
-                    aufg_7_19();
-                    break;
-                case 20:
-                    aufg_7_20();
-                    break;
-                case 21:
-                    aufg_7_21();
-                    break;
-                case 22:
-                    aufg_7_22();
-                    break;
-                case 23:
-                    aufg_7_23();
-                    break;
-                case 24:
-                    aufg_7_24();
-                    break;
-                case 25:
-                    aufg_7_25();
-                    break;
-                case 26:
-                    aufg_7_26();
-                    break;
-                case 27:
-                    aufg_7_27();
-                    break;
-                case 28:
-                    aufg_7_28();
-                    break;
 			}
             break;
     }
     return 0;
 }
 
-
-void help()
+void todo()
 {
-	printf("Mögliche Operationen:\n");
-	printf("Kap:\tAufg:\t//Kommentar\n");
-	printf("4\t5\t//Mehrwertsteuer\n");
-	printf("4\t13\t//Summe n+n+1+n+2+...+2n\n");
-	printf("4\t17\t//Summe aller Un-/Geraden Zahlen\n");
-	printf("4\t25\t//Fibonacci && Primzahl\n");
-	printf("4\t26\t//wie 25, mit Primzahlensieb\n");
+	printf("\nTODO\n\n");
+	printf("Alle Kapitel auslagern\n");
+	printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
+}
+
+void version()
+{
+	printf("\nTODO\n\n");
+	printf("Alle Kapitel auslagern\n");
+	printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
+}
+
+void help( int chap )
+{
 	printf("-------------\n");
-	printf("5\t2\t//potenzieren\n");
-	printf("5\t3\t//großes H\n");
-	printf("5\t4\t//vierte Wurzel\n");
-	printf("5\t8\t//ax^2+bx+c\n");
-	printf("5\t12\t//Fibonacci Zahl auf Prim prüfen\n");
-	printf("5\t14\t//Primfaktoren\n");
-	printf("5\t18\t//Münzwurf\n");
-	printf("5\t19\t//Geburtstagsproblem\n");
-	printf("-------------\n");
-	printf("6\t2\t//Reziproke\n");
-	printf("6\t8\t//16 Bit shift (zyklisch)\n");
-	printf("6\t9\t//16 Bit spiegeln\n");
-	printf("6\t12\t//Maximum von vier Zahlen\n");
-	printf("6\t16\t//Roulette\n");
-	printf("6\t17\t//Datum binär packen\n");
-	printf("6\t23\t//Pokerhand\n");
-	printf("6\t24\t//Viele Pokerrunden\n");
-	printf("-------------\n");
-	printf("7\t8\t//Polynom berechnen\n");
-	printf("7\t9\t//Polynome addieren\n");
-	printf("7\t10\t//Polynome multiplizieren\n");
-	printf("7\t11\t//Polynom ableiten\n");
-	printf("7\t12\t//Monte Carlo Pi\n");
-	printf("7\t15\t//100 Zeichen Palindromität prüfen\n");
-	printf("7\t16\t//Matrix transponieren\n");
-	printf("7\t17\t//Matrix addieren\n");
-	printf("7\t18\t//Matrix mit Skalar multiplizieren\n");
-	printf("7\t19\t//Matrix mit Matrix multiplizieren\n");
-	printf("7\t20\t//el. Zeilenumformung\n");
-	printf("7\t21\t//el. Zeilenumformung\n");
-	printf("7\t22\t//el. Zeilenumformung\n");
-	printf("7\t23\t//Gaussche Normalform\n");
-	printf("7\t24\t//Determinante\n");
-	printf("7\t25\t//Diagonalform\n");
-	printf("7\t26\t//Inverse\n");
-	printf("7\t27\t//Adjunkte\n");
-	printf("7\t28\t//Inverse mit Adjunkter\n");
-	printf("\n");
 	printf("Verwendug:\n");
 	printf("[Programm] [Kapitel] [Aufgabe]\n");
+	printf("\n");
+	printf("Mögliche Operationen:\n");
+	printf("Kap:\tAufg:\t//Kommentar\n");
+	switch(chap)
+	{
+		case 0:
+		case 1:
+			printf("\nKapitel 1: Lineare Algebra\n\n");
+			printf("1\t 1\t//Matrix transponieren\n");
+			printf("1\t 2\t//Matrix addieren\n");
+			printf("1\t 3\t//Matrix mit Skalar multiplizieren\n");
+			printf("1\t 4\t//Matrix mit Matrix multiplizieren\n");
+			printf("1\t 5\t//el. Zeilenumformung S\n");
+			printf("1\t 6\t//el. Zeilenumformung Q\n");
+			printf("1\t 7\t//el. Zeilenumformung P\n");
+			printf("1\t 8\t//Gaussche Normalform\n");
+			printf("1\t 9\t//Diagonalform\n");
+			printf("1\t10\t//Determinante\n");
+			printf("1\t11\t//Adjunkte\n");
+			printf("1\t12\t//Inverse\n");
+			printf("1\t13\t//Inverse mit Adjunkter\n");
+			if(chap==1) break;
+		case 4:
+			printf("\nKapitel 4: Krimskrams\n\n");
+			printf("4\t5\t//Mehrwertsteuer\n");
+			printf("4\t13\t//Summe n+n+1+n+2+...+2n\n");
+			printf("4\t17\t//Summe aller Un-/Geraden Zahlen\n");
+			printf("4\t25\t//Fibonacci && Primzahl\n");
+			printf("4\t26\t//wie 25, mit Primzahlensieb\n");
+			if(chap==4) break;
+		case 5:
+			printf("\nKapitel 5: Zufall\n\n");
+			printf("5\t2\t//potenzieren\n");
+			printf("5\t3\t//großes H\n");
+			printf("5\t4\t//vierte Wurzel\n");
+			printf("5\t8\t//ax^2+bx+c\n");
+			printf("5\t12\t//Fibonacci Zahl auf Prim prüfen\n");
+			printf("5\t14\t//Primfaktoren\n");
+			printf("5\t18\t//Münzwurf\n");
+			printf("5\t19\t//Geburtstagsproblem\n");
+			if(chap==5) break;
+		case 6:
+			printf("\nKapitel 6: Spiele\n\n");
+			printf("6\t2\t//Reziproke\n");
+			printf("6\t8\t//16 Bit shift (zyklisch)\n");
+			printf("6\t9\t//16 Bit spiegeln\n");
+			printf("6\t12\t//Maximum von vier Zahlen\n");
+			printf("6\t16\t//Roulette\n");
+			printf("6\t17\t//Datum binär packen\n");
+			printf("6\t23\t//Pokerhand\n");
+			printf("6\t24\t//Viele Pokerrunden\n");
+			if(chap==6) break;
+		case 7:
+			printf("\nKapitel 7: Polynome und Pi\n\n");
+			printf("7\t8\t//Polynom berechnen\n");
+			printf("7\t9\t//Polynome addieren\n");
+			printf("7\t10\t//Polynome multiplizieren\n");
+			printf("7\t11\t//Polynom ableiten\n");
+			printf("7\t12\t//Monte Carlo Pi\n");
+			printf("7\t15\t//100 Zeichen Palindromität prüfen\n");
+			if(chap==7) break;
+	}
 }
 

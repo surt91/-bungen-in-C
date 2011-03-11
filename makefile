@@ -1,4 +1,4 @@
-OBJ 	= main.o functions.o
+OBJ 	= main.o functions.o mat.o mataufruf.o
 TARGET	= Ubung
 LINK	= gcc
 

@@ -7,8 +7,11 @@
 #include <math.h>
 #include <time.h>
 #include "functions.h"
+#include "mat.h"
+#include "mataufruf.h"
 
-void help();
+void help( int chap );
+void todo();
 
 #endif
 
