@@ -162,7 +162,7 @@ void prim_ausgabe(unsigned *prim_liste, unsigned anzahl_prim)
     short tmp=0;
 
     for(i=0; i<anzahl_prim; i++){
-        printf("%10ud ",prim_liste[i]);
+        printf("%10u ",prim_liste[i]);
         tmp++;
         if(tmp%5==0)
             printf("\n");

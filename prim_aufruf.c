@@ -20,6 +20,15 @@ void aufg_PRIM_1()
     return;
 }
 
+void aufg_PRIM_2()
+{
+    int k;
+    printf("Bis zu welcher Zahl sollen Primzahlen gesucht werden?\n");
+    scanf("%d",&k);
+    prim_ermitteln(k);
+    return;
+}
+
 void aufg_PRIM_4()
 {
     int k,q, *array;

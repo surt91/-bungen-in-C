@@ -97,9 +97,9 @@ int menu(int argc, char **argv)
                 case 1:
                     aufg_PRIM_1();
                     break;
-				//~ case 2:
-					//~ aufg_PRIM_2();
-					//~ break;
+				case 2:
+					aufg_PRIM_2();
+					break;
                 case 3:
                     aufg_PRIM_3();
                     break;
