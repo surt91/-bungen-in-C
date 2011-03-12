@@ -6,6 +6,8 @@
 #include <string.h>
 #include <math.h>
 #include <time.h>
+#include "menu.h"
+#include "help.h"
 #include "mat.h"
 #include "mat_aufruf.h"
 #include "trivia.h"
@@ -27,11 +29,6 @@
 #define PRIM 4
 #define POLY 5
 #define TRIV 6
-
-
-void help( int chap );
-void todo();
-void version();
 
 #endif
 
