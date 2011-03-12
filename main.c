@@ -1,484 +1,5 @@
 #include "main.h"
 
-void aufg_4_5()
-{
-    double netto_preis, mwsteuer, preis;
-    mwsteuer = preis = 0;
-    printf("Nettopreis?\n");
-    scanf("%lf", &netto_preis);
-    mwsteuer=netto_preis*0.19;
-    preis=mwsteuer+netto_preis;
-    printf("Das Produkt kostet:\nNetto   :\t%.2lf€\nSteuern :\t%.2lf€\nBrutto  :\t%.2lf€\n", netto_preis, mwsteuer, preis);
-}
-
-void aufg_4_13()
-{
-    int n;
-    printf("Es wird von n bis 2n aufsummiert.\nn?\n");
-    scanf("%d", &n);
-    printf("%d", aufsummieren(n));
-}
-
-void aufg_4_17()
-{
-    int sum_g=0, sum_ug=0, n;
-
-    printf("Die ersten wieviel geraden/ungeraden Zahlen sollen aufaddiert werden?\n");
-    scanf("%d", &n);
-    summe_g_ug(n, &sum_g, &sum_ug);
-    printf("Gerade  : %d\nUngerade: %d", sum_g, sum_ug);
-}
-
-void aufg_4_25()
-{
-    int n,i,fibo=0,k=0;
-    printf("Wieviele Fibonacci-Primzahlen sollen ausgegeben werden?\n");
-    scanf("%d", &n);
-    for(i=3;k<n;i++)
-    {
-        fibo=fibonacci(i);
-        if(ist_prim(fibo) && fibo > 1)
-        {
-            printf("%d, ", fibo);
-            k++;
-        }
-    }
-    printf("sind die ersten %d Fibonacci Zahlen, die auch Primzahlen sind\n",k);
-}
-void aufg_4_26()
-{   int n,i, *fibo_array=0, prim_max;
-    short *prim_array;
-    printf("Wieviele Fibonacci-Primzahlen sollen ausgegeben werden?\n");
-    scanf("%d", &n);
-    fibo_array = (int *) calloc(n+1, sizeof(int));
-    fibonacci_array(n, fibo_array);
-    prim_max=fibo_array[n];
-    prim_array = (short *) calloc(prim_max, sizeof(short));
-    primzahl(prim_max, prim_array);
-    for(i=1;i<=n;i++)
-    {
-		if(!prim_array[fibo_array[i]])
-			printf("%d, ", fibo_array[i]);
-	}
-	free(prim_array);
-	free(fibo_array);
-    printf("sind die Primzahlen unter den ersten %d Fibonacci Zahlen\n",n);
-}
-
-void aufg_5_2()
-{
-    int n, x;
-    printf("Basis?\n");
-    scanf("%d", &x);
-    printf("Potenz?\n");
-    scanf("%d", &n);
-    printf("Ergebnis: %d", power(x,n));
-    return;
-}
-
-void aufg_5_3()
-{
-    int i;
-    char h = 'H', leer = ' ';
-
-    for(i=1;i<=4;i++){
-        schreibe_zeichen(h,2);
-        schreibe_zeichen(leer,8);
-        schreibe_zeichen(h,2);
-        printf("\n");
-    }
-    for(i=1;i<=2;i++){
-        schreibe_zeichen(h,12);
-        printf("\n");
-    }
-    for(i=1;i<=4;i++){
-        schreibe_zeichen(h,2);
-        schreibe_zeichen(leer,8);
-        schreibe_zeichen(h,2);
-        printf("\n");
-    }
-    return;
-}
-
-void aufg_5_4()
-{
-    int k;
-    printf("Aus welcher Zahl soll die 4te Wurzel gezogen werden?\n");
-    scanf("%d",&k);
-    printf("%f", wurzel4(k));
-    return;
-}
-
-void aufg_5_8()
-{
-    int x, a, b, c;
-    printf("f(x)=ax^2+bx+c\nGib die Parameter in der Reihenfolge: x a b c getrennt durch Leerzeichen ein.\n");
-    scanf("%d %d %d %d", &x, &a, &b, &c);
-    printf("f(x)=%d\n", f(x, a, b, c));
-}
-
-void aufg_5_12()
-{
-    int k,q, *array;
-    printf("Die wievielte Fibonacci Zahl soll überprüft werden?\n");
-    scanf("%d",&k);
-    array = (int *) calloc(k+1, sizeof(int));
-    array=fibonacci_array(k, array);
-    q=array[k];
-    if(q<0)
-    {
-		printf("Bitte gebe eine ganze Zahl größer gleich 1 an.\n");
-		return;
-	}
-    if(ist_prim_array(q))
-    {
-        printf("Die %d. Fibonacci Zahl %d ist eine Primzahl\n", k, q);
-    }
-    else
-    {
-        printf("Die %d. Fibonacci Zahl %d ist keine Primzahl\n", k, q);
-    }
-    return;
-}
-
-void aufg_5_14()
-{
-    int k;
-    printf("Welche Zahl soll in ihre Primfaktoren zerlegt werden?\n");
-    scanf("%d",&k);
-    primfaktoren(k);
-    return;
-}
-
-void aufg_5_18()
-{
-    int zahl=0, kopf=0, k;
-    printf("Wie oft soll die Münze geworfen werden?\n");
-    scanf("%d",&k);
-    muenzwurf(k, &kopf, &zahl);
-    printf("Würfe: %d\nKopf: %d\nZahl: %d\n", k, kopf, zahl);
-    return;
-}
-
-void aufg_5_19()
-{
-    int k, e;
-    printf("Wie wieviele Personen stehen im Raum?\n");
-    scanf("%d",&k);
-    e=monteCarloGeburtstagsProblem(k);
-    printf("Die Wahrscheinlichkeit, dass mindestens 2 im gleichen Monat Geburtstag haben liegt bei etwa %d Prozent\n", e);
-    return;
-}
-
-void aufg_6_2()
-{
-    float k;
-    printf("Zu welcher Zahl soll das Inverse (Reziproken Wert) gebildet werden?\n");
-    scanf("%f", &k);
-    printf("Inverses von %g ist %g", k, invers(k));
-    return;
-}
-
-void aufg_6_8()
-{
-    int n;
-    short a;
-    printf("Welche Zahl soll geshiftet werden? (max. 16 Bit)\n");
-    scanf("%hd", &a);
-    d2b(a,16);
-    printf("\nUm wieviele Stellen soll sie geshiftet werden?\n");
-    scanf("%d", &n);
-    printf("%d\n", zyklischer_shift(a,n));
-    d2b(zyklischer_shift(a,n),16);
-	printf("\n");
-    return;
-}
-
-void aufg_6_9()
-{
-    short a;
-    printf("Welche Zahl soll bitweise gespiegelt werden? (max 16 Bit)\n");
-    scanf("%hd", &a);
-    d2b(a,16);
-    printf("\nGespiegelt ergibt sich %d\n",spiegel(a));
-    d2b(spiegel(a),16);
-    printf("\n");
-    return;
-}
-
-void aufg_6_12()
-{
-    int x, y, z, w;
-    printf("Von welchen 4 Zahlen, soll das Maximum gefunden werden? (getrennt durch Kommata)\n");
-    scanf("%d,%d,%d,%d", &x, &y,&z,&w);
-    printf("%d ist die größte der vier Zahlen\n", max4(x,y,z,w));
-    return;
-}
-
-void aufg_6_16()
-{
-    int x, k, kugel, besitz, einsatz, gewinn,runde;
-    k=-1;
-    runde=1;
-    besitz=100;
-    while(1)
-    {
-        printf("Roulette\t\tRunde%d\nWorauf setzt du?\n1: Gerade\n2: Ungerade\n3: Zahl\n666: zum Beenden\n\n",runde);
-        while(x!=1 && x!=2 && x!=3 && x!=666)
-        {
-            scanf("%d", &x);
-
-            if(x==3)
-            {
-                printf("Auf welche Zahl zwischen 0 und 35 setzt du?\n");
-                while(k<0 || k>35)
-                {
-                    scanf("%d",&k);
-                    if(k<0 || k>35)
-                    {
-                        printf("Wähle eine Zahl zwischen 0 und 35.\n");
-                    }
-                    else
-                    {
-                        printf("Du setzt auf die %d!\n",k);
-                    }
-                }
-            }
-            else if(x==1)
-            {
-                k=36;
-            }
-            else if(x==2)
-            {
-                k=37;
-            }
-            else if(x==666)
-            {
-                return;
-            }
-            else
-            {
-                printf("Wähle eine der genannten Zahlen:\n1: Gerade\n2: Ungerade\n3: Zahl\n666: zum Beenden\n\n");
-            }
-        }
-        x=0;
-        printf("Wieviel setzt du?\nDu hast %d€\n", besitz);
-        scanf("%d", &einsatz);
-        besitz-=einsatz;
-        kugel = roulette();
-        runde++;
-        printf("Die Kugel ist auf %d liegen geblieben!\n", kugel);
-        gewinn=roulette_gewinn_faktor(k,kugel);
-        if(gewinn)
-        {
-            besitz+=gewinn*einsatz;
-            printf("Du hast Gewonnen!\nDu erhälst %d€\nDu hast jetzt %d€\n\n", gewinn*einsatz, besitz);
-        }
-        else if(besitz>0)
-        {
-            printf("Leider verloren. Du hast noch %d€\n\n", besitz);
-        }
-        else
-        {
-            printf("Du bist leider Pleite und wirst aus dem Kasino geworfen!\n\n");
-            return;
-        }
-    }
-    return;
-}
-
-void aufg_6_17()
-{
-    int tag, monat, jahr, gepackt, etag,emonat,ejahr,toggle;
-    printf("Entpacken: 0\nPacken: 1\n");
-    scanf("%d",&toggle);
-    if(toggle)
-    {
-        printf("\n\nWelches Datum soll gepackt werden? (dd.mm.yy)\n");
-        scanf("%d.%d.%d", &tag, &monat, &jahr);
-        jahr%=100;
-        printf("\nBinär: ");d2b(tag,5);d2b(monat,4);d2b(jahr,7);
-        gepackt=datum_packer(tag,monat,jahr);
-        printf("\nSo sieht das Datum gepackt aus:\nDezimal: %d\nBinär: ", gepackt);
-        d2b(gepackt,16);
-        datum_entpacker(gepackt,&etag,&emonat,&ejahr);
-        printf("\nZur Kontrolle:\nentpackt:\nDezimal: %d.%d.%d\nBinär: ", etag, emonat, ejahr);
-        d2b(etag,5);d2b(emonat,4);d2b(ejahr,7);
-        printf("\n\ngepackt:\n%d", gepackt);
-    }
-    else
-    {
-        printf("\n\nWelches Datum soll entpackt werden? (dezimal)\n");
-        scanf("%d", &gepackt);
-        printf("\nBinär: ");d2b(gepackt,16);
-        datum_entpacker(gepackt,&tag,&monat,&jahr);
-        printf("\nSo sieht das Datum entpackt aus:\nDezimal: %d.%d.%d", tag,monat,jahr);
-        gepackt=datum_packer(tag,monat,jahr);
-        printf("\nZur Kontrolle:\ngepackt:\nDezimal: %d\nBinär: ", gepackt);
-        d2b(gepackt,16);
-        printf("\n\nentpackt:\n%d.%d.%d", tag,monat,jahr);
-    }
-
-    return;
-}
-
-void aufg_6_23()
-{
-    struct card hand[5];
-    karten_geber(hand);
-    karten_sortierer(hand);
-    karten_zeiger(hand);
-    return;
-}
-
-void aufg_6_24()
-{
-    struct card hand[5];
-    int i, flush=0, fullhouse=0, straight=0, straight_flush=0, royal_flush=0, runden=0, limit;
-    printf("Wieviele Runden sollen gegeben werden?\n");
-    scanf("%d", &limit);
-    for(i=0;i<limit;i++)
-    {
-        karten_geber(hand);
-        if(is_straight(hand)==2)
-        {
-            if(is_flush(hand))
-            {
-                royal_flush++;
-                runden++;
-                printf("#%4d: Royal Flush!", runden);
-                karten_zeiger(hand);
-            }
-            else
-            {
-                straight++;
-                runden++;
-                printf("#%4d: Straße!", runden);
-                karten_zeiger(hand);
-            }
-        }
-        else if(is_straight(hand))
-        {
-            if(is_flush(hand))
-            {
-                straight_flush++;
-                runden++;
-                printf("#%4d: Straight Flush!", runden);
-                karten_zeiger(hand);
-            }
-            else
-            {
-                straight++;
-                runden++;
-                printf("#%4d: Straße!", runden);
-                karten_zeiger(hand);
-            }
-        }
-        else if(is_flush(hand))
-        {
-            flush++;
-            runden++;
-            printf("#%4d: Flush!", runden);
-            karten_zeiger(hand);
-        }
-        else if(is_fullhouse(hand))
-        {
-            fullhouse++;
-            runden++;
-            printf("#%4d: Fullhouse!", runden);
-            karten_zeiger(hand);
-        }
-        else
-        {
-            runden++;
-        }
-    }
-    printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
-    return;
-}
-
-void aufg_7_8()
-{
-	int *polynom=0, grad, x, fvonx;
-	polynom=polynom_eingabe(polynom, &grad);
-	printf("Welchen Wert soll x haben?\n");
-	scanf("%d", &x);
-	//fvonx=polynom_naiv(polynom, x, grad);
-	fvonx=polynom_horner(polynom, x, grad);
-	printf("\nf(%d) = %d\n", x, fvonx);
-	return;
-}
-
-void aufg_7_9()
-{
-	int *erstes_polynom, *zweites_polynom, *ergebnis_polynom, grad_eins, grad_zwei, grad_ergebnis;
-	printf("Zwei Polynome addieren.\n");
-	printf("Wie lautet das erste Polynom?\n");
-	erstes_polynom = polynom_eingabe(erstes_polynom, &grad_eins);
-	printf("Wie lautet das zweite Polynom?\n");
-	zweites_polynom = polynom_eingabe(zweites_polynom, &grad_zwei);
-	printf("Polynom eins: %d. Grad\nPolynom zwei: %d. Grad\n", grad_eins, grad_zwei);
-	ergebnis_polynom = polynom_addierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
-	printf("Das addierte Polynom(%d. Grad):\n", grad_ergebnis);
-	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
-	return;
-}
-
-void aufg_7_10()
-{
-	int *erstes_polynom, *zweites_polynom, *ergebnis_polynom, grad_eins, grad_zwei, grad_ergebnis;
-	printf("Zwei Polynome multiplizieren.\n");
-	printf("Wie lautet das erste Polynom?\n");
-	erstes_polynom = polynom_eingabe(erstes_polynom, &grad_eins);
-	printf("Wie lautet das zweite Polynom?\n");
-	zweites_polynom = polynom_eingabe(zweites_polynom, &grad_zwei);
-	printf("Polynom eins: %d. Grad\nPolynom zwei: %d. Grad\n", grad_eins, grad_zwei);
-	ergebnis_polynom = polynom_multiplizierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
-	printf("Das multiplizierte Polynom (%d. Grad):\n", grad_ergebnis);
-	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
-	return;
-}
-
-void aufg_7_11()
-{
-	int *polynom_in, *polynom_out, grad_in, grad_out;
-	printf("Ein Polynom ableiten.\n");
-	printf("Wie lautet das Polynom?\n");
-	polynom_in = polynom_eingabe(polynom_in, &grad_in);
-	polynom_out = polynom_ableiter(polynom_out, polynom_in, &grad_out, grad_in);
-	printf("Das differenzierte Polynom (%d. Grad):\n", grad_out);
-	polynom_anzeige(polynom_out, grad_out);
-	return;
-}
-
-void aufg_7_12()
-{
-	int versuche;
-	printf("Hier ermitteln wir Pi, indem wir Dartpfeile auf eine Kreisscheibe werfen. Weil wir nicht gut sind im Dart, treffen wir gleichverteilt. Anhand der Treffer können wir dann Pi ermitteln.\n");
-	printf("Wieviele Dartpfeile sollen geworfen werden?\n");
-	scanf("%d", &versuche);
-	printf("Mit %d Dartpfeilen haben wir Pi als %.9lf ermittelt:\n", versuche, pi(versuche));
-	return;
-}
-void aufg_7_15()
-{
-	char *string;
-	size_t laenge=100;
-	string = (char *) calloc(laenge, sizeof(char));
-	printf("Welcher String soll auf Palindromität untersucht werden.\n");
-	laenge=getline(&string, &laenge, stdin);
-	string[laenge-1]= '\0';
-	printf("\"%s\", %d Buchstaben\n", string, (int)laenge-1);
-	if(ist_palindrom(string, laenge))
-		printf("\"%s\" ist ein Palindrom\n", string);
-	else
-		printf("\"%s\" ist kein Palindrom\n", string);
-	free(string);
-	return;
-}
-
-
-
 int main(int argc, char **argv)
 {
     int aufgnr=0, kapitel=0;
@@ -492,6 +13,7 @@ int main(int argc, char **argv)
 		}
 		else
 		{
+			version();
 			help(0);
 			todo();
 		}
@@ -503,149 +25,111 @@ int main(int argc, char **argv)
     }
     switch (kapitel)
     {
-        case 1:
+        case MAT:
             switch (aufgnr)
             {
 				case 1:
-                    aufg_1_1();
+                    aufg_MAT_1();
                     break;
                 case 2:
-                    aufg_1_2();
+                    aufg_MAT_2();
                     break;
                 case 3:
-                    aufg_1_3();
+                    aufg_MAT_3();
                     break;
                 case 4:
-                    aufg_1_4();
+                    aufg_MAT_4();
                     break;
                 case 5:
-                    aufg_1_5();
+                    aufg_MAT_5();
                     break;
                 case 6:
-                    aufg_1_6();
+                    aufg_MAT_6();
                     break;
                 case 7:
-                    aufg_1_7();
+                    aufg_MAT_7();
                     break;
                 case 8:
-                    aufg_1_8();
+                    aufg_MAT_8();
                     break;
                 case 9:
-                    aufg_1_9();
+                    aufg_MAT_9();
                     break;
                 case 10:
-                    aufg_1_10();
+                    aufg_MAT_10();
                     break;
                 case 11:
-                    aufg_1_11();
+                    aufg_MAT_11();
                     break;
                 case 12:
-                    aufg_1_12();
+                    aufg_MAT_12();
                     break;
                 case 13:
-                    aufg_1_13();
+                    aufg_MAT_13();
                     break;
 			}
-        case 4:
+        case GAME:
             switch (aufgnr)
             {
-                case 5:
-                    aufg_4_5();
+                case 1:
+                    aufg_GAME_1();
                     break;
-                case 13:
-                    aufg_4_13();
-                    break;
-                case 17:
-                    aufg_4_17();
-                    break;
-                case 25:
-                    aufg_4_25();
-                    break;
-                case 26:
-                    aufg_4_26();
-                    break;
-            }
-            break;
-        case 5:
-            switch (aufgnr)
-            {
                 case 2:
-                    aufg_5_2();
+                    aufg_GAME_2();
                     break;
                 case 3:
-                    aufg_5_3();
+                    aufg_GAME_3();
                     break;
                 case 4:
-                    aufg_5_4();
+                    aufg_GAME_4();
                     break;
-                case 8:
-                    aufg_5_8();
+                case 5:
+                    aufg_GAME_5();
                     break;
-                case 12:
-                    aufg_5_12();
-                    break;
-                case 14:
-                    aufg_5_14();
-                    break;
-                case 18:
-                    aufg_5_18();
-                    break;
-                case 19:
-                    aufg_5_19();
+                case 6:
+                    aufg_GAME_6();
                     break;
             }
             break;
-        case 6:
+        case PRIM:
             switch (aufgnr)
             {
-                case 2:
-                    aufg_6_2();
+                case 1:
+                    aufg_PRIM_1();
                     break;
-                case 8:
-                    aufg_6_8();
+				//~ case 2:
+					//~ aufg_PRIM_2();
+					//~ break;
+                case 3:
+                    aufg_PRIM_3();
                     break;
-                case 9:
-                    aufg_6_9();
+                case 4:
+                    aufg_PRIM_4();
                     break;
-                case 12:
-                    aufg_6_12();
+                case 5:
+                    aufg_PRIM_5();
                     break;
-                case 16:
-                    aufg_6_16();
-                    break;
-                case 17:
-                    aufg_6_17();
-                    break;
-                case 23:
-                    aufg_6_23();
-                    break;
-                case 24:
-                    aufg_6_24();
+                case 6:
+                    aufg_PRIM_6();
                     break;
             }
             break;
-		case 7:
+        case POLY:
             switch (aufgnr)
             {
-                case 8:
-                    aufg_7_8();
+                case 1:
+                    aufg_POLY_1();
                     break;
-                case 9:
-                    aufg_7_9();
+				case 2:
+					aufg_POLY_2();
+					break;
+                case 3:
+                    aufg_POLY_3();
                     break;
-                case 10:
-                    aufg_7_10();
+                case 4:
+                    aufg_POLY_4();
                     break;
-                case 11:
-                    aufg_7_11();
-                    break;
-                case 12:
-                    aufg_7_12();
-                    break;
-                case 15:
-                    aufg_7_15();
-                    break;
-			}
+            }
             break;
     }
     return 0;
@@ -654,20 +138,24 @@ int main(int argc, char **argv)
 void todo()
 {
 	printf("\nTODO\n\n");
-	printf("Alle Kapitel auslagern\n");
-	printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
+	//~ printf("Alle Kapitel auslagern\n");
+	//~ printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
 }
 
 void version()
 {
-	printf("\nTODO\n\n");
-	printf("Alle Kapitel auslagern\n");
-	printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
+	printf( "Version: %d.%d.%d\n",V_MAJOR,V_MINOR,V_FIX);
+	//~ printf( "Copyright (C) 2010 Hendrik Schawe\n");
+	printf( "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n");
+	printf( "This is free software: you are free to change and redistribute it.\n");
+	printf( "There is NO WARRANTY, to the extent permitted by law.\n");
+	printf( "\n");
+	printf( "Written by Hendrik Schawe <hendrik.schawe@gmail.com>\n\n");
 }
 
 void help( int chap )
 {
-	printf("-------------\n");
+	printf("-------------\n\n");
 	printf("Verwendug:\n");
 	printf("[Programm] [Kapitel] [Aufgabe]\n");
 	printf("\n");
@@ -676,61 +164,66 @@ void help( int chap )
 	switch(chap)
 	{
 		case 0:
-		case 1:
-			printf("\nKapitel 1: Lineare Algebra\n\n");
-			printf("1\t 1\t//Matrix transponieren\n");
-			printf("1\t 2\t//Matrix addieren\n");
-			printf("1\t 3\t//Matrix mit Skalar multiplizieren\n");
-			printf("1\t 4\t//Matrix mit Matrix multiplizieren\n");
-			printf("1\t 5\t//el. Zeilenumformung S\n");
-			printf("1\t 6\t//el. Zeilenumformung Q\n");
-			printf("1\t 7\t//el. Zeilenumformung P\n");
-			printf("1\t 8\t//Gaussche Normalform\n");
-			printf("1\t 9\t//Diagonalform\n");
-			printf("1\t10\t//Determinante\n");
-			printf("1\t11\t//Adjunkte\n");
-			printf("1\t12\t//Inverse\n");
-			printf("1\t13\t//Inverse mit Adjunkter\n");
-			if(chap==1) break;
-		case 4:
-			printf("\nKapitel 4: Krimskrams\n\n");
-			printf("4\t5\t//Mehrwertsteuer\n");
-			printf("4\t13\t//Summe n+n+1+n+2+...+2n\n");
-			printf("4\t17\t//Summe aller Un-/Geraden Zahlen\n");
-			printf("4\t25\t//Fibonacci && Primzahl\n");
-			printf("4\t26\t//wie 25, mit Primzahlensieb\n");
-			if(chap==4) break;
-		case 5:
-			printf("\nKapitel 5: Zufall\n\n");
-			printf("5\t2\t//potenzieren\n");
-			printf("5\t3\t//großes H\n");
-			printf("5\t4\t//vierte Wurzel\n");
-			printf("5\t8\t//ax^2+bx+c\n");
-			printf("5\t12\t//Fibonacci Zahl auf Prim prüfen\n");
-			printf("5\t14\t//Primfaktoren\n");
-			printf("5\t18\t//Münzwurf\n");
-			printf("5\t19\t//Geburtstagsproblem\n");
-			if(chap==5) break;
-		case 6:
-			printf("\nKapitel 6: Spiele\n\n");
-			printf("6\t2\t//Reziproke\n");
-			printf("6\t8\t//16 Bit shift (zyklisch)\n");
-			printf("6\t9\t//16 Bit spiegeln\n");
-			printf("6\t12\t//Maximum von vier Zahlen\n");
-			printf("6\t16\t//Roulette\n");
-			printf("6\t17\t//Datum binär packen\n");
-			printf("6\t23\t//Pokerhand\n");
-			printf("6\t24\t//Viele Pokerrunden\n");
-			if(chap==6) break;
-		case 7:
-			printf("\nKapitel 7: Polynome und Pi\n\n");
-			printf("7\t8\t//Polynom berechnen\n");
-			printf("7\t9\t//Polynome addieren\n");
-			printf("7\t10\t//Polynome multiplizieren\n");
-			printf("7\t11\t//Polynom ableiten\n");
-			printf("7\t12\t//Monte Carlo Pi\n");
-			printf("7\t15\t//100 Zeichen Palindromität prüfen\n");
-			if(chap==7) break;
+		case MAT:
+			printf("\nKapitel %d: Lineare Algebra\n\n",MAT);
+			printf("%d\t 1\t//Matrix transponieren\n",MAT);
+			printf("%d\t 2\t//Matrix addieren\n",MAT);
+			printf("%d\t 3\t//Matrix mit Skalar multiplizieren\n",MAT);
+			printf("%d\t 4\t//Matrix mit Matrix multiplizieren\n",MAT);
+			printf("%d\t 5\t//el. Zeilenumformung S\n",MAT);
+			printf("%d\t 6\t//el. Zeilenumformung Q\n",MAT);
+			printf("%d\t 7\t//el. Zeilenumformung P\n",MAT);
+			printf("%d\t 8\t//Gaussche Normalform\n",MAT);
+			printf("%d\t 9\t//Diagonalform\n",MAT);
+			printf("%d\t10\t//Determinante\n",MAT);
+			printf("%d\t11\t//Adjunkte\n",MAT);
+			printf("%d\t12\t//Inverse\n",MAT);
+			printf("%d\t13\t//Inverse mit Adjunkter\n",MAT);
+			if(chap==MAT) break;
+		case GAME:
+			printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);
+			printf("%d\t 1\t//Roulette\n",GAME);
+			printf("%d\t 2\t//Pokerhand\n",GAME);
+			printf("%d\t 3\t//Viele Pokerrunden\n",GAME);
+			printf("%d\t 4\t//Münzwurf\n",GAME);
+			printf("%d\t 5\t//Geburtstagsproblem\n",GAME);
+			printf("%d\t 6\t//Monte Carlo Pi (Dart)\n",GAME);
+			if(chap==GAME) break;
+		case KRYPTO:
+			printf("\nKapitel %d: Krypto\n\n",KRYPTO);
+			printf("TODO\n");
+			if(chap==KRYPTO) break;
+		case PRIM:
+			printf("\nKapitel %d: Primzahlen\n\n",PRIM);
+			printf("%d\t 1\t//Primfaktoren\n",PRIM);
+			printf("%d\t 2\t//TODO erste x Primzahlen\n",PRIM);
+			printf("%d\t 3\t//potenzieren\n",PRIM);
+			printf("%d\t 4\t//Fibonacci Zahl auf Prim prüfen\n",PRIM);
+			printf("%d\t 5\t//Fibonacci && Primzahl\n",PRIM);
+			printf("%d\t 6\t//wie 25, mit Primzahlensieb\n",PRIM);
+			if(chap==PRIM) break;
+		case POLY:
+			printf("\nKapitel %d: Polynome\n\n",POLY);
+			printf("%d\t 1\t//Polynom berechnen\n",POLY);
+			printf("%d\t 2\t//Polynome addieren\n",POLY);
+			printf("%d\t 3\t//Polynome multiplizieren\n",POLY);
+			printf("%d\t 4\t//Polynom ableiten\n",POLY);
+			if(chap==POLY) break;
+		case TRIV:
+			printf("\nKapitel %d: Trivia\n\n",TRIV);
+			printf("%d\t 1\t//Mehrwertsteuer\n",TRIV);
+			printf("%d\t 2\t//Summe n+n+1+n+2+...+2n\n",TRIV);
+			printf("%d\t 3\t//Summe aller Un-/Geraden Zahlen\n",TRIV);
+			printf("%d\t 4\t//großes H\n",TRIV);
+			printf("%d\t 5\t//vierte Wurzel\n",TRIV);
+			printf("%d\t 6\t//ax^2+bx+c\n",TRIV);
+			printf("%d\t 7\t//Reziproke\n",TRIV);
+			printf("%d\t 8\t//16 Bit shift (zyklisch)\n",TRIV);
+			printf("%d\t 9\t//16 Bit spiegeln\n",TRIV);
+			printf("%d\t10\t//Maximum von vier Zahlen\n",TRIV);
+			printf("%d\t11\t//Datum binär packen\n",TRIV);
+			printf("%d\t12\t//100 Zeichen Palindromität prüfen\n",TRIV);
+			if(chap==TRIV) break;
 	}
 }
 

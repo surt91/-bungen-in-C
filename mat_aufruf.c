@@ -1,6 +1,6 @@
-#include "mataufruf.h"
+#include "mat_aufruf.h"
 
-void aufg_1_1()
+void aufg_MAT_1()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -14,7 +14,7 @@ void aufg_1_1()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_2()
+void aufg_MAT_2()
 {
 	struct mat matrix1, matrix2, matrix_out;
 	matrix1.zeilen = matrix1.spalten =  matrix2.zeilen = matrix2.spalten = 0;
@@ -35,7 +35,7 @@ void aufg_1_2()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_3()
+void aufg_MAT_3()
 {
 	double faktor;
 	struct mat matrix_in, matrix_out;
@@ -53,7 +53,7 @@ void aufg_1_3()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_4()
+void aufg_MAT_4()
 {
 	struct mat matrix1, matrix2, matrix_out;
 	matrix1.zeilen = matrix1.spalten =  matrix2.zeilen = matrix2.spalten = 0;
@@ -79,7 +79,7 @@ void aufg_1_4()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_5()
+void aufg_MAT_5()
 {
 	int k;
 	double faktor;
@@ -100,7 +100,7 @@ void aufg_1_5()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_6()
+void aufg_MAT_6()
 {
 	int k, l;
 	double faktor;
@@ -123,7 +123,7 @@ void aufg_1_6()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_7()
+void aufg_MAT_7()
 {
 	int k, l;
 	struct mat matrix_in, matrix_out;
@@ -143,7 +143,7 @@ void aufg_1_7()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_8()
+void aufg_MAT_8()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -158,7 +158,7 @@ void aufg_1_8()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_9()
+void aufg_MAT_9()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -172,7 +172,7 @@ void aufg_1_9()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_10()
+void aufg_MAT_10()
 {
 	struct mat matrix_in;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -184,7 +184,7 @@ void aufg_1_10()
 	printf("Die Determinante ist: %lg \n", matrix_det(matrix_in));
 	return;
 }
-void aufg_1_11()
+void aufg_MAT_11()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -198,7 +198,7 @@ void aufg_1_11()
 	matrix_anzeige(matrix_out);
 	return;
 }
-void aufg_1_12()
+void aufg_MAT_12()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
@@ -215,7 +215,7 @@ void aufg_1_12()
 	}
 	return;
 }
-void aufg_1_13()
+void aufg_MAT_13()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
