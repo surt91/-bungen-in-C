@@ -172,3 +172,30 @@ int ist_palindrom(char *string, size_t laenge)
 	free(neu_string);
 	return 1;
 }
+
+char* dec2base(uint64_t number, int base)
+{
+	static const char digit[36] = {"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+	char tmp[256];
+	char *out;
+	int i=0,n=0;
+	if(base > 36)
+	{
+		printf("Bitte wähle eine Basis kleiner gleich 36");
+		return NULL;
+	}
+	do {
+		tmp[i] = digit[number % base];
+		number /= base;
+		i++;
+	} while(number > 0);
+	out = (char *) calloc(i, sizeof(char));
+	i--;
+	while(i>=0)
+	{
+		out[n]=tmp[i];
+		n++;
+		i--;
+	}
+	return out;
+}

@@ -12,6 +12,7 @@ void aufg_MAT_1()
 	matrix_out = matrix_transponieren(matrix_in);
 	printf("Die %d x %d transponierte Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_2()
@@ -33,6 +34,7 @@ void aufg_MAT_2()
 	matrix_out = matrix_addieren(matrix1, matrix2);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_3()
@@ -51,6 +53,7 @@ void aufg_MAT_3()
 	matrix_out = matrix_skalaprodukt(matrix_in, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_4()
@@ -77,6 +80,7 @@ void aufg_MAT_4()
 
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_5()
@@ -98,6 +102,7 @@ void aufg_MAT_5()
 	matrix_out = matrix_z_S(matrix_in, k-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_6()
@@ -121,6 +126,7 @@ void aufg_MAT_6()
 	matrix_out = matrix_z_Q(matrix_in, k-1, l-1, faktor);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_7()
@@ -141,6 +147,7 @@ void aufg_MAT_7()
 	matrix_out = matrix_z_P(matrix_in, k-1, l-1);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_8()
@@ -156,6 +163,7 @@ void aufg_MAT_8()
 	matrix_out = matrix_gnf(matrix_in);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_9()
@@ -170,6 +178,7 @@ void aufg_MAT_9()
 	matrix_out = matrix_dgf(matrix_in);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_10()
@@ -196,6 +205,7 @@ void aufg_MAT_11()
 	matrix_out = matrix_adjunkte(matrix_in);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
 	return;
 }
 void aufg_MAT_12()
@@ -212,6 +222,7 @@ void aufg_MAT_12()
 	{
 		printf("Die invertierte %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 		matrix_anzeige(matrix_out);
+		matrix_save(matrix_out);
 	}
 	return;
 }
@@ -227,5 +238,44 @@ void aufg_MAT_13()
 	matrix_out = matrix_invertieren_adjunkte(matrix_in);
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
+	return;
+}
+void aufg_MAT_14()
+{
+	struct mat matrix_out;
+	int n, m, p=0, g=10, z=0, s;
+	printf("Erzeugung einer zufälligen Matrix\n");
+	printf("Wie groß soll die Matrix sein?\n");
+	printf("Zeilen?\n");
+	scanf("%d",&n);
+	printf("Spalten?\n");
+	scanf("%d",&m);
+	printf("Optional:\n");
+	printf("Nur ganze Zahlen?\n");
+	scanf("%d",&z);
+	printf("Nur positive Zahlen?\n");
+	scanf("%d",&p);
+	printf("Größter Betrag?\n");
+	scanf("%d",&g);
+	matrix_out = matrix_rand(n, m, p, z, g);
+	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
+	if (z)
+		matrix_ianzeige(matrix_out);
+	else
+		matrix_anzeige(matrix_out);
+	matrix_save(matrix_out);
+	return;
+}
+void aufg_MAT_15()
+{
+	struct mat matrix_out;
+	int begin, end;
+	int i;
+	printf("Benchmark des Systems durch das Lösen von 100 zufälligen 100x100 Matrizen. (Diagonalform)\n");
+	begin = clock();
+	for(i=0;i<100;i++) matrix_dgf(matrix_rand(100,100,0,0,100));
+	end = clock();
+	printf("Time: %4.2f s\n",(double)(end-begin)/1000000);
 	return;
 }

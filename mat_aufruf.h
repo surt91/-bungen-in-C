@@ -15,5 +15,6 @@ void aufg_MAT_9();
 void aufg_MAT_11();
 void aufg_MAT_12();
 void aufg_MAT_13();
+void aufg_MAT_14();
 
 #endif //MATAUFRUF_H

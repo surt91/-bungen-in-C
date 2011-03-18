@@ -4,21 +4,57 @@
 struct mat matrix_eingabe(struct mat matrix_out)
 {
 	int i, j;
-	if(matrix_out.zeilen == 0 || matrix_out.spalten == 0){
+	if(matrix_out.zeilen == 0 || matrix_out.spalten == 0)
+	{
 		printf("Anzahl Zeilen der Matrix?\n");
 		scanf("%d",&matrix_out.zeilen);
 		printf("Anzahl Spalten der Matrix?\n");
 		scanf("%d",&matrix_out.spalten);
 	}
-	// erstellt ein Array variabler Länge
+	if(matrix_out.zeilen < 0 || matrix_out.spalten < 0)
+	{
+		char *filename;
+		printf("Matrix aus Datei lesen!\n");
+		printf("Aus welcher Datei soll eine Matrix gelesen werden?\n");
+		scanf("%s",&filename);
+		matrix_out = matrix_auslesen(matrix_out,filename);
+	}
+	else
+	{
+		// erstellt ein Array variabler Länge
+		matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+		printf("Zeilen und Spalten beginnen bei Null und Enden bei #Zeilen-1 bzw. #Spalten-1\n");
+		for(i=0;i< matrix_out.zeilen ;i++)
+			for(j=0;j< matrix_out.spalten ;j++)
+			{
+				printf("%d-te Zeile, %d-te Spalte\n", i+1, j+1);
+				scanf("%lf", &matrix_out.matrix[i * matrix_out.spalten + j]);
+			}
+	}
+	return (matrix_out);
+}
+struct mat matrix_auslesen(struct mat matrix_in, char *filename)
+{
+	int i,j;
+	FILE *datei;
+	//~ char *filename = "ans.dat";
+	double tmp = 3;
+	struct mat matrix_out;
+	printf("Matrix wird aus %s gelesen!\n", filename);
+	datei = fopen (filename, "r");
+	if (datei == NULL)
+	{
+		printf("Fehler beim oeffnen der Datei.\n");
+		return;
+	}
+
+	fscanf(datei, "%dx%d", &matrix_out.zeilen, &matrix_out.spalten);
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
-	printf("Zeilen und Spalten beginnen bei Null und Enden bei #Zeilen-1 bzw. #Spalten-1\n");
-	for(i=0;i< matrix_out.zeilen ;i++)
-		for(j=0;j< matrix_out.spalten ;j++)
-		{
-			printf("%d-te Zeile, %d-te Spalte\n", i+1, j+1);
-			scanf("%lf", &matrix_out.matrix[i * matrix_out.spalten + j]);
-		}
+	for(i=0;i<matrix_out.zeilen;i++)
+		for(j=0;j<matrix_out.spalten;j++)
+			fscanf(datei, "%lf", &matrix_out.matrix[j* matrix_out.zeilen+i]);
+
+	fclose (datei);
 	return (matrix_out);
 }
 // Erzeugt eine n x n Einheitsmatrix
@@ -32,81 +68,111 @@ struct mat matrix_e(int n)
 		for(j=0;j<matrix_out.spalten;j++)
 		{
 			if(i==j)
-				matrix_out.matrix[j* matrix_out.spalten+i] = 1;
+				matrix_out.matrix[j* matrix_out.zeilen+i] = 1;
 			else
-				matrix_out.matrix[j* matrix_out.spalten+i] = 0;
+				matrix_out.matrix[j* matrix_out.zeilen+i] = 0;
+		}
+	return matrix_out;
+}
+// Erzeugt eine n x m zufallsmatrix
+// p=1: nur positive Werte, g obere Grenze des Betrags der Werte,
+// z=1 nur ganze Zahlen
+struct mat matrix_rand(int n, int m, int p, int z, int g)
+{
+	int i, j;
+	int vz=1;
+	struct mat matrix_out;
+	matrix_out.zeilen  = n;
+	matrix_out.spalten = m;
+	matrix_out.matrix = (double *) calloc(n * m, sizeof(double));
+	for(i=0;i<matrix_out.zeilen;i++)
+		for(j=0;j<matrix_out.spalten;j++)
+		{
+			if(!p)
+			{
+				vz = rand()%2;
+				if(vz == 0)
+					vz = -1;
+			}
+			if(z)
+				matrix_out.matrix[j* matrix_out.zeilen+i] = (rand() % g) * vz;
+			else
+				matrix_out.matrix[j* matrix_out.zeilen+i] = ((double)rand() / RAND_MAX ) * g * vz;
 		}
 	return matrix_out;
 }
 
-//~ struct mat matrix_auslesen(struct mat matrix_out)
-//~ {
-	//~ FILE *fp;
-	//~ FILE *fopen(char *, char *);
-	//~ char c, zahl[20];
-	//~ int i;
-	//~ fp = fopen(name, mode);
-	//~ while(c != 'Q')
-		//~ while(c != '\n')
-		//~ {
-			//~ i=0;
-			//~ n=0;
-			//~ while(c != ',')
-			//~ {
-				//~ c = getc(fp);
-				//~ zahl[i]=c;
-				//~ i++;
-			//~ }
-			//~ (const char) *zahl;
-			//~ matrix[n] = atoi(*zahl);
-			//~ n++;
-		//~ }
-//~
-	//~ fclose(fp);
-	//~ int i, j;
-	//~ if(matrix_out.zeilen == 0 || matrix_out.spalten == 0){
-		//~ printf("Anzahl Zeilen der Matrix?\n");
-		//~ scanf("%d",&matrix_out.zeilen);
-		//~ printf("Anzahl Spalten der Matrix?\n");
-		//~ scanf("%d",&matrix_out.spalten);
-	//~ }
-	//~ // erstellt ein Array variabler Länge
-	//~ matrix_out.matrix = (int *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(int));
-	//~ printf("Zeilen und Spalten beginnen bei Null und Enden bei #Zeilen-1 bzw. #Spalten-1\n");
-	//~ for(i=0;i< matrix_out.zeilen ;i++)
-		//~ for(j=0;j< matrix_out.spalten ;j++)
-		//~ {
-			//~ printf("%d-te Zeile, %d-te Spalte\n", i, j);
-			//~ scanf("%d", &matrix_out.matrix[i * matrix_out.spalten + j]);
-		//~ }
-	//~ return (matrix_out);
-//~ }
 void matrix_anzeige(struct mat matrix_in)
 {
 	int i, j;
+	double tmp;
+
 	for(i=0;i<matrix_in.zeilen;i++)
 	{
 		printf(" ");
 		for(j=0;j<matrix_in.spalten;j++)
 		{
-			printf(" % #5.3f ", matrix_in.matrix[i* matrix_in.spalten+j]);
+			tmp = matrix_in.matrix[i* matrix_in.spalten+j];
+			if(tmp < FLOATNULL && tmp > -FLOATNULL)
+				printf(" % #5d     ", 0);
+			else
+				if((tmp - (int)tmp) < FLOATNULL && (tmp -(int)tmp) > -FLOATNULL)
+					printf(" % #5d     ", (int)tmp);
+				else
+					printf(" % #9.3f ", tmp);
 		}
 		printf("\n");
 	}
 }
-//~ void matrix_schreiben(struct mat matrix_in)
-//~ {
-	//~ int i, j;
-	//~ for(i=0;i<matrix_in.zeilen;i++)
-	//~ {
-		//~ printf("| ");
-		//~ for(j=0;j<matrix_in.spalten;j++)
-		//~ {
-			//~ printf("%d ", matrix_in.matrix[i* matrix_in.spalten+j]);
-		//~ }
-		//~ printf("|\n");
-	//~ }
-//~ }
+void matrix_ianzeige(struct mat matrix_in)
+{
+	int i, j;
+	double tmp;
+	for(i=0;i<matrix_in.zeilen;i++)
+	{
+		printf(" ");
+		for(j=0;j<matrix_in.spalten;j++)
+		{
+			printf(" % #5d ", (int)matrix_in.matrix[i* matrix_in.spalten+j]);
+		}
+		printf("\n");
+	}
+}
+int matrix_schreiben(struct mat matrix_in, char *filename)
+{
+	int i,j;
+	FILE *datei;
+	//~ char *filename = "ans.dat";
+	datei = fopen (filename, "w");
+	printf("%s",filename);
+	if (datei == NULL)
+	{
+		printf("Fehler beim oeffnen der Datei.\n");
+		return 1;
+	}
+	fprintf (datei, "%dx%d ", matrix_in.zeilen, matrix_in.spalten);
+	for(i=0;i<matrix_in.zeilen;i++)
+		for(j=0;j<matrix_in.spalten;j++)
+			fprintf (datei, "%lf ", matrix_in.matrix[j* matrix_in.zeilen+i]);
+	fprintf (datei, "\n");
+	fclose (datei);
+	printf("Matrix erfolgreich nach %s geschrieben\n", filename);
+	return 0;
+}
+int matrix_save(struct mat matrix_out)
+{
+	int s;
+	char filename[80];
+	printf("Soll die Matrix gespeichert werden?\n");\
+	scanf("%d",&s);
+	if(s)
+	{
+		printf("Unter welchem Namen?\n");
+		scanf("%s",filename);
+		matrix_schreiben(matrix_out,filename);
+	}
+}
+
 struct mat matrix_transponieren(struct mat matrix_in)
 {
 	int i, j;

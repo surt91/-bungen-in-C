@@ -1,6 +1,6 @@
 #include "trivia_aufruf.h"
 
-void aufg_9_1()
+void aufg_TRIV_1()
 {
     double netto_preis, mwsteuer, preis;
     mwsteuer = preis = 0;
@@ -11,7 +11,7 @@ void aufg_9_1()
     printf("Das Produkt kostet:\nNetto   :\t%.2lf€\nSteuern :\t%.2lf€\nBrutto  :\t%.2lf€\n", netto_preis, mwsteuer, preis);
 }
 
-void aufg_9_2()
+void aufg_TRIV_2()
 {
     int n;
     printf("Es wird von n bis 2n aufsummiert.\nn?\n");
@@ -19,7 +19,7 @@ void aufg_9_2()
     printf("%d", aufsummieren(n));
 }
 
-void aufg_9_3()
+void aufg_TRIV_3()
 {
     int sum_g=0, sum_ug=0, n;
 
@@ -29,7 +29,7 @@ void aufg_9_3()
     printf("Gerade  : %d\nUngerade: %d", sum_g, sum_ug);
 }
 
-void aufg_9_4()
+void aufg_TRIV_4()
 {
     int i;
     char h = 'H', leer = ' ';
@@ -53,7 +53,7 @@ void aufg_9_4()
     return;
 }
 
-void aufg_9_5()
+void aufg_TRIV_5()
 {
     int k;
     printf("Aus welcher Zahl soll die 4te Wurzel gezogen werden?\n");
@@ -62,7 +62,7 @@ void aufg_9_5()
     return;
 }
 
-void aufg_9_6()
+void aufg_TRIV_6()
 {
     int x, a, b, c;
     printf("f(x)=ax^2+bx+c\nGib die Parameter in der Reihenfolge: x a b c getrennt durch Leerzeichen ein.\n");
@@ -71,7 +71,7 @@ void aufg_9_6()
 }
 
 
-void aufg_9_7()
+void aufg_TRIV_7()
 {
     float k;
     printf("Zu welcher Zahl soll das Inverse (Reziproken Wert) gebildet werden?\n");
@@ -80,7 +80,7 @@ void aufg_9_7()
     return;
 }
 
-void aufg_9_8()
+void aufg_TRIV_8()
 {
     int n;
     short a;
@@ -95,7 +95,7 @@ void aufg_9_8()
     return;
 }
 
-void aufg_9_9()
+void aufg_TRIV_9()
 {
     short a;
     printf("Welche Zahl soll bitweise gespiegelt werden? (max 16 Bit)\n");
@@ -107,7 +107,7 @@ void aufg_9_9()
     return;
 }
 
-void aufg_9_10()
+void aufg_TRIV_10()
 {
     int x, y, z, w;
     printf("Von welchen 4 Zahlen, soll das Maximum gefunden werden? (getrennt durch Kommata)\n");
@@ -116,7 +116,7 @@ void aufg_9_10()
     return;
 }
 
-void aufg_9_11()
+void aufg_TRIV_11()
 {
     int tag, monat, jahr, gepackt, etag,emonat,ejahr,toggle;
     printf("Entpacken: 0\nPacken: 1\n");
@@ -151,7 +151,7 @@ void aufg_9_11()
     return;
 }
 
-void aufg_9_12()
+void aufg_TRIV_12()
 {
 	char *string;
 	size_t laenge=100;
@@ -165,5 +165,19 @@ void aufg_9_12()
 	else
 		printf("\"%s\" ist kein Palindrom\n", string);
 	free(string);
+	return;
+}
+
+void aufg_TRIV_13()
+{
+	uint64_t number;
+	int base;
+	char *out;
+	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 64 bit unsigned)\n");
+	scanf("%ull", &number);
+	printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
+	scanf("%d", &base);
+	out = dec2base(number,base);
+	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,out);
 	return;
 }
