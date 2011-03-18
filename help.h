@@ -6,6 +6,7 @@
 void help( int chap );
 
 void todo();
+void bugs();
 void version();
 
 #endif

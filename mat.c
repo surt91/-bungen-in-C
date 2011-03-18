@@ -11,6 +11,7 @@ struct mat matrix_eingabe(struct mat matrix_out)
 		printf("Anzahl Spalten der Matrix?\n");
 		scanf("%d",&matrix_out.spalten);
 	}
+	// Matrix aus Datei lesen
 	if(matrix_out.zeilen < 0 || matrix_out.spalten < 0)
 	{
 		char *filename;
@@ -19,6 +20,7 @@ struct mat matrix_eingabe(struct mat matrix_out)
 		scanf("%s",&filename);
 		matrix_out = matrix_auslesen(matrix_out,filename);
 	}
+	// Oder Matrix per Hand eingeben
 	else
 	{
 		// erstellt ein Array variabler Länge
@@ -37,14 +39,13 @@ struct mat matrix_auslesen(struct mat matrix_in, char *filename)
 {
 	int i,j;
 	FILE *datei;
-	//~ char *filename = "ans.dat";
 	double tmp = 3;
 	struct mat matrix_out;
 	printf("Matrix wird aus %s gelesen!\n", filename);
 	datei = fopen (filename, "r");
 	if (datei == NULL)
 	{
-		printf("Fehler beim öffnen der Datei!\n");
+		printf("Fehler beim Öffnen der Datei!\n");
 		return;
 	}
 
@@ -145,7 +146,7 @@ int matrix_schreiben(struct mat matrix_in, char *filename)
 	datei = fopen (filename, "w");
 	if (datei == NULL)
 	{
-		printf("Fehler beim öffnen der Datei!\n");
+		printf("Fehler beim Öffnen der Datei!\n");
 		return 1;
 	}
 	fprintf (datei, "%dx%d ", matrix_in.zeilen, matrix_in.spalten);
@@ -168,8 +169,10 @@ int matrix_save(struct mat matrix_out)
 	{
 		printf("Unter welchem Namen?\n");
 		scanf("%s",filename);
-		matrix_schreiben(matrix_out,filename);
+		//~ matrix_schreiben(matrix_out,filename);
+		return matrix_schreiben(matrix_out,filename);
 	}
+	return 0;
 }
 
 struct mat matrix_transponieren(struct mat matrix_in)

@@ -2,9 +2,14 @@
 
 void todo()
 {
-	printf("\nTODO\n\n");
+	//~ printf("\nTODO\n\n");
 	//~ printf("Alle Kapitel auslagern\n");
 	//~ printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
+}
+void bugs()
+{
+	printf("\nBUGS\n\n");
+	printf("Dateinamen können nicht länger sein, als 80 Zeichen.\n");
 }
 
 void version()
@@ -48,6 +53,7 @@ void help( int chap )
 			printf("%d\t14\t//Zufällige Matrix erzeugen\n",MAT);
 			printf("%d\t15\t//Bench: Linpack :D\n",MAT);
 			printf("%d\t16\t//gespeicherte Matrix anzeigen\n",MAT);
+			printf("%d\t17\t//Matrix speichern\n",MAT);
 			if(chap==MAT) break;
 		case GAME:
 			printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);

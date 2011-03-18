@@ -284,3 +284,16 @@ void aufg_MAT_16()
 	matrix_anzeige(matrix_out);
 	return;
 }
+void aufg_MAT_17()
+{
+	char name[80];
+	struct mat matrix_out;
+	printf("Matrix speichern:\n");
+	printf("Wie lautet die zu speichernde Matrix?\n");
+	matrix_out = matrix_eingabe(matrix_out);
+	matrix_anzeige;
+	printf("Unter welchem Namen soll sie gespeichert werden?\n");
+	scanf("%s",name);
+	matrix_schreiben(matrix_out, name);
+	return;
+}

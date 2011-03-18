@@ -136,8 +136,8 @@ int is_flush(struct card *hand)
 // überprüft, ob eine Straße auf der Hand ist
 int is_straight(struct card *hand)
 {
+	int i;
     karten_sortierer(hand);
-    int i;
     if(hand[1].w==10 && hand[2].w==bube && hand[3].w==dame && hand[4].w==konig && hand[0].w==ass)
     {
         return 2;
