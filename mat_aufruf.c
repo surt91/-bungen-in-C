@@ -269,13 +269,7 @@ void aufg_MAT_14()
 }
 void aufg_MAT_15()
 {
-	struct mat matrix_out;
-	int begin, end;
-	int i;
 	printf("Benchmark des Systems durch das Lösen von 100 zufälligen 100x100 Matrizen. (Diagonalform)\n");
-	begin = clock();
-	for(i=0;i<100;i++) matrix_dgf(matrix_rand(100,100,0,0,100));
-	end = clock();
-	printf("Time: %4.2f s\n",(double)(end-begin)/1000000);
+	printf("Time: %4.2f s\n",matrix_benchmark());
 	return;
 }

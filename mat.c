@@ -485,3 +485,13 @@ struct mat matrix_invertieren_adjunkte(struct mat matrix_in)
 
 	return(matrix_skalaprodukt(tmp,det));
 }
+double matrix_benchmark()
+{
+	int begin, end;
+	int i;
+	begin = clock();
+	for(i=0;i<100;i++) matrix_dgf(matrix_rand(100,100,0,0,100));
+	end = clock();
+
+	return ((double)(end-begin)/1000000);
+}

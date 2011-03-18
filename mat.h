@@ -33,5 +33,6 @@ double matrix_det(struct mat matrix_in);
 struct mat matrix_streichen(struct mat matrix_in, int i, int j);
 struct mat matrix_adjunkte(struct mat matrix_in);
 struct mat matrix_invertieren_adjunkte(struct mat matrix_in);
+double matrix_benchmark();
 
 #endif //MAT_H
