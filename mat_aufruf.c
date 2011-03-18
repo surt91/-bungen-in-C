@@ -273,3 +273,14 @@ void aufg_MAT_15()
 	printf("Time: %4.2f s\n",matrix_benchmark());
 	return;
 }
+void aufg_MAT_16()
+{
+	char name[80];
+	struct mat matrix_out;
+	printf("gespeicherte Matrix anzeigen:\n");
+	printf("Wie lautet der Dateiname der gespeicherten Matrix?\n");
+	scanf("%s",name);
+	matrix_out = matrix_auslesen(matrix_out, name);
+	matrix_anzeige(matrix_out);
+	return;
+}

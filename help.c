@@ -30,6 +30,7 @@ void help( int chap )
 	{
 		case 0:
 		case MAT:
+
 			printf("\nKapitel %d: Lineare Algebra\n\n",MAT);
 			printf("%d\t 1\t//Matrix transponieren\n",MAT);
 			printf("%d\t 2\t//Matrix addieren\n",MAT);
@@ -46,6 +47,7 @@ void help( int chap )
 			printf("%d\t13\t//Inverse mit Adjunkter\n",MAT);
 			printf("%d\t14\t//Zufällige Matrix erzeugen\n",MAT);
 			printf("%d\t15\t//Bench: Linpack :D\n",MAT);
+			printf("%d\t16\t//gespeicherte Matrix anzeigen\n",MAT);
 			if(chap==MAT) break;
 		case GAME:
 			printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);

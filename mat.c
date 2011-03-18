@@ -44,7 +44,7 @@ struct mat matrix_auslesen(struct mat matrix_in, char *filename)
 	datei = fopen (filename, "r");
 	if (datei == NULL)
 	{
-		printf("Fehler beim oeffnen der Datei.\n");
+		printf("Fehler beim öffnen der Datei!\n");
 		return;
 	}
 
@@ -95,7 +95,7 @@ struct mat matrix_rand(int n, int m, int p, int z, int g)
 					vz = -1;
 			}
 			if(z)
-				matrix_out.matrix[j* matrix_out.zeilen+i] = (rand() % g) * vz;
+				matrix_out.matrix[j* matrix_out.zeilen+i] = (rand() % (g+1)) * vz;
 			else
 				matrix_out.matrix[j* matrix_out.zeilen+i] = ((double)rand() / RAND_MAX ) * g * vz;
 		}
@@ -142,12 +142,10 @@ int matrix_schreiben(struct mat matrix_in, char *filename)
 {
 	int i,j;
 	FILE *datei;
-	//~ char *filename = "ans.dat";
 	datei = fopen (filename, "w");
-	printf("%s",filename);
 	if (datei == NULL)
 	{
-		printf("Fehler beim oeffnen der Datei.\n");
+		printf("Fehler beim öffnen der Datei!\n");
 		return 1;
 	}
 	fprintf (datei, "%dx%d ", matrix_in.zeilen, matrix_in.spalten);
@@ -161,11 +159,12 @@ int matrix_schreiben(struct mat matrix_in, char *filename)
 }
 int matrix_save(struct mat matrix_out)
 {
-	int s;
+	char c;
 	char filename[80];
-	printf("Soll die Matrix gespeichert werden?\n");\
-	scanf("%d",&s);
-	if(s)
+	printf("Soll die Matrix gespeichert werden? (y/n) ");
+	scanf("%c",&c);
+	scanf("%c",&c);
+	if(c=='y'||c=='Y'||c=='1')
 	{
 		printf("Unter welchem Namen?\n");
 		scanf("%s",filename);
