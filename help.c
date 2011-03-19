@@ -35,7 +35,6 @@ void help( int chap )
 	{
 		case 0:
 		case MAT:
-
 			printf("\nKapitel %d: Lineare Algebra\n\n",MAT);
 			printf("%d\t 1\t//Matrix transponieren\n",MAT);
 			printf("%d\t 2\t//Matrix addieren\n",MAT);
@@ -71,7 +70,7 @@ void help( int chap )
 		case PRIM:
 			printf("\nKapitel %d: Primzahlen\n\n",PRIM);
 			printf("%d\t 1\t//Primfaktoren\n",PRIM);
-			printf("%d\t 2\t//TODO erste x Primzahlen\n",PRIM);
+			printf("%d\t 2\t//erste x Primzahlen\n",PRIM);
 			printf("%d\t 3\t//potenzieren\n",PRIM);
 			printf("%d\t 4\t//Fibonacci Zahl auf Prim prüfen\n",PRIM);
 			printf("%d\t 5\t//Fibonacci && Primzahl\n",PRIM);

@@ -115,7 +115,8 @@ int spiegel(short a)
 // findet das Maximum von vier Werten
 int max4(x,y,z,w)
 {
-    return( (x>y) ? ((x>z) ? ((x>w) ?  x : w ) : (z>w) ? z : w) : (y>z) ? ((y>w) ? y : z) : (w>z) ? w : z );
+    //~ return( (x>y) ? ((x>z) ? ((x>w) ?  x : w ) : (z>w) ? z : w) : (y>z) ? ((y>w) ? y : z) : (w>z) ? w : z );
+    return( max2(max2(x,y),max2(z,w)) );
 }
 int max2(int x,int y)
 {
