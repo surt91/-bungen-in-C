@@ -186,6 +186,7 @@ struct mat matrix_transponieren(struct mat matrix_in)
 		for(j=0;j<matrix_in.spalten;j++)
 			matrix_out.matrix[j* matrix_out.spalten+i] = matrix_in.matrix[i* matrix_in.spalten+j];
 
+	free(matrix_in.matrix);
 	return matrix_out;
 }
 struct mat matrix_addieren(struct mat matrix1, struct mat matrix2)
@@ -199,6 +200,8 @@ struct mat matrix_addieren(struct mat matrix1, struct mat matrix2)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[i* matrix_out.spalten+j] = matrix1.matrix[i* matrix1.spalten+j]+matrix2.matrix[i* matrix2.spalten+j];
 
+	free(matrix1.matrix);
+	free(matrix2.matrix);
 	return matrix_out;
 }
 struct mat matrix_skalaprodukt(struct mat matrix_out, double faktor)
@@ -227,6 +230,8 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 			for(k=0;k<matrix1.spalten;k++)
 				matrix_out.matrix[i*matrix_out.spalten+j] += matrix2.matrix[k*matrix2.spalten+j]*matrix1.matrix[i*matrix1.spalten+k];
 
+	free(matrix1.matrix);
+	free(matrix2.matrix);
 	return matrix_out;
 }
 //Multiplikation der k-ten Zeile mit einem Skalar
@@ -266,6 +271,7 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 		matrix_out.matrix[l* matrix_out.spalten+j] = matrix_in.matrix[k* matrix_in.spalten+j];
 	}
 
+	//~ free(matrix_in.matrix);
 	return matrix_out;
 }
 // ref / Gaußsche Normalform / Dreiecksform
@@ -324,7 +330,7 @@ struct mat matrix_dgf(struct mat matrix_out)
 				for(p=0;p<i;p++)
 					matrix_out=matrix_z_Q(matrix_out, p, i, -matrix_out.matrix[p* matrix_out.spalten+j]);
 		}
-return matrix_out;
+	return matrix_out;
 }
 // invertieren
 struct mat matrix_invertieren(struct mat matrix_in)
@@ -344,7 +350,8 @@ struct mat matrix_invertieren(struct mat matrix_in)
 
 	det = matrix_det(tmp2);
 
-	if(det < -FLOATNULL || det > FLOATNULL) // Wenn Determinante != 0
+	//~ if(det < -FLOATNULL || det > FLOATNULL) // Wenn Determinante != 0
+	if(det != 0) // Wenn Determinante != 0
 	{
 		tmp.spalten = matrix_in.spalten*2;
 		tmp.zeilen = matrix_in.zeilen;
@@ -364,12 +371,16 @@ struct mat matrix_invertieren(struct mat matrix_in)
 		for(i=0;i<matrix_in.zeilen;i++)
 			for(j=0;j<matrix_in.spalten;j++)
 				matrix_out.matrix[i* matrix_in.spalten +j] = tmp.matrix[i* tmp.spalten + (j+matrix_in.spalten)];
+
+		free(matrix_in.matrix);
+		free(tmp.matrix);
 		return matrix_out;
 	}
 	else
 	{
 		printf("Die Matrix ist nicht invertierbar.\n");
-		return;
+		matrix_out.zeilen = matrix_out.spalten = 0;
+		return matrix_out;
 	}
 }
 // Determinante
@@ -414,6 +425,8 @@ double matrix_det(struct mat matrix_out)
 
 	for(i=0;i<matrix_out.spalten;i++)
 		det *= matrix_out.matrix[i* matrix_out.spalten+i];
+
+	free(matrix_out.matrix);
 	return det;
 }
 // Zeile/Spalte streichen
@@ -491,9 +504,13 @@ double matrix_benchmark()
 {
 	int begin, end;
 	int i;
+	struct mat rand;
+	rand = matrix_rand(100,100,0,0,100);
 	begin = clock();
-	for(i=0;i<100;i++) matrix_dgf(matrix_rand(100,100,0,0,100));
+	for(i=0;i<100;i++)
+		matrix_dgf(rand);
+		//~ matrix_dgf(matrix_rand(100,100,0,0,100));
 	end = clock();
-
+	free(rand.matrix);
 	return ((double)(end-begin)/1000000);
 }

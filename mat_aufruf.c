@@ -13,6 +13,7 @@ void aufg_MAT_1()
 	printf("Die %d x %d transponierte Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_2()
@@ -35,6 +36,7 @@ void aufg_MAT_2()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_3()
@@ -54,6 +56,7 @@ void aufg_MAT_3()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_4()
@@ -81,6 +84,7 @@ void aufg_MAT_4()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_5()
@@ -103,6 +107,7 @@ void aufg_MAT_5()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_6()
@@ -127,6 +132,7 @@ void aufg_MAT_6()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_7()
@@ -148,6 +154,7 @@ void aufg_MAT_7()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_8()
@@ -164,6 +171,7 @@ void aufg_MAT_8()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_9()
@@ -179,6 +187,7 @@ void aufg_MAT_9()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_10()
@@ -206,13 +215,15 @@ void aufg_MAT_11()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
+	free(matrix_in.matrix);
 	return;
 }
 void aufg_MAT_12()
 {
 	struct mat matrix_in, matrix_out;
 	matrix_in.zeilen = matrix_in.spalten = 0;
-	printf("Welche Matrix soll auf Diagonalform gebracht werden?.\n");
+	printf("Zu welcher Matrix soll die Inverse ermittelt werden?\n");
 	printf("Wie lautet die Matrix?\n");
 	matrix_in = matrix_eingabe(matrix_in);
 	printf("Die Matrix:\n");
@@ -224,6 +235,7 @@ void aufg_MAT_12()
 		matrix_anzeige(matrix_out);
 		matrix_save(matrix_out);
 	}
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_13()
@@ -239,6 +251,7 @@ void aufg_MAT_13()
 	printf("Die %d x %d Matrix lautet:\n", matrix_out.zeilen, matrix_out.spalten);
 	matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_14()
@@ -265,6 +278,7 @@ void aufg_MAT_14()
 	else
 		matrix_anzeige(matrix_out);
 	matrix_save(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_15()
@@ -282,6 +296,7 @@ void aufg_MAT_16()
 	scanf("%s",name);
 	matrix_out = matrix_auslesen(matrix_out, name);
 	matrix_anzeige(matrix_out);
+	free(matrix_out.matrix);
 	return;
 }
 void aufg_MAT_17()
@@ -295,5 +310,6 @@ void aufg_MAT_17()
 	printf("Unter welchem Namen soll sie gespeichert werden?\n");
 	scanf("%s",name);
 	matrix_schreiben(matrix_out, name);
+	free(matrix_out.matrix);
 	return;
 }
