@@ -11,6 +11,7 @@ struct mat
 		int zeilen;
 		int spalten;
 	};
+void alloc_fail();
 struct mat matrix_eingabe(struct mat matrix_out);
 struct mat matrix_e(int n);
 struct mat matrix_rand(int n, int m, int p, int g, int z);

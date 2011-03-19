@@ -1,5 +1,9 @@
 #include "mat.h"
 
+void alloc_fail()
+{
+	printf("Allozieren des Speichers Fehlgeschlagen!\nIrgendwas läuft schief :/");
+}
 // Nimmt Eingaben zur Erstellung einer Matrix
 struct mat matrix_eingabe(struct mat matrix_out)
 {
@@ -50,7 +54,10 @@ struct mat matrix_auslesen(struct mat matrix_in, char *filename)
 	}
 
 	fscanf(datei, "%dx%d", &matrix_out.zeilen, &matrix_out.spalten);
+
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 			fscanf(datei, "%lf", &matrix_out.matrix[j* matrix_out.zeilen+i]);
@@ -65,6 +72,8 @@ struct mat matrix_e(int n)
 	struct mat matrix_out;
 	matrix_out.zeilen = matrix_out.spalten = n;
 	matrix_out.matrix = (double *) calloc(n * n, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 		{
@@ -86,6 +95,8 @@ struct mat matrix_rand(int n, int m, int p, int z, int g)
 	matrix_out.zeilen  = n;
 	matrix_out.spalten = m;
 	matrix_out.matrix = (double *) calloc(n * m, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 		{
@@ -182,6 +193,8 @@ struct mat matrix_transponieren(struct mat matrix_in)
 	matrix_out.zeilen = matrix_in.spalten;
 	matrix_out.spalten = matrix_in.zeilen;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_in.zeilen;i++)
 		for(j=0;j<matrix_in.spalten;j++)
 			matrix_out.matrix[j* matrix_out.spalten+i] = matrix_in.matrix[i* matrix_in.spalten+j];
@@ -196,6 +209,8 @@ struct mat matrix_addieren(struct mat matrix1, struct mat matrix2)
 	matrix_out.zeilen = matrix1.zeilen;
 	matrix_out.spalten = matrix1.spalten;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[i* matrix_out.spalten+j] = matrix1.matrix[i* matrix1.spalten+j]+matrix2.matrix[i* matrix2.spalten+j];
@@ -225,6 +240,8 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 	matrix_out.zeilen = matrix1.zeilen;
 	matrix_out.spalten = matrix2.spalten;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 			for(k=0;k<matrix1.spalten;k++)
@@ -261,6 +278,8 @@ struct mat matrix_z_P(struct mat matrix_in, int k, int l)
 	matrix_out.zeilen = matrix_in.zeilen;
 	matrix_out.spalten = matrix_in.spalten;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
+
 	for(i=0;i<matrix_out.zeilen;i++)
 		for(j=0;j<matrix_out.spalten;j++)
 			matrix_out.matrix[i* matrix_out.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
@@ -344,6 +363,8 @@ struct mat matrix_invertieren(struct mat matrix_in)
 	tmp2.spalten = matrix_in.spalten;
 	tmp2.zeilen = matrix_in.zeilen;
 	tmp2.matrix = (double *) calloc(tmp2.zeilen * tmp2.spalten, sizeof(double));
+	if(tmp2.matrix == NULL) alloc_fail();
+
 	for(i=0;i<tmp2.zeilen;i++)
 		for(j=0;j<tmp2.spalten;j++)
 			tmp2.matrix[i* tmp2.spalten+j] = matrix_in.matrix[i* matrix_in.spalten+j];
@@ -356,9 +377,12 @@ struct mat matrix_invertieren(struct mat matrix_in)
 		tmp.spalten = matrix_in.spalten*2;
 		tmp.zeilen = matrix_in.zeilen;
 		tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+		if(tmp.matrix == NULL) alloc_fail();
+
 		matrix_out.spalten = matrix_in.spalten;
 		matrix_out.zeilen = matrix_in.zeilen;
 		matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+		if(matrix_out.matrix == NULL) alloc_fail();
 
 		for(i=0;i<matrix_in.zeilen;i++)
 			for(j=0;j<matrix_in.spalten;j++)
@@ -438,6 +462,7 @@ struct mat matrix_streichen(struct mat matrix_in, int i, int j)
 	tmp.spalten = matrix_in.spalten - 1;
 	tmp.zeilen = matrix_in.zeilen - 1;
 	tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+	if(tmp.matrix == NULL) alloc_fail();
 
 	for(m=0,q=0;q<matrix_in.zeilen;q++,m++)
 	{
@@ -467,6 +492,7 @@ struct mat matrix_adjunkte(struct mat matrix_in)
 	matrix_out.spalten = matrix_in.spalten;
 	matrix_out.zeilen = matrix_in.zeilen;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
+	if(matrix_out.matrix == NULL) alloc_fail();
 
 	if(matrix_out.zeilen != matrix_out.spalten)
 		return;
@@ -491,6 +517,7 @@ struct mat matrix_invertieren_adjunkte(struct mat matrix_in)
 	tmp.spalten = matrix_in.spalten;
 	tmp.zeilen = matrix_in.zeilen;
 	tmp.matrix = (double *) calloc(tmp.zeilen * tmp.spalten, sizeof(double));
+	if(tmp.matrix == NULL) alloc_fail();
 
 	tmp=matrix_adjunkte(matrix_in);
 	det=matrix_det(matrix_in);
@@ -506,11 +533,13 @@ double matrix_benchmark()
 	int i;
 	struct mat rand;
 	rand = matrix_rand(100,100,0,0,100);
+
 	begin = clock();
 	for(i=0;i<100;i++)
 		matrix_dgf(rand);
 		//~ matrix_dgf(matrix_rand(100,100,0,0,100));
 	end = clock();
+
 	free(rand.matrix);
 	return ((double)(end-begin)/1000000);
 }

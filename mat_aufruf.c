@@ -285,6 +285,13 @@ void aufg_MAT_15()
 {
 	printf("Benchmark des Systems durch das Lösen von 100 zufälligen 100x100 Matrizen. (Diagonalform)\n");
 	printf("Time: %4.2f s\n",matrix_benchmark());
+	printf("Benchmark des Systems durch das Zählen der Treffer bei 10000000 Darts auf eine Dartscheibe (und dabei angenäherter Wert von PI)\n");
+	int begin,end;
+	double v;
+	begin = clock();
+	v=pi(10000000);
+	end = clock();
+	printf("Time: %4.2f s (pi=%f)\n",(double)(end-begin)/1000000,v);
 	return;
 }
 void aufg_MAT_16()
