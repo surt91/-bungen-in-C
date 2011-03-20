@@ -3,104 +3,79 @@
 void aufg_GAME_1()
 {
     //~ int x, k, kugel, besitz, einsatz, gewinn,runde;
-    int x, k, besitz, runde;
+    int x, besitz, runde, i, k;
+    int liste[42];
+    for(i=0;i<=42;i++)
+		liste[i] = 0;
     k=-1;
     runde=1;
     besitz=100;
     while(1)
     {
-        printf("Roulette\t\tRunde%d\nWorauf setzt du?\n",runde);
-        printf("1: Gerade\n");
-        printf("2: Ungerade\n");
-        printf("3: Rot\n");
-        printf("4: Schwarz\n");
-        printf("5: niedrig\n");
-        printf("6: hoch\n");
-        printf("7: Zahl\n");
-        printf("666: zum Beenden\n");
-        printf("1337: zum Speichern und Beenden\n");
-        printf("1338: zum Laden\n\n");
-        while(x!=1 && x!=2 && x!=3 && x!=4 && x!=5 && x!=6 && x!=7 && x!=666 && x!=1337 && x!=1338)
-        {
-            scanf("%d", &x);
+        x = roulette_menu(liste, runde, besitz);
 
-            if(x==7)
-            {
-                printf("Auf welche Zahl zwischen 0 und 36 setzt du?\n");
-                while(k<0 || k>36)
-                {
-                    scanf("%d",&k);
-                    if(k<0 || k>36)
-                    {
-                        printf("Wähle eine Zahl zwischen 0 und 36.\n");
-                    }
-                    else
-                    {
-                        printf("Du setzt auf die %d!\n",k);
-                    }
-                }
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==1)
-            {
-                k=37;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==2)
-            {
-                k=38;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==3)
-            {
-                k=39;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==4)
-            {
-                k=40;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==5)
-            {
-                k=41;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==6)
-            {
-                k=42;
-                roulette_setzen(&besitz, k, &runde);
-            }
-            else if(x==666)
-            {
-                return;
-            }
-            else if(x==1337)
-            {
-				roulette_save(runde, besitz, "roulette_save.dat");
-                return;
-            }
-            else if(x==1338)
-            {
-				roulette_load(&runde, &besitz, "roulette_save.dat");
-				break;
-            }
-            else
-            {
-                printf("Wähle eine der genannten Zahlen:\n");
-                printf("1: Gerade\n");
-				printf("2: Ungerade\n");
-				printf("3: Rot\n");
-				printf("4: Schwarz\n");
-				printf("5: niedrig\n");
-				printf("6: hoch\n");
-				printf("7: Zahl\n");
-				printf("666: zum Beenden\n");
-				printf("1337: zum Speichern und Beenden\n");
-				printf("1338: zum Laden\n\n");
-            }
-        }
-        x=0;
+		if(x==7)
+		{
+			printf("Auf welche Zahl zwischen 0 und 36 setzt du?\n");
+			while(k<0 || k>36)
+			{
+				scanf("%d",&k);
+				if(k<0 || k>36)
+				{
+					printf("Wähle eine Zahl zwischen 0 und 36.\n");
+				}
+				else
+				{
+					printf("Du setzt auf die %d!\n",k);
+				}
+			}
+			roulette_setzen(&besitz, liste, k);
+		}
+		else if(x==0)
+		{
+			roulette_drehen(liste, &besitz);
+			runde++;
+		}
+		else if(x==1)
+		{
+			roulette_setzen(&besitz, liste, GERADE);
+		}
+		else if(x==2)
+		{
+			roulette_setzen(&besitz, liste, UNGERADE);
+		}
+		else if(x==3)
+		{
+			roulette_setzen(&besitz, liste, ROT);
+		}
+		else if(x==4)
+		{
+			roulette_setzen(&besitz, liste, SCHWARZ);
+		}
+		else if(x==5)
+		{
+			roulette_setzen(&besitz, liste, NIEDRIG);
+		}
+		else if(x==6)
+		{
+			roulette_setzen(&besitz, liste, HOCH);
+		}
+		else if(x==666)
+		{
+			return;
+		}
+		else if(x==1337)
+		{
+			roulette_save(runde, besitz, "roulette_save.dat");
+		}
+		else if(x==1338)
+		{
+			roulette_load(&runde, &besitz, "roulette_save.dat");
+		}
+		else
+		{
+			printf("unzulässig, bitte wähle erneut");
+		}
     }
     return;
 }
