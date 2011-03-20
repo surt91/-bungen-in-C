@@ -1,10 +1,10 @@
 #include "game_rand.h"
 
-// liefert eine Zahl zwischen 0 und 35
+// liefert eine Zahl zwischen 0 und 36
 int roulette()
 {
     //srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
-    return (rand()%36);
+    return (rand()%37);
 }
 
 // berechnet wie Groß der Gewinn-Faktor ist
@@ -12,15 +12,90 @@ int roulette_gewinn_faktor(k,kugel)
 {
     if(kugel==0 && k!=0)
         return 0;
-    if(k==36 && kugel%2==0)
+    // Gerade
+    if(k==37 && kugel%2==0)
         return 2;
-    if(k==37 && kugel%2==1)
+    // Ungerade
+    if(k==38 && kugel%2==1)
         return 2;
+    // Rot
+    if(k==39 && (kugel+kugel%10)%2==0)
+        return 2;
+    // Schwarz
+    if(k==40 && (kugel+kugel%10)%2==1)
+        return 2;
+    // <=18
+    if(k==41 && kugel <= 18)
+        return 2;
+    // > 18
+    if(k==42 && kugel > 18)
+        return 2;
+    // Zahl
     if(k==kugel)
-        return 35;
-    return 0;
+        return 36;
+    return 0;\
 }
-
+int roulette_setzen(int *besitz, int k, int *runde)
+{
+	int einsatz, kugel, gewinn;
+	printf("Wieviel setzt du?\nDu hast %d€\n", *besitz);
+	scanf("%d", &einsatz);
+	*besitz-=einsatz;
+	kugel = roulette();
+	*runde++;
+	printf("Die Kugel ist auf %d liegen geblieben!\n", kugel);
+	gewinn=roulette_gewinn_faktor(k,kugel);
+	if(gewinn)
+	{
+		*besitz+=gewinn*einsatz;
+		printf("Du hast Gewonnen!\nDu erhälst %d€\nDu hast jetzt %d€\n\n", gewinn*einsatz, *besitz);
+	}
+	else if(besitz>0)
+	{
+		printf("Leider verloren. Du hast noch %d€\n\n", *besitz);
+	}
+	else
+	{
+		printf("Du bist leider Pleite und wirst aus dem Kasino geworfen!\n\n");
+		return;
+	}
+}
+// schreibt einen Roulette Spielstand in eine Datei
+int roulette_save(int runde, int geld, char *filename)
+{
+	int i,j;
+	FILE *datei;
+	//~ char *filename = "roulette_save.dat";
+	datei = fopen (filename, "w");
+	if (datei == NULL)
+	{
+		printf("Fehler beim Öffnen der Datei!\n");
+		return 1;
+	}
+	fprintf (datei, "%d;%d\n", runde, geld);
+	fclose (datei);
+	printf("Spielstand erfolgreich gespeichert!\n", filename);
+	return 0;
+}
+int roulette_load(int *runde, int *geld, char *filename)
+{
+	int i,j;
+	FILE *datei;
+	//~ char *filename = "roulette_save.dat";
+	datei = fopen (filename, "r");
+	if (datei == NULL)
+	{
+		printf("Fehler beim Öffnen der Datei!\n");
+		return 1;
+	}
+	fscanf (datei, "%d;%d\n", runde, geld);
+	fclose (datei);
+	printf("\nSpielstand erfolgreich geladen!\n\n");
+	printf("Dein Geld:\t%5d €\n",*geld);
+	printf("Runde    :\t%5d\n",*runde);
+	printf("\n\n");
+	return 0;
+}
 // gibt eine Pokerhand
 struct card *karten_geber(struct card *hand)
 {
@@ -125,12 +200,8 @@ int is_flush(struct card *hand)
 {
     int i;
     for(i=1;i<5;i++)
-    {
         if(hand[0].f!=hand[i].f)
-        {
             return 0;
-        }
-    }
     return 1;
 }
 // überprüft, ob eine Straße auf der Hand ist
@@ -139,16 +210,12 @@ int is_straight(struct card *hand)
 	int i;
     karten_sortierer(hand);
     if(hand[1].w==10 && hand[2].w==bube && hand[3].w==dame && hand[4].w==konig && hand[0].w==ass)
-    {
         return 2;
-    }
+
     for(i=0;i<4;i++)
-    {
         if(hand[i].w+1!=hand[i+1].w)
-        {
             return 0;
-        }
-    }
+
     return 1;
 }
 // sortiert eine Pokerhand aufsteigend, (ass, zwei, drei...)

@@ -2,72 +2,105 @@
 
 void aufg_GAME_1()
 {
-    int x, k, kugel, besitz, einsatz, gewinn,runde;
+    //~ int x, k, kugel, besitz, einsatz, gewinn,runde;
+    int x, k, besitz, runde;
     k=-1;
     runde=1;
     besitz=100;
     while(1)
     {
-        printf("Roulette\t\tRunde%d\nWorauf setzt du?\n1: Gerade\n2: Ungerade\n3: Zahl\n666: zum Beenden\n\n",runde);
-        while(x!=1 && x!=2 && x!=3 && x!=666)
+        printf("Roulette\t\tRunde%d\nWorauf setzt du?\n",runde);
+        printf("1: Gerade\n");
+        printf("2: Ungerade\n");
+        printf("3: Rot\n");
+        printf("4: Schwarz\n");
+        printf("5: niedrig\n");
+        printf("6: hoch\n");
+        printf("7: Zahl\n");
+        printf("666: zum Beenden\n");
+        printf("1337: zum Speichern und Beenden\n");
+        printf("1338: zum Laden\n\n");
+        while(x!=1 && x!=2 && x!=3 && x!=4 && x!=5 && x!=6 && x!=7 && x!=666 && x!=1337 && x!=1338)
         {
             scanf("%d", &x);
 
-            if(x==3)
+            if(x==7)
             {
-                printf("Auf welche Zahl zwischen 0 und 35 setzt du?\n");
-                while(k<0 || k>35)
+                printf("Auf welche Zahl zwischen 0 und 36 setzt du?\n");
+                while(k<0 || k>36)
                 {
                     scanf("%d",&k);
-                    if(k<0 || k>35)
+                    if(k<0 || k>36)
                     {
-                        printf("Wähle eine Zahl zwischen 0 und 35.\n");
+                        printf("Wähle eine Zahl zwischen 0 und 36.\n");
                     }
                     else
                     {
                         printf("Du setzt auf die %d!\n",k);
                     }
                 }
+                roulette_setzen(&besitz, k, &runde);
             }
             else if(x==1)
             {
-                k=36;
+                k=37;
+                roulette_setzen(&besitz, k, &runde);
             }
             else if(x==2)
             {
-                k=37;
+                k=38;
+                roulette_setzen(&besitz, k, &runde);
+            }
+            else if(x==3)
+            {
+                k=39;
+                roulette_setzen(&besitz, k, &runde);
+            }
+            else if(x==4)
+            {
+                k=40;
+                roulette_setzen(&besitz, k, &runde);
+            }
+            else if(x==5)
+            {
+                k=41;
+                roulette_setzen(&besitz, k, &runde);
+            }
+            else if(x==6)
+            {
+                k=42;
+                roulette_setzen(&besitz, k, &runde);
             }
             else if(x==666)
             {
                 return;
             }
+            else if(x==1337)
+            {
+				roulette_save(runde, besitz, "roulette_save.dat");
+                return;
+            }
+            else if(x==1338)
+            {
+				roulette_load(&runde, &besitz, "roulette_save.dat");
+				break;
+            }
             else
             {
-                printf("Wähle eine der genannten Zahlen:\n1: Gerade\n2: Ungerade\n3: Zahl\n666: zum Beenden\n\n");
+                printf("Wähle eine der genannten Zahlen:\n");
+                printf("1: Gerade\n");
+				printf("2: Ungerade\n");
+				printf("3: Rot\n");
+				printf("4: Schwarz\n");
+				printf("5: niedrig\n");
+				printf("6: hoch\n");
+				printf("7: Zahl\n");
+				printf("666: zum Beenden\n");
+				printf("1337: zum Speichern und Beenden\n");
+				printf("1338: zum Laden\n\n");
             }
         }
         x=0;
-        printf("Wieviel setzt du?\nDu hast %d€\n", besitz);
-        scanf("%d", &einsatz);
-        besitz-=einsatz;
-        kugel = roulette();
-        runde++;
-        printf("Die Kugel ist auf %d liegen geblieben!\n", kugel);
-        gewinn=roulette_gewinn_faktor(k,kugel);
-        if(gewinn)
-        {
-            besitz+=gewinn*einsatz;
-            printf("Du hast Gewonnen!\nDu erhälst %d€\nDu hast jetzt %d€\n\n", gewinn*einsatz, besitz);
-        }
-        else if(besitz>0)
-        {
-            printf("Leider verloren. Du hast noch %d€\n\n", besitz);
-        }
-        else
-        {
-            printf("Du bist leider Pleite und wirst aus dem Kasino geworfen!\n\n");
-            return;
-        }
     }
     return;
 }
