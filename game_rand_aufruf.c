@@ -2,7 +2,6 @@
 
 void aufg_GAME_1()
 {
-    //~ int x, k, kugel, besitz, einsatz, gewinn,runde;
     int x, besitz, runde, i, k;
     int liste[42];
     for(i=0;i<=42;i++)
@@ -10,74 +9,77 @@ void aufg_GAME_1()
     k=-1;
     runde=1;
     besitz=100;
+    int max_geld = besitz;
+    int max_runde = runde;
     while(1)
     {
+		max_runde = runde;
+		if(max_geld < besitz)
+			max_geld = besitz;
         x = roulette_menu(liste, runde, besitz);
 
-		if(x==7)
+		switch(x)
 		{
-			printf("Auf welche Zahl zwischen 0 und 36 setzt du?\n");
-			while(k<0 || k>36)
-			{
-				scanf("%d",&k);
-				if(k<0 || k>36)
+			case 0:
+				if(roulette_drehen(liste, &besitz))
 				{
-					printf("Wähle eine Zahl zwischen 0 und 36.\n");
+					roulette_zeige_highscore(max_geld, max_runde);
+					return;
 				}
-				else
+				runde++;
+				break;
+			case 1:
+				roulette_setzen(&besitz, liste, GERADE);
+				break;
+			case 2:
+				roulette_setzen(&besitz, liste, UNGERADE);
+				break;
+			case 3:
+				roulette_setzen(&besitz, liste, ROT);
+				break;
+			case 4:
+				roulette_setzen(&besitz, liste, SCHWARZ);
+				break;
+			case 5:
+				roulette_setzen(&besitz, liste, NIEDRIG);
+				break;
+			case 6:
+				roulette_setzen(&besitz, liste, HOCH);
+				break;
+			case 7:
+				printf("Auf welche Zahl zwischen 0 und 36 setzt du?\n");
+				while(1)
 				{
-					printf("Du setzt auf die %d!\n",k);
+					scanf("%d",&k);
+					if(k<0 || k>36)
+					{
+						printf("Wähle eine Zahl zwischen 0 und 36.\n");
+					}
+					else
+					{
+						printf("Du setzt auf die %d!\n",k);
+						break;
+					}
 				}
-			}
-			roulette_setzen(&besitz, liste, k);
-		}
-		else if(x==0)
-		{
-			roulette_drehen(liste, &besitz);
-			runde++;
-		}
-		else if(x==1)
-		{
-			roulette_setzen(&besitz, liste, GERADE);
-		}
-		else if(x==2)
-		{
-			roulette_setzen(&besitz, liste, UNGERADE);
-		}
-		else if(x==3)
-		{
-			roulette_setzen(&besitz, liste, ROT);
-		}
-		else if(x==4)
-		{
-			roulette_setzen(&besitz, liste, SCHWARZ);
-		}
-		else if(x==5)
-		{
-			roulette_setzen(&besitz, liste, NIEDRIG);
-		}
-		else if(x==6)
-		{
-			roulette_setzen(&besitz, liste, HOCH);
-		}
-		else if(x==666)
-		{
-			return;
-		}
-		else if(x==1337)
-		{
-			roulette_save(runde, besitz, "roulette_save.dat");
-		}
-		else if(x==1338)
-		{
-			roulette_load(&runde, &besitz, "roulette_save.dat");
-		}
-		else
-		{
-			printf("unzulässig, bitte wähle erneut");
+				roulette_setzen(&besitz, liste, k);
+				break;
+			case 666:
+				roulette_zeige_highscore(max_geld, max_runde);
+				return;
+			case 888:
+				roulette_load_highscore();
+				break;
+			case 1337:
+				roulette_save(runde, besitz, max_geld, "roulette_save.dat");
+				break;
+			case 1338:
+				roulette_load(&runde, &besitz, &max_geld, "roulette_save.dat");
+				break;
+			default:
+				printf("unzulässig, bitte wähle erneut");
+				break;
 		}
     }
-    return;
 }
 
 void aufg_GAME_2()

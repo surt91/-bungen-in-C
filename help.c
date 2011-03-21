@@ -2,7 +2,8 @@
 
 void todo()
 {
-	//~ printf("\nTODO\n\n");
+	printf("\nTODO\n\n");
+	printf("Highscore Datei für Roulette\n");
 	//~ printf("Alle Kapitel auslagern\n");
 	//~ printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
 }
