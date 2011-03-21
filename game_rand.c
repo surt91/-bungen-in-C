@@ -186,7 +186,7 @@ void roulette_zeige_highscore(int max_geld, int max_runde)
 int roulette_load_highscore()
 {
 	FILE *datei;
-	int i, hs_geld, hs_runde,day, month, year, tmp=0;
+	int i, hs_geld, hs_runde,day, month, year, hour, min, tmp=0;
 	char *filename = RHSS;
 	char name[80];
 	datei = fopen (filename, "r");
@@ -199,14 +199,15 @@ int roulette_load_highscore()
 	printf("\tNAME   \t\t  GELD\t\tRUNDE\t\tDATUM\n");
 	for(i=0;i<NUMHS;i++)
 	{
-		fscanf (datei, "%d;%d;%d;%d;%d;%s\n", &hs_geld, &hs_runde, &day, &month, &year, name);
+		fscanf (datei, "%d;%d;%d;%d;%d;%d;%d;%s\n", &hs_geld, &hs_runde, &day, &month, &year, &hour, &min, name);
 		printf("\t%s", name);
 		printf("\t\t%5d€",hs_geld);
 		printf("\t\t%5d",hs_runde);
 		printf("\t\t%02d.%02d.%04d",day,month,year);
+		printf("\t%02d:%02d",hour,min);
 		printf("\n");
-		if(tmp<hs_geld)
-			tmp = hs_geld;
+		//~ if(tmp > hs_geld)
+		tmp = hs_geld;
 	}
 	printf("\n");
 	fclose (datei);
@@ -231,7 +232,7 @@ int roulette_save_highscore(int max_geld, int max_runde, char *name)
     t = time(NULL);
     ts = localtime(&t);
 
-	fprintf (datei, "%d;%d;%d;%d;%d;%s\n", max_geld, max_runde, ts->tm_mday, ts->tm_mon+1, ts->tm_year+1900, name);
+	fprintf (datei, "%d;%d;%d;%d;%d;%d;%d;%s\n", max_geld, max_runde, ts->tm_mday, ts->tm_mon+1, ts->tm_year+1900, ts->tm_hour, ts->tm_min, name);
 	fclose (datei);
 	roulette_highscore_sort();
 	printf("Highscore gespeichert!\n", filename);
