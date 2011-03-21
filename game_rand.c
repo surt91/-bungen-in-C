@@ -80,10 +80,8 @@ int roulette_gewinn(int *liste, int kugel)
 			printf("Hoch    : Dein Einsatz verdoppelt sich auf %d!\n", liste[HOCH]);
 	}
 	else
-	{
 		for(i=1;i<=42;i++)
 			liste[i]=0;
-	}
     // Zahl
     liste[kugel] *= 36;
     if(liste[kugel])
@@ -139,7 +137,6 @@ int roulette_save(int runde, int geld, int max_geld, char *filename)
 {
 	int i,j;
 	FILE *datei;
-	//~ char *filename = "roulette_save.dat";
 	datei = fopen (filename, "w");
 	if (datei == NULL)
 	{
@@ -155,7 +152,6 @@ int roulette_load(int *runde, int *geld, int *max_geld, char *filename)
 {
 	int i,j;
 	FILE *datei;
-	//~ char *filename = "roulette_save.dat";
 	datei = fopen (filename, "r");
 	if (datei == NULL)
 	{
@@ -197,7 +193,7 @@ int roulette_load_highscore()
 	if (datei == NULL)
 	{
 		printf("Fehler beim Öffnen der Datei!\n");
-		return;
+		return 1;
 	}
 	printf("\tAll Time Highscores\n");
 	printf("\tNAME   \t\t  GELD\t\tRUNDE\t\tDATUM\n");
@@ -217,7 +213,7 @@ int roulette_load_highscore()
 	return tmp;
 }
 
-void roulette_save_highscore(int max_geld, int max_runde, char *name)
+int roulette_save_highscore(int max_geld, int max_runde, char *name)
 {
 	int i,j;
 	FILE *datei;
@@ -227,7 +223,7 @@ void roulette_save_highscore(int max_geld, int max_runde, char *name)
 	if (datei == NULL)
 	{
 		printf("Fehler beim Öffnen der Datei!\n");
-		return;
+		return 1;
 	}
 
 	struct tm *ts;
@@ -239,7 +235,7 @@ void roulette_save_highscore(int max_geld, int max_runde, char *name)
 	fclose (datei);
 	roulette_highscore_sort();
 	printf("Highscore gespeichert!\n", filename);
-	return;
+	return 0;
 }
 
 void roulette_highscore_sort()

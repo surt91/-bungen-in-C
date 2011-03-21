@@ -21,7 +21,7 @@ int roulette_save(int runde, int geld, int max_geld, char *filename);
 int roulette_load(int *runde, int *geld, int *max_geld, char *filename);
 void roulette_zeige_highscore(int max_geld, int max_runde);
 int roulette_load_highscore();
-void roulette_save_highscore(int max_geld, int max_runde, char *name);
+int roulette_save_highscore(int max_geld, int max_runde, char *name);
 void roulette_highscore_sort();
 //6.23
 struct card
