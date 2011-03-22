@@ -206,11 +206,10 @@ int roulette_load_highscore()
 		printf("\t\t%02d.%02d.%04d",day,month,year);
 		printf("\t%02d:%02d",hour,min);
 		printf("\n");
-		//~ if(tmp > hs_geld)
-		tmp = hs_geld;
 	}
-	printf("\n");
 	fclose (datei);
+	printf("\n");
+	tmp = hs_geld;
 	return tmp;
 }
 
@@ -220,6 +219,9 @@ int roulette_save_highscore(int max_geld, int max_runde, char *name)
 	FILE *datei;
 	char *filename = RHSS;
 
+	struct tm *ts;
+	time_t t;
+
 	datei = fopen (filename, "a");
 	if (datei == NULL)
 	{
@@ -227,8 +229,6 @@ int roulette_save_highscore(int max_geld, int max_runde, char *name)
 		return 1;
 	}
 
-	struct tm *ts;
-	time_t t;
     t = time(NULL);
     ts = localtime(&t);
 
