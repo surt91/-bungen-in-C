@@ -1,0 +1,12 @@
+# Git soll Objekte ignorieren, genauso, wie CodeBlocks dateien
+*.o
+geany_run_script.sh
+*.cbp
+*.depend
+*.layout
+bin/
+obj/
+
+*.dat
+*.txt
+*.stat
