@@ -1,4 +1,5 @@
-# Git soll Objekte ignorieren, genauso, wie CodeBlocks dateien
+# Git soll Objekte ignorieren, genauso, wie Code::Blocks dateien
+
 *.o
 geany_run_script.sh
 *.cbp
