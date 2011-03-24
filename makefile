@@ -3,8 +3,8 @@ TARGET	= Ubung
 LINK	= gcc
 CC		= gcc
 CFLAGS	= -march=native -O2 -pipe -fomit-frame-pointer -funroll-all-loops -ffast-math -finline-functions
-WARNLEVEL= -Wall -pedantic
-#~ WARNLEVEL= -Wall
+#~ WARNLEVEL= -Wall -pedantic
+WARNLEVEL= -Wall
 
 all: $(TARGET)
 

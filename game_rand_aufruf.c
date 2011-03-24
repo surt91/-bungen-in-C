@@ -3,15 +3,16 @@
 void aufg_GAME_1()
 {
     int x, besitz, runde, i, k;
-    int max_geld = besitz;
-    int max_runde = runde;
+    int max_geld;
+    int max_runde;
     int liste[42];
     for(i=0;i<=42;i++)
 		liste[i] = 0;
     k=-1;
     runde=1;
     besitz=100;
-
+    max_geld = besitz;
+    max_runde = runde;
     while(1)
     {
 		max_runde = runde;

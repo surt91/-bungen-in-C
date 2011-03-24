@@ -180,9 +180,9 @@ int menu(int argc, char **argv)
                 case 11:
                     aufg_TRIV_11();
                     break;
-                case 12:
-                    aufg_TRIV_12();
-                    break;
+//                case 12:
+//                    aufg_TRIV_12();
+//                    break;
                 case 13:
                     aufg_TRIV_13();
                     break;

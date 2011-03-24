@@ -239,6 +239,7 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 	{
 		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Dimension der Zeilen der zweiten Matrix überein.\n");
 		matrix_out.zeilen = matrix_out.spalten = 0;
+		matrix_out.matrix = NULL;
 		return matrix_out;
 	}
 	matrix_out.zeilen = matrix1.zeilen;
@@ -408,6 +409,7 @@ struct mat matrix_invertieren(struct mat matrix_in)
 	{
 		printf("Die Matrix ist nicht invertierbar.\n");
 		matrix_out.zeilen = matrix_out.spalten = 0;
+		matrix_out.matrix = NULL;
 		return matrix_out;
 	}
 }
@@ -551,5 +553,5 @@ double matrix_benchmark()
 	end = clock();
 
 	free(rand.matrix);
-	return ((double)(end-begin)/1000000);
+	return ((double)(end-begin)/CLOCKS_PER_SEC);
 }

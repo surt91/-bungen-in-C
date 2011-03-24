@@ -8,7 +8,7 @@ void aufg_TRIV_1()
     scanf("%lf", &netto_preis);
     mwsteuer=netto_preis*0.19;
     preis=mwsteuer+netto_preis;
-    printf("Das Produkt kostet:\nNetto   :\t%.2f€\nSteuern :\t%.2f€\nBrutto  :\t%.2f€\n", netto_preis, mwsteuer, preis);
+    printf("Das Produkt kostet:\nNetto   :\t%.2lf€\nSteuern :\t%.2lf€\nBrutto  :\t%.2lf€\n", netto_preis, mwsteuer, preis);
 }
 
 void aufg_TRIV_2()
@@ -151,37 +151,38 @@ void aufg_TRIV_11()
     return;
 }
 
-void aufg_TRIV_12()
-{
-	char *string;
-	size_t laenge=100;
-	string = (char *) calloc(laenge, sizeof(char));
-	printf("Welcher String soll auf Palindromität untersucht werden.\n");
-	laenge=getline(&string, &laenge, stdin);
-	string[laenge-1]= '\0';
-	printf("\"%s\", %d Buchstaben\n", string, (int)laenge-1);
-	if(ist_palindrom(string, laenge))
-		printf("\"%s\" ist ein Palindrom\n", string);
-	else
-		printf("\"%s\" ist kein Palindrom\n", string);
-	free(string);
-	return;
-}
+//void aufg_TRIV_12()
+//{
+//	char *string;
+//	size_t laenge=100;
+//	string = (char *) calloc(laenge, sizeof(char));
+//	printf("Welcher String soll auf Palindromität untersucht werden.\n");
+//	laenge=getline(&string, &laenge, stdin);
+//	string[laenge-1]= '\0';
+//	printf("\"%s\", %d Buchstaben\n", string, (int)laenge-1);
+//	if(ist_palindrom(string, laenge))
+//		printf("\"%s\" ist ein Palindrom\n", string);
+//	else
+//		printf("\"%s\" ist kein Palindrom\n", string);
+//	free(string);
+//	return;
+//}
 
 void aufg_TRIV_13()
 {
 	unsigned base, number;
-	char out[80];
+	char out[100];
 	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 32 bit unsigned)\n");
 	scanf("%ull", &number);
 	printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
-	scanf("%u", &base);
+	scanf("%d", &base);
 	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,dec2base(number,base,out));
 	return;
 }
 
 void aufg_TRIV_15()
 {
+	unsigned w;
 	double ma, pi, pr, v;
 	char yn;
 	printf("Benchmark des Systems durch das Lösen von 200 zufälligen 200x200 Matrizen. (Diagonalform)\n");
@@ -191,8 +192,8 @@ void aufg_TRIV_15()
 	pi = pi_benchmark(&v);
 	printf("Time: %4.2f s (pi=%f)\n", pi, v);
 	printf("Benchmark des Systems durch das Ermitteln aller Primzahlen < 100.000.000\n");
-	pr = prim_benchmark();
-	printf("Time: %4.2f s\n", pr);
+	pr = prim_benchmark(&w);
+	printf("Time: %4.2f s (%d Stück)\n", pr, w);
 
 	printf("save? (y,n)");
 	scanf("%c", &yn);

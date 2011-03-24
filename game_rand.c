@@ -500,5 +500,5 @@ double pi_benchmark(double *v)
 	begin = clock();
 	*v=pi(100000000);
 	end = clock();
-	return((double)(end-begin)/1000000);
+	return((double)(end-begin)/CLOCKS_PER_SEC);
 }

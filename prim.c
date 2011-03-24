@@ -104,6 +104,7 @@ void prim_ermitteln(unsigned long max)
     prim_liste = prim_array_bereinigen(array, max, &laenge);
     prim_ausgabe(prim_liste, laenge);
     free(array);
+    free(prim_liste);
 }
 // Primzahlenermittlung mit Array
 void primzahl(unsigned max, short *a)
@@ -186,19 +187,20 @@ int ist_prim_array(test)
 		return 0;
 }
 
-double prim_benchmark()
+double prim_benchmark(unsigned *w)
 {
 	int begin,end;
 
-	unsigned laenge=0, *prim_liste;
+	unsigned  *prim_liste;
     short *array=0;
     int max = 100000000;
     array = (short *) calloc(max, sizeof(short));
+//    printf("test");
     begin = clock();
     primzahl(max, array);
-    prim_liste = prim_array_bereinigen(array, max, &laenge);
+    prim_liste = prim_array_bereinigen(array, max, w);
     end = clock();
     free(array);
 
-	return((double)(end-begin)/1000000);
+	return((double)(end-begin)/CLOCKS_PER_SEC);
 }

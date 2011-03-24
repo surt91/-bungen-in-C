@@ -147,32 +147,32 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr)
 }
 
 // findet heraus, ob der Parameter String ein Palindrom ist
-int ist_palindrom(char *string, size_t laenge)
-{
-	int i, j;
-	char *neu_string;
-	laenge = strlen(string);
-	neu_string = (char *) calloc(laenge, sizeof(char));
-	for(j=i=0;string[i]!='\0';i++)
-	{
-        if(string[i]!=' ')
-            neu_string[j++]=string[i];
-        else
-			laenge--;
-		if(neu_string[j-1]<97)
-			neu_string[j-1] += 32;
-	}
-	for(i=0;i<(laenge-1)/2;i++)
-	{
-		if(neu_string[i]!=neu_string[laenge-1-i])
-		{
-			free(neu_string);
-			return 0;
-		}
-	}
-	free(neu_string);
-	return 1;
-}
+//int ist_palindrom(char *string, size_t laenge)
+//{
+//	int i, j;
+//	char *neu_string;
+//	laenge = strlen(string);
+//	neu_string = (char *) calloc(laenge, sizeof(char));
+//	for(j=i=0;string[i]!='\0';i++)
+//	{
+//        if(string[i]!=' ')
+//            neu_string[j++]=string[i];
+//        else
+//			laenge--;
+//		if(neu_string[j-1]<97)
+//			neu_string[j-1] += 32;
+//	}
+//	for(i=0;i<(laenge-1)/2;i++)
+//	{
+//		if(neu_string[i]!=neu_string[laenge-1-i])
+//		{
+//			free(neu_string);
+//			return 0;
+//		}
+//	}
+//	free(neu_string);
+//	return 1;
+//}
 
 char* dec2base(unsigned number, unsigned base, char *out)
 {
