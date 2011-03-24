@@ -51,7 +51,7 @@ void help( int chap )
 			printf("%d\t12\t//Inverse\n",MAT);
 			printf("%d\t13\t//Inverse mit Adjunkter\n",MAT);
 			printf("%d\t14\t//Zufällige Matrix erzeugen\n",MAT);
-			printf("%d\t15\t//Bench: Linpack :D\n",MAT);
+			//~ printf("%d\t15\t//Bench: Linpack :D\n",MAT);
 			printf("%d\t16\t//gespeicherte Matrix anzeigen\n",MAT);
 			printf("%d\t17\t//Matrix speichern\n",MAT);
 			if(chap==MAT) break;
@@ -98,6 +98,8 @@ void help( int chap )
 			printf("%d\t10\t//Maximum von vier Zahlen\n",TRIV);
 			printf("%d\t11\t//Datum binär packen\n",TRIV);
 			printf("%d\t12\t//100 Zeichen Palindromität prüfen\n",TRIV);
+			printf("%d\t13\t//dec2base36\n",TRIV);
+			printf("%d\t15\t//Benchmark\n",TRIV);
 			if(chap==TRIV) break;
 	}
 }

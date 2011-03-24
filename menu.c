@@ -70,9 +70,9 @@ int menu(int argc, char **argv)
                 case 14:
                     aufg_MAT_14();
                     break;
-                case 15:
-                    aufg_MAT_15();
-                    break;
+                //~ case 15:
+                    //~ aufg_MAT_15();
+                    //~ break;
                 case 16:
                     aufg_MAT_16();
                     break;
@@ -185,6 +185,9 @@ int menu(int argc, char **argv)
                     break;
                 case 13:
                     aufg_TRIV_13();
+                    break;
+                case 15:
+                    aufg_TRIV_15();
                     break;
             }
             break;

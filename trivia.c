@@ -174,11 +174,10 @@ int ist_palindrom(char *string, size_t laenge)
 	return 1;
 }
 
-char* dec2base(uint64_t number, int base)
+char* dec2base(unsigned number, unsigned base, char *out)
 {
 	static const char digit[36] = {"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
 	char tmp[256];
-	char *out;
 	int i=0,n=0;
 	if(base > 36)
 	{
@@ -190,7 +189,7 @@ char* dec2base(uint64_t number, int base)
 		number /= base;
 		i++;
 	} while(number > 0);
-	out = (char *) calloc(i, sizeof(char));
+	out = (char *) calloc(i+1, sizeof(char));
 	i--;
 	while(i>=0)
 	{
@@ -199,4 +198,21 @@ char* dec2base(uint64_t number, int base)
 		i--;
 	}
 	return out;
+}
+
+int benchmark_save(double ma, double pi, double pr)
+{
+	int i,j;
+	char* filename = "bench.stat";
+	FILE *datei;
+	datei = fopen (filename, "w");
+	if (datei == NULL)
+	{
+		printf("Fehler beim Öffnen der Datei!\n");
+		return 1;
+	}
+	fprintf (datei, "%f,%f,%f\n", ma, pi, pr);
+	fclose (datei);
+	printf("Benchmark Ergebnisse erfolgreich nach %s geschrieben\n", filename);
+	return 0;
 }

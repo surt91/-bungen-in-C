@@ -16,5 +16,6 @@ void aufg_TRIV_10();
 void aufg_TRIV_11();
 void aufg_TRIV_12();
 void aufg_TRIV_13();
+void aufg_TRIV_15();
 
 #endif //TRIVIA_H

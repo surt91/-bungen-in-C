@@ -17,5 +17,6 @@ void prim_ausgabe(unsigned *prim_liste, unsigned anzahl_prim);
 int ist_prim_array(int test);
 //5.14
 void primfaktoren(int zahl);
+double prim_benchmark();
 
 #endif //PRIM_H

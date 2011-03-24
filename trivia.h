@@ -30,6 +30,8 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr);
 //7.15
 int ist_palindrom(char *string, size_t laenge);
 
-char* dec2base(uint64_t number, int base);
+char* dec2base(unsigned number, unsigned base, char *out);
+
+int benchmark_save(double ma, double pi, double pr);
 
 #endif //TRIVIA_H

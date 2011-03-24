@@ -185,3 +185,21 @@ int ist_prim_array(test)
 	else
 		return 0;
 }
+
+double prim_benchmark()
+{
+	int begin,end;
+	double v;
+
+	unsigned laenge=0, *prim_liste;
+    short *array=0;
+    int max = 100000000;
+    array = (short *) calloc(max, sizeof(short));
+    begin = clock();
+    primzahl(max, array);
+    prim_liste = prim_array_bereinigen(array, max, &laenge);
+    end = clock();
+    free(array);
+
+	return((double)(end-begin)/1000000);
+}

@@ -532,10 +532,10 @@ double matrix_benchmark()
 	int begin, end;
 	int i;
 	struct mat rand;
-	rand = matrix_rand(100,100,0,0,100);
+	rand = matrix_rand(200,200,0,0,200);
 
 	begin = clock();
-	for(i=0;i<100;i++)
+	for(i=0;i<200;i++)
 		matrix_dgf(rand);
 		//~ matrix_dgf(matrix_rand(100,100,0,0,100));
 	end = clock();

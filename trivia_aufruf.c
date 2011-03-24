@@ -170,14 +170,33 @@ void aufg_TRIV_12()
 
 void aufg_TRIV_13()
 {
-	uint64_t number;
-	int base;
+	unsigned base, number;
 	char *out;
-	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 64 bit unsigned)\n");
+	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 32 bit unsigned)\n");
 	scanf("%ull", &number);
 	printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
 	scanf("%d", &base);
-	out = dec2base(number,base);
-	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,out);
+	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,dec2base(number,base,out));
+	return;
+}
+
+void aufg_TRIV_15()
+{
+	double ma, pi, pr, v;
+	char yn;
+	printf("Benchmark des Systems durch das Lösen von 200 zufälligen 200x200 Matrizen. (Diagonalform)\n");
+	ma = matrix_benchmark();
+	printf("Time: %4.2f s\n", ma);
+	printf("Benchmark des Systems durch das Zählen der Treffer bei 100.000.000 Darts auf eine Dartscheibe (und dabei angenäherter Wert von PI)\n");
+	pi = pi_benchmark(&v);
+	printf("Time: %4.2f s (pi=%f)\n", pi, v);
+	printf("Benchmark des Systems durch das Ermitteln aller Primzahlen < 100.000.000\n");
+	pr = prim_benchmark();
+	printf("Time: %4.2f s\n", pr);
+
+	printf("save? (y,n)");
+	scanf("%c", &yn);
+	if( yn == 'y' || yn == 'Y' || yn == '1')
+		benchmark_save(ma,pi,pr);
 	return;
 }

@@ -497,3 +497,12 @@ double pi(int versuche)
 	}
 	return(treffer/versuche*4);
 }
+
+double pi_benchmark(double *v)
+{
+	int begin,end;
+	begin = clock();
+	*v=pi(100000000);
+	end = clock();
+	return((double)(end-begin)/1000000);
+}

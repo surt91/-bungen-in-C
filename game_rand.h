@@ -42,5 +42,6 @@ void muenzwurf(int wuerfe, int *kopf, int *zahl);
 int monteCarloGeburtstagsProblem(int k);
 //7.12
 double pi(int versuche);
+double pi_benchmark();
 
 #endif //GAME_RAND_H
