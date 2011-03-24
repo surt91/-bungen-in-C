@@ -12,6 +12,7 @@ void aufg_MAT_6();
 void aufg_MAT_7();
 void aufg_MAT_8();
 void aufg_MAT_9();
+void aufg_MAT_10();
 void aufg_MAT_11();
 void aufg_MAT_12();
 void aufg_MAT_13();

@@ -6,7 +6,7 @@ int roulette_menu(int *liste, int runde, int besitz)
 	printf("\n\nRoulette\n\n");
 	printf("\t\tRunde: \t %5d\n",runde);
 	printf("\t\tKonto: \t %5d€\n\n",besitz);
-	printf("Worauf setzt du?\n\n",runde);
+	printf("Worauf setzt du?\n\n");
 	printf("0: Dreh das Rad\n");
 	printf("1: Gerade   \t\t %d€\n",liste[GERADE]);
 	printf("2: Ungerade \t\t %d€\n",liste[UNGERADE]);
@@ -135,7 +135,6 @@ int roulette_drehen(int *liste, int *besitz)
 // schreibt einen Roulette Spielstand in eine Datei
 int roulette_save(int runde, int geld, int max_geld, char *filename)
 {
-	int i,j;
 	FILE *datei;
 	datei = fopen (filename, "w");
 	if (datei == NULL)
@@ -145,12 +144,11 @@ int roulette_save(int runde, int geld, int max_geld, char *filename)
 	}
 	fprintf (datei, "%d;%d;%d\n", runde, geld, max_geld);
 	fclose (datei);
-	printf("Spielstand erfolgreich gespeichert!\n", filename);
+	printf("Spielstand erfolgreich gespeichert!\n");
 	return 0;
 }
 int roulette_load(int *runde, int *geld, int *max_geld, char *filename)
 {
-	int i,j;
 	FILE *datei;
 	datei = fopen (filename, "r");
 	if (datei == NULL)
@@ -169,7 +167,6 @@ int roulette_load(int *runde, int *geld, int *max_geld, char *filename)
 void roulette_zeige_highscore(int max_geld, int max_runde)
 {
 	char name[80];
-	int tmp;
 
 	printf("\nHighscore:\n\n");
 	printf("Geld  :\t%5d €\n",max_geld);
@@ -179,7 +176,7 @@ void roulette_zeige_highscore(int max_geld, int max_runde)
 	{
 		printf("Das ist ein neuer Highscore!\n");
 		printf("Trage deinen Namen ein:\n");
-		scanf("%s",&name);
+		scanf("%s",name);
 		roulette_save_highscore(max_geld,max_runde,name);
 	}
 }
@@ -215,7 +212,6 @@ int roulette_load_highscore()
 
 int roulette_save_highscore(int max_geld, int max_runde, char *name)
 {
-	int i,j;
 	FILE *datei;
 	char *filename = RHSS;
 
@@ -235,16 +231,16 @@ int roulette_save_highscore(int max_geld, int max_runde, char *name)
 	fprintf (datei, "%d;%d;%d;%d;%d;%d;%d;%s\n", max_geld, max_runde, ts->tm_mday, ts->tm_mon+1, ts->tm_year+1900, ts->tm_hour, ts->tm_min, name);
 	fclose (datei);
 	roulette_highscore_sort();
-	printf("Highscore gespeichert!\n", filename);
+	printf("Highscore gespeichert!\n");
 	return 0;
 }
 
 void roulette_highscore_sort()
 {
 	FILE *datei;
-	int i, j, n, data[NUMHS+1], itmp, index[NUMHS+1];
+	int i, j, data[NUMHS+1], itmp, index[NUMHS+1];
 	char *filename = RHSS;
-	char rest[NUMHS+1][100], strtmp;
+	char rest[NUMHS+1][100];
 	for(i=0;i<NUMHS+1;i++)
 		index[i] = i;
 	datei = fopen (filename, "r");

@@ -109,5 +109,12 @@ int *polynom_ableiter(int *poly_out, int *poly_in, int *grad_out, int grad_in)
 	return (poly_out);
 }
 
-
-
+// gibt ein zufälliges Polynom aus
+int* polynom_random(int *polynom, int grad)
+{
+	int i;
+	polynom = (int *) calloc(grad, sizeof(int));
+	for(i=grad;i>=0;i--)
+		polynom[i] = rand() % 100;
+	return (polynom);
+}

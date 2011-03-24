@@ -1,7 +1,8 @@
-#ifndef TRIVIA_H
-#define TRIVIA_H
+#ifndef TRIVIAAUFRUF_H
+#define TRIVIAAUFRUF_H
 
 #include "main.h"
+#include "trivia.h"
 
 void aufg_TRIV_1();
 void aufg_TRIV_2();
@@ -18,4 +19,4 @@ void aufg_TRIV_12();
 void aufg_TRIV_13();
 void aufg_TRIV_15();
 
-#endif //TRIVIA_H
+#endif //TRIVIAAUFRUF_H

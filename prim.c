@@ -189,7 +189,6 @@ int ist_prim_array(test)
 double prim_benchmark()
 {
 	int begin,end;
-	double v;
 
 	unsigned laenge=0, *prim_liste;
     short *array=0;

@@ -127,23 +127,23 @@ int menu(int argc, char **argv)
                     break;
             }
             break;
-        case POLY:
-            switch (aufgnr)
-            {
-                case 1:
-                    aufg_POLY_1();
-                    break;
-				case 2:
-					aufg_POLY_2();
-					break;
-                case 3:
-                    aufg_POLY_3();
-                    break;
-                case 4:
-                    aufg_POLY_4();
-                    break;
-            }
-            break;
+        //~ case POLY:
+            //~ switch (aufgnr)
+            //~ {
+                //~ case 1:
+                    //~ aufg_POLY_1();
+                    //~ break;
+				//~ case 2:
+					//~ aufg_POLY_2();
+					//~ break;
+                //~ case 3:
+                    //~ aufg_POLY_3();
+                    //~ break;
+                //~ case 4:
+                    //~ aufg_POLY_4();
+                    //~ break;
+            //~ }
+            //~ break;
         case TRIV:
             switch (aufgnr)
             {

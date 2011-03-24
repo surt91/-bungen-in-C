@@ -8,7 +8,7 @@ void aufg_TRIV_1()
     scanf("%lf", &netto_preis);
     mwsteuer=netto_preis*0.19;
     preis=mwsteuer+netto_preis;
-    printf("Das Produkt kostet:\nNetto   :\t%.2lf€\nSteuern :\t%.2lf€\nBrutto  :\t%.2lf€\n", netto_preis, mwsteuer, preis);
+    printf("Das Produkt kostet:\nNetto   :\t%.2f€\nSteuern :\t%.2f€\nBrutto  :\t%.2f€\n", netto_preis, mwsteuer, preis);
 }
 
 void aufg_TRIV_2()
@@ -171,11 +171,11 @@ void aufg_TRIV_12()
 void aufg_TRIV_13()
 {
 	unsigned base, number;
-	char *out;
+	char out[80];
 	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 32 bit unsigned)\n");
 	scanf("%ull", &number);
 	printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
-	scanf("%d", &base);
+	scanf("%u", &base);
 	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,dec2base(number,base,out));
 	return;
 }

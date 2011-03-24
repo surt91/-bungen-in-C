@@ -17,11 +17,11 @@ void aufg_POLY_2()
 	int *erstes_polynom, *zweites_polynom, *ergebnis_polynom, grad_eins, grad_zwei, grad_ergebnis;
 	printf("Zwei Polynome addieren.\n");
 	printf("Wie lautet das erste Polynom?\n");
-	erstes_polynom = polynom_eingabe(erstes_polynom, &grad_eins);
+	polynom_eingabe(erstes_polynom, &grad_eins);
 	printf("Wie lautet das zweite Polynom?\n");
-	zweites_polynom = polynom_eingabe(zweites_polynom, &grad_zwei);
+	polynom_eingabe(zweites_polynom, &grad_zwei);
 	printf("Polynom eins: %d. Grad\nPolynom zwei: %d. Grad\n", grad_eins, grad_zwei);
-	ergebnis_polynom = polynom_addierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
+	polynom_addierer(ergebnis_polynom, erstes_polynom, zweites_polynom, &grad_ergebnis, grad_eins, grad_zwei);
 	printf("Das addierte Polynom(%d. Grad):\n", grad_ergebnis);
 	polynom_anzeige(ergebnis_polynom, grad_ergebnis);
 	return;

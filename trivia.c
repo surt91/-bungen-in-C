@@ -189,7 +189,7 @@ char* dec2base(unsigned number, unsigned base, char *out)
 		number /= base;
 		i++;
 	} while(number > 0);
-	out = (char *) calloc(i+1, sizeof(char));
+	//~ out = (char *) calloc(i+1, sizeof(char));
 	i--;
 	while(i>=0)
 	{
@@ -202,7 +202,6 @@ char* dec2base(unsigned number, unsigned base, char *out)
 
 int benchmark_save(double ma, double pi, double pr)
 {
-	int i,j;
 	char* filename = "bench.stat";
 	FILE *datei;
 	datei = fopen (filename, "w");

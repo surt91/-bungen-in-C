@@ -77,13 +77,13 @@ void help( int chap )
 			printf("%d\t 5\t//Fibonacci && Primzahl\n",PRIM);
 			printf("%d\t 6\t//wie 25, mit Primzahlensieb\n",PRIM);
 			if(chap==PRIM) break;
-		case POLY:
-			printf("\nKapitel %d: Polynome\n\n",POLY);
-			printf("%d\t 1\t//Polynom berechnen\n",POLY);
-			printf("%d\t 2\t//Polynome addieren\n",POLY);
-			printf("%d\t 3\t//Polynome multiplizieren\n",POLY);
-			printf("%d\t 4\t//Polynom ableiten\n",POLY);
-			if(chap==POLY) break;
+		//~ case POLY:
+			//~ printf("\nKapitel %d: Polynome\n\n",POLY);
+			//~ printf("%d\t 1\t//Polynom berechnen\n",POLY);
+			//~ printf("%d\t 2\t//Polynome addieren\n",POLY);
+			//~ printf("%d\t 3\t//Polynome multiplizieren\n",POLY);
+			//~ printf("%d\t 4\t//Polynom ableiten\n",POLY);
+			//~ if(chap==POLY) break;
 		case TRIV:
 			printf("\nKapitel %d: Trivia\n\n",TRIV);
 			printf("%d\t 1\t//Mehrwertsteuer\n",TRIV);

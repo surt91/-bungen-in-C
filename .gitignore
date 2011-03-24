@@ -11,3 +11,10 @@ obj/
 *.dat
 *.txt
 *.stat
+*.mat
+
+*.exe
+
+!roulette_highscore_save.dat
+
+Ubung

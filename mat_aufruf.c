@@ -257,7 +257,7 @@ void aufg_MAT_13()
 void aufg_MAT_14()
 {
 	struct mat matrix_out;
-	int n, m, p=0, g=10, z=0, s;
+	int n, m, p=0, g=10, z=0;
 	printf("Erzeugung einer zufälligen Matrix\n");
 	printf("Wie groß soll die Matrix sein?\n");
 	printf("Zeilen?\n");
@@ -301,7 +301,7 @@ void aufg_MAT_17()
 	printf("Matrix speichern:\n");
 	printf("Wie lautet die zu speichernde Matrix?\n");
 	matrix_out = matrix_eingabe(matrix_out);
-	matrix_anzeige;
+	matrix_anzeige(matrix_out);
 	printf("Unter welchem Namen soll sie gespeichert werden?\n");
 	scanf("%s",name);
 	matrix_schreiben(matrix_out, name);

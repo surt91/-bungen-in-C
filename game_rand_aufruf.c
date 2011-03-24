@@ -3,14 +3,15 @@
 void aufg_GAME_1()
 {
     int x, besitz, runde, i, k;
+    int max_geld = besitz;
+    int max_runde = runde;
     int liste[42];
     for(i=0;i<=42;i++)
 		liste[i] = 0;
     k=-1;
     runde=1;
     besitz=100;
-    int max_geld = besitz;
-    int max_runde = runde;
+
     while(1)
     {
 		max_runde = runde;
@@ -181,6 +182,6 @@ void aufg_GAME_6()
 	printf("Hier ermitteln wir Pi, indem wir Dartpfeile auf eine Kreisscheibe werfen. Weil wir nicht gut sind im Dart, treffen wir gleichverteilt. Anhand der Treffer können wir dann Pi ermitteln.\n");
 	printf("Wieviele Dartpfeile sollen geworfen werden?\n");
 	scanf("%d", &versuche);
-	printf("Mit %d Dartpfeilen haben wir Pi als %.9lf ermittelt:\n", versuche, pi(versuche));
+	printf("Mit %d Dartpfeilen haben wir Pi als %.9f ermittelt:\n", versuche, pi(versuche));
 	return;
 }

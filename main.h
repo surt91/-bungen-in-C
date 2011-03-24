@@ -17,8 +17,8 @@
 #include "game_rand_aufruf.h"
 #include "prim.h"
 #include "prim_aufruf.h"
-#include "polynom.h"
-#include "polynom_aufruf.h"
+//~ #include "polynom.h"
+//~ #include "polynom_aufruf.h"
 
 #define V_MAJOR 0
 #define V_MINOR 1
@@ -28,8 +28,8 @@
 #define GAME 2
 #define KRYPTO 3
 #define PRIM 4
-#define POLY 5
-#define TRIV 6
+//~ #define POLY 5
+#define TRIV 5
 
 #endif
 

@@ -18,10 +18,10 @@ struct mat matrix_eingabe(struct mat matrix_out)
 	// Matrix aus Datei lesen
 	if(matrix_out.zeilen < 0 || matrix_out.spalten < 0)
 	{
-		char *filename;
+		char filename[80];
 		printf("Matrix aus Datei lesen!\n");
 		printf("Aus welcher Datei soll eine Matrix gelesen werden?\n");
-		scanf("%s",&filename);
+		scanf("%s",filename);
 		matrix_out = matrix_auslesen(matrix_out,filename);
 	}
 	// Oder Matrix per Hand eingeben
@@ -43,14 +43,14 @@ struct mat matrix_auslesen(struct mat matrix_in, char *filename)
 {
 	int i,j;
 	FILE *datei;
-	double tmp = 3;
 	struct mat matrix_out;
 	printf("Matrix wird aus %s gelesen!\n", filename);
 	datei = fopen (filename, "r");
 	if (datei == NULL)
 	{
 		printf("Fehler beim Öffnen der Datei!\n");
-		return;
+		matrix_out.zeilen = matrix_out.spalten = 0;
+		return matrix_out;
 	}
 
 	fscanf(datei, "%dx%d", &matrix_out.zeilen, &matrix_out.spalten);
@@ -119,6 +119,9 @@ void matrix_anzeige(struct mat matrix_in)
 	int i, j;
 	double tmp;
 
+	if( !(matrix_in.zeilen && matrix_in.spalten))
+		return;
+
 	for(i=0;i<matrix_in.zeilen;i++)
 	{
 		printf(" ");
@@ -126,26 +129,26 @@ void matrix_anzeige(struct mat matrix_in)
 		{
 			tmp = matrix_in.matrix[i* matrix_in.spalten+j];
 			if(tmp < FLOATNULL && tmp > -FLOATNULL)
-				printf(" % #5d     ", 0);
+				printf(" % 5d     ", 0);
 			else
 				if((tmp - (int)tmp) < FLOATNULL && (tmp -(int)tmp) > -FLOATNULL)
-					printf(" % #5d     ", (int)tmp);
+					printf(" % 5d     ", (int)tmp);
 				else
-					printf(" % #9.3f ", tmp);
+					printf(" % 9.3f ", tmp);
 		}
 		printf("\n");
 	}
+	return;
 }
 void matrix_ianzeige(struct mat matrix_in)
 {
 	int i, j;
-	double tmp;
 	for(i=0;i<matrix_in.zeilen;i++)
 	{
 		printf(" ");
 		for(j=0;j<matrix_in.spalten;j++)
 		{
-			printf(" % #5d ", (int)matrix_in.matrix[i* matrix_in.spalten+j]);
+			printf(" % 5d ", (int)matrix_in.matrix[i* matrix_in.spalten+j]);
 		}
 		printf("\n");
 	}
@@ -235,7 +238,8 @@ struct mat matrix_matrixprodukt(struct mat matrix1, struct mat matrix2)
 	if(matrix1.spalten != matrix2.zeilen)
 	{
 		printf("Die Dimension der Spalten der ersten Matrix stimmt nicht mit der Dimension der Zeilen der zweiten Matrix überein.\n");
-		return;
+		matrix_out.zeilen = matrix_out.spalten = 0;
+		return matrix_out;
 	}
 	matrix_out.zeilen = matrix1.zeilen;
 	matrix_out.spalten = matrix2.spalten;
@@ -488,14 +492,17 @@ struct mat matrix_adjunkte(struct mat matrix_in)
 {
 	int i, j;
 	double det=0;
-	struct mat tmp, matrix_out;
+	struct mat matrix_out;
 	matrix_out.spalten = matrix_in.spalten;
 	matrix_out.zeilen = matrix_in.zeilen;
 	matrix_out.matrix = (double *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(double));
 	if(matrix_out.matrix == NULL) alloc_fail();
 
 	if(matrix_out.zeilen != matrix_out.spalten)
-		return;
+	{
+		matrix_out.zeilen = matrix_out.spalten = 0;
+		return matrix_out;
+	}
 
 	for(i=0;i<matrix_in.zeilen;i++)
 		for(j=0;j<matrix_in.spalten;j++)
@@ -522,7 +529,10 @@ struct mat matrix_invertieren_adjunkte(struct mat matrix_in)
 	tmp=matrix_adjunkte(matrix_in);
 	det=matrix_det(matrix_in);
 	if(det > -FLOATNULL && det < FLOATNULL) // Wenn Determinante == 0
-		return;
+	{
+		tmp.zeilen = tmp.spalten = 0;
+		return tmp;
+	}
 	det=1/det;
 
 	return(matrix_skalaprodukt(tmp,det));
