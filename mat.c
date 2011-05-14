@@ -186,6 +186,10 @@ int matrix_save(struct mat matrix_out)
 		//~ matrix_schreiben(matrix_out,filename);
 		return matrix_schreiben(matrix_out,filename);
 	}
+	else
+	{
+		printf("\n");
+	}
 	return 0;
 }
 
