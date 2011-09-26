@@ -102,6 +102,9 @@ int menu(int argc, char **argv)
                 case 6:
                     aufg_GAME_6();
                     break;
+                case 7:
+                    conway_test();
+                    break;
             }
             break;
         case PRIM:
@@ -194,4 +197,3 @@ int menu(int argc, char **argv)
     }
     return 0;
 }
-

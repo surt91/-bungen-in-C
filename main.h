@@ -17,6 +17,7 @@
 #include "game_rand_aufruf.h"
 #include "prim.h"
 #include "prim_aufruf.h"
+#include "conway.h"
 //~ #include "polynom.h"
 //~ #include "polynom_aufruf.h"
 
@@ -32,5 +33,3 @@
 #define TRIV 5
 
 #endif
-
-

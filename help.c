@@ -4,6 +4,7 @@ void todo()
 {
 	printf("\nTODO\n\n");
 	printf("Highscore Datei für Roulette\n");
+	printf("Krypt\n");
 	//~ printf("Alle Kapitel auslagern\n");
 	//~ printf("Kapitel \"Trivia\" anlegen und andere konsequenter sortieren\n");
 }
@@ -63,11 +64,12 @@ void help( int chap )
 			printf("%d\t 4\t//Münzwurf\n",GAME);
 			printf("%d\t 5\t//Geburtstagsproblem\n",GAME);
 			printf("%d\t 6\t//Monte Carlo Pi (Dart)\n",GAME);
+			printf("%d\t 7\t//Conways Game of Life\n",GAME);
 			if(chap==GAME) break;
-		case KRYPTO:
-			printf("\nKapitel %d: Krypto\n\n",KRYPTO);
-			printf("TODO\n");
-			if(chap==KRYPTO) break;
+		//~ case KRYPTO:
+			//~ printf("\nKapitel %d: Krypto\n\n",KRYPTO);
+			//~ printf("TODO\n");
+			//~ if(chap==KRYPTO) break;
 		case PRIM:
 			printf("\nKapitel %d: Primzahlen\n\n",PRIM);
 			printf("%d\t 1\t//Primfaktoren\n",PRIM);
