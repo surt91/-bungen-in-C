@@ -2,6 +2,7 @@
 #define CONWAY_H
 
 #include "main.h"
+#include <cairo/cairo.h>
 
 struct conway_map
 {
@@ -16,8 +17,11 @@ struct conway_pos
     int y;
 };
 
-void conway_test();
-void conway_draw(struct conway_map map, int gen);
+void conway_gleiter();
+void conway_random();
+void conway_HWSS();
+int conway_draw(struct conway_map map, int gen);
+int conway_paint(struct conway_map map, int gen);
 int conway_update_status(struct conway_map map, struct conway_pos pos);
 void conway_main(struct conway_map map);
 int conway_dead_or_alive(int counter, int state);

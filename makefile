@@ -3,6 +3,7 @@ TARGET	= Ubung
 LINK	= gcc
 CC		= gcc
 CFLAGS	= -march=native -O2 -pipe -fomit-frame-pointer -funroll-all-loops -ffast-math -finline-functions
+LFLAGS	= -lm -lcairo
 #~ WARNLEVEL= -Wall -pedantic
 WARNLEVEL= -Wall
 
@@ -12,7 +13,7 @@ all: $(TARGET)
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJ)
-	$(CC) $(LFLAGS) -lm -o $(TARGET) $(OBJ)
+	$(CC) $(LFLAGS) -o $(TARGET) $(OBJ)
 
 clean:
 	rm *.o $(TARGET)

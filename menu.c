@@ -102,9 +102,6 @@ int menu(int argc, char **argv)
                 case 6:
                     aufg_GAME_6();
                     break;
-                case 7:
-                    conway_test();
-                    break;
             }
             break;
         case PRIM:
@@ -191,6 +188,20 @@ int menu(int argc, char **argv)
                     break;
                 case 15:
                     aufg_TRIV_15();
+                    break;
+            }
+            break;
+        case CONWAY:
+            switch (aufgnr)
+            {
+                case 1:
+                    conway_gleiter();
+                    break;
+                case 2:
+                    conway_HWSS();
+                    break;
+                case 3:
+                    conway_random();
                     break;
             }
             break;

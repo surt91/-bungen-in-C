@@ -12,6 +12,7 @@ obj/
 *.txt
 *.stat
 *.mat
+*.png
 
 *.exe
 

@@ -1,25 +1,41 @@
 #include "conway.h"
 
-#define GENERATIONEN 10
+#define GENERATIONEN 25
+#define CAIRO_SCALE 15
 // Conways Game of Live
 
-void conway_test()
+void conway_gleiter()
 {
     struct conway_map conway_glider;
     conway_glider.x = conway_glider.y = 10;
     conway_glider.status = (short *) calloc(conway_glider.x * conway_glider.y, sizeof(short));
-    conway_glider.status[7*10+9] = 1;
-    conway_glider.status[7*10+8] = 1;
-    conway_glider.status[7*10+7] = 1;
-    conway_glider.status[8*10+7] = 1;
-    conway_glider.status[9*10+8] = 1;
+    //~ conway_glider.status[7*10+9] = 1;
+    //~ conway_glider.status[7*10+8] = 1;
+    //~ conway_glider.status[7*10+7] = 1;
+    //~ conway_glider.status[8*10+7] = 1;
+    //~ conway_glider.status[9*10+8] = 1;
+    conway_glider.status[2*10+0] = 1;
+    conway_glider.status[2*10+1] = 1;
+    conway_glider.status[2*10+2] = 1;
+    conway_glider.status[1*10+2] = 1;
+    conway_glider.status[1] = 1;
     conway_main(conway_glider);
+    return;
+}
+
+void conway_random()
+{
+    return;
+}
+
+void conway_HWSS()
+{
     return;
 }
 
 void conway_main(struct conway_map map)
 {
-    int i, j, n,m;
+    int i, j, n=0, m;
     struct conway_pos now;
     struct conway_map tmp;
     tmp.x = map.x;
@@ -28,7 +44,8 @@ void conway_main(struct conway_map map)
 
     for(n=0;n<GENERATIONEN;n++)
     {
-        conway_draw(map, n+1);
+        //~ conway_draw(map, n+1);
+        conway_paint(map, n+1);
         for(i=0; i < map.x ; i++){
             for(j=0; j < map.y; j++)
             {
@@ -43,7 +60,7 @@ void conway_main(struct conway_map map)
     return;
 }
 
-void conway_draw(struct conway_map map, int gen)
+int conway_draw(struct conway_map map, int gen)
 {
     int i,j;
     printf("\nGeneration %03d\n", gen);
@@ -66,6 +83,41 @@ void conway_draw(struct conway_map map, int gen)
     for(j=0; j < map.y; j++)
         printf("-");
     printf("\n");
+
+    return 0;
+}
+
+int conway_paint(struct conway_map map, int gen)
+{
+    int i, j;
+    cairo_surface_t *surface;
+    cairo_t *cr;
+    char filename[40];
+
+    sprintf(filename, "conway/conwayGoL_%03d.png", gen);
+
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CAIRO_SCALE*map.x, CAIRO_SCALE*map.y);
+    cr = cairo_create (surface);
+    cairo_scale (cr, CAIRO_SCALE, CAIRO_SCALE);
+
+    /* weißer Hintergrund */
+    cairo_set_source_rgb (cr, 1, 1, 1);
+    cairo_paint (cr);
+
+    /* Drawing code goes here */
+    cairo_set_source_rgb (cr, 0, 0, 0);
+    for(i=0; i < map.x ; i++)
+        for(j=0; j < map.y; j++)
+            if(map.status[j * map.x+i])
+                cairo_rectangle (cr, i, j, 1, 1);
+    cairo_fill (cr);
+
+    /* Write output and clean up */
+    cairo_surface_write_to_png (surface, filename);
+    cairo_destroy (cr);
+    cairo_surface_destroy (surface);
+
+    return 0;
 }
 
 int conway_update_status(struct conway_map map, struct conway_pos pos)
@@ -76,7 +128,7 @@ int conway_update_status(struct conway_map map, struct conway_pos pos)
     {
         for(j = pos.y-1; j <= pos.y+1; j++)
         {
-            if(j > 0 && j < map.y && i > 0 && i < map.x){
+            if(j >= 0 && j < map.y && i >= 0 && i < map.x){
                 if(i!=pos.x || j!=pos.y){
                     if(map.status[i * map.x + j]){
                         counter++;

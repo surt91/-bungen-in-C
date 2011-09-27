@@ -31,5 +31,6 @@
 #define PRIM 4
 //~ #define POLY 5
 #define TRIV 5
+#define CONWAY 6
 
 #endif
