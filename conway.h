@@ -6,29 +6,22 @@
 
 struct conway_map
 {
-    short *status;
+    char *status;
     int x;
     int y;
-};
-
-struct conway_pos
-{
-    int x;
-    int y;
+    int gen;
 };
 
 void conway_gleiter();
 void conway_random();
 void conway_HWSS();
+void conway_pulsator();
 int conway_draw(struct conway_map map, int gen);
 int conway_paint(struct conway_map map, int gen);
-int conway_update_status(struct conway_map map, struct conway_pos pos);
+char conway_update_status(int x, int y, struct conway_map map);
 void conway_main(struct conway_map map);
-int conway_dead_or_alive(int counter, int state);
-
-//~ static const conway_map conway_glider;
-//~ conway_glider.x = conway_glider.y = 10;
-//~ conway_glider.status = (short *) calloc(matrix_out.zeilen * matrix_out.spalten, sizeof(short));
-
+char conway_dead_or_alive(int counter, int state);
+int conway_set_status(int x, int y, struct conway_map map, char state);
+int conway_get_status(int x, int y, struct conway_map map);
 
 #endif //CONWAY_H
