@@ -104,9 +104,11 @@ void help( int chap )
             if(chap==TRIV) break;
         case CONWAY:
             printf("\nKapitel %d: Conways Game of Life\n\n",CONWAY);
-            printf("%d\t 1\t//Gleiter, 10x10, 25Gen\n",GAME);
-            printf("%d\t 2\t//HWSS, 100x20, 100Gen\n",GAME);
-            printf("%d\t 3\t//Ramdom, 10x10, 25Gen\n",GAME);
+            printf("%d\t 1\t//Gleiter, 10x10, 32Gen\n",GAME);
+            printf("%d\t 2\t//HWSS, 100x20, 200Gen\n",GAME);
+            printf("%d\t 3\t//Pulsator, 30x30, 15Gen\n",GAME);
+            printf("%d\t 4\t//stabil, 19x19, 19Gen\n",GAME);
+            printf("%d\t 3\t//Ramdom, 100x100, 300Gen\n",GAME);
             if(chap==CONWAY) break;
     }
 }

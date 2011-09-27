@@ -1,15 +1,19 @@
-#include "conway.h"
+/***
+ *  Conways Game of Live
+ *
+ *  27.09.2011
+ *  Hendrik Schawe <hendrik.schawe@gmail.com>
+ ***/
 
-//~ #define GENERATIONEN 32
+#include "conway.h"
 #define CAIRO_SCALE 15
-// Conways Game of Live
 
 void conway_gleiter()
 {
     struct conway_map map;
     map.gen=32;
     map.x = map.y = 10;
-    map.status = (char *) calloc(map.x * map.y, sizeof(char));
+    map = conway_init_map(map);
     conway_set_status(0, 2, map, 1);
     conway_set_status(1, 2, map, 1);
     conway_set_status(2, 2, map, 1);
@@ -21,11 +25,51 @@ void conway_gleiter()
 
 void conway_random()
 {
+    int i, j, state;
+    struct conway_map map;
+    map.gen=300;
+    map.x = map.y = 100;
+    map = conway_init_map(map);
+    for(i=0; i < map.x ; i++)
+            for(j=0; j < map.y; j++)
+            {
+                state = (rand()%100 < 31 ? 1 : 0);
+                conway_set_status(i, j, map, state);
+            }
+    conway_main(map);
     return;
 }
 
 void conway_pulsator()
 {
+    struct conway_map map;
+    map.gen=15;
+    map.x = 20;
+    map.y = 20;
+    map = conway_init_map(map);
+    conway_set_status( 6,  8, map, 1);
+    conway_set_status( 7,  8, map, 1);
+    conway_set_status( 8,  8, map, 1);
+    conway_set_status( 9,  8, map, 1);
+    conway_set_status(10,  8, map, 1);
+    conway_set_status(11,  8, map, 1);
+    conway_set_status(12,  8, map, 1);
+    conway_set_status(13,  8, map, 1);
+    conway_set_status( 6, 10, map, 1);
+    conway_set_status( 7, 10, map, 1);
+    conway_set_status( 8, 10, map, 1);
+    conway_set_status( 9, 10, map, 1);
+    conway_set_status(10, 10, map, 1);
+    conway_set_status(11, 10, map, 1);
+    conway_set_status(12, 10, map, 1);
+    conway_set_status(13, 10, map, 1);
+    conway_set_status( 6,  9, map, 1);
+    conway_set_status( 8,  9, map, 1);
+    conway_set_status( 9,  9, map, 1);
+    conway_set_status(10,  9, map, 1);
+    conway_set_status(11,  9, map, 1);
+    conway_set_status(13,  9, map, 1);
+    conway_main(map);
     return;
 }
 
@@ -35,7 +79,7 @@ void conway_HWSS()
     map.gen=200;
     map.x = 100;
     map.y = 10;
-    map.status = (char *) calloc(map.x * map.y, sizeof(char));
+    map = conway_init_map(map);
     conway_set_status(1, 3, map, 1);
     conway_set_status(2, 3, map, 1);
     conway_set_status(3, 3, map, 1);
@@ -54,14 +98,40 @@ void conway_HWSS()
     return;
 }
 
+void conway_stabil()
+{
+    struct conway_map map;
+    map.gen=19;
+    map.x = 19;
+    map.y = 19;
+    map = conway_init_map(map);
+    conway_set_status( 8, 11, map, 1);
+    conway_set_status( 9, 11, map, 1);
+    conway_set_status(10, 11, map, 1);
+    conway_set_status( 9,  9, map, 1);
+    conway_set_status(10,  9, map, 1);
+    conway_set_status( 9,  8, map, 1);
+    conway_set_status(10,  8, map, 1);
+    conway_set_status( 9,  7, map, 1);
+    conway_set_status(10,  7, map, 1);
+    conway_main(map);
+    return;
+}
+
 int conway_set_status(int x, int y, struct conway_map map, char state)
 {
     map.status[y * map.x + x] = state;
-    return 1;
+    return 0;
 }
 int conway_get_status(int x, int y, struct conway_map map)
 {
     return map.status[y * map.x + x];
+}
+
+struct conway_map conway_init_map(struct conway_map map)
+{
+    map.status = (char *) calloc(map.x * map.y, sizeof(char));
+    return map;
 }
 
 void conway_main(struct conway_map map)
@@ -70,7 +140,7 @@ void conway_main(struct conway_map map)
     struct conway_map tmp;
     tmp.x = map.x;
     tmp.y = map.y;
-    tmp.status = (char *) calloc(tmp.x * tmp.y, sizeof(char));
+    tmp = conway_init_map(tmp);
 
     for(n=0;n<map.gen;n++)
     {
@@ -79,7 +149,6 @@ void conway_main(struct conway_map map)
         for(i=0; i < map.x ; i++)
             for(j=0; j < map.y; j++)
                 conway_set_status(i, j, tmp, conway_update_status(i, j, map));
-                //~ tmp.status[i* tmp.x+j] = conway_update_status(i, j, map);
         for(m=0; m<tmp.y*tmp.x;m++)
             map.status[m] = tmp.status[m];
     }

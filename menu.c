@@ -201,6 +201,12 @@ int menu(int argc, char **argv)
                     conway_HWSS();
                     break;
                 case 3:
+                    conway_pulsator();
+                    break;
+                case 4:
+                    conway_stabil();
+                    break;
+                case 5:
                     conway_random();
                     break;
             }
