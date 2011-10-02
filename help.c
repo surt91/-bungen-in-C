@@ -64,7 +64,7 @@ void help( int chap )
             printf("%d\t 4\t//Münzwurf\n",GAME);
             printf("%d\t 5\t//Geburtstagsproblem\n",GAME);
             printf("%d\t 6\t//Monte Carlo Pi (Dart)\n",GAME);
-            //~ printf("%d\t 7\t//Snake\n",GAME);
+            printf("%d\t 7\t//Snake\n",GAME);
             if(chap==GAME) break;
         //~ case KRYPTO:
             //~ printf("\nKapitel %d: Krypto\n\n",KRYPTO);
@@ -105,11 +105,11 @@ void help( int chap )
             if(chap==TRIV) break;
         case CONWAY:
             printf("\nKapitel %d: Conways Game of Life\n\n",CONWAY);
-            printf("%d\t 1\t//Gleiter, 10x10, 32Gen\n",GAME);
-            printf("%d\t 2\t//HWSS, 100x20, 200Gen\n",GAME);
-            printf("%d\t 3\t//Pulsator, 30x30, 15Gen\n",GAME);
-            printf("%d\t 4\t//stabil, 19x19, 19Gen\n",GAME);
-            printf("%d\t 3\t//Ramdom, 100x100, 300Gen\n",GAME);
+            printf("%d\t 1\t//Gleiter, 10x10, 32Gen\n",CONWAY);
+            printf("%d\t 2\t//HWSS, 100x20, 200Gen\n",CONWAY);
+            printf("%d\t 3\t//Pulsator, 30x30, 15Gen\n",CONWAY);
+            printf("%d\t 4\t//stabil, 19x19, 19Gen\n",CONWAY);
+            printf("%d\t 3\t//Ramdom, 100x100, 300Gen\n",CONWAY);
             if(chap==CONWAY) break;
     }
 }

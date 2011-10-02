@@ -18,6 +18,7 @@
 #include "prim.h"
 #include "prim_aufruf.h"
 #include "conway.h"
+#include "snake.h"
 //~ #include "polynom.h"
 //~ #include "polynom_aufruf.h"
 

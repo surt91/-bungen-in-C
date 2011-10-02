@@ -14,5 +14,10 @@ struct snake_map
 };
 
 void snake();
-int snake_dead_or_eating(snake_map map);
+void snake_draw(struct snake_map map);
+int snake_set_status(int x, int y, struct snake_map map, char state);
+int snake_get_status(int x, int y, struct snake_map map);
+void snake_random_pos(int *pos, struct snake_map map);
+struct snake_map snake_koerper(struct snake_map map);
+int snake_dead_or_eating(struct snake_map map);
 #endif //SNAKE_H
