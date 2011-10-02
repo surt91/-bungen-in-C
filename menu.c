@@ -102,6 +102,9 @@ int menu(int argc, char **argv)
                 case 6:
                     aufg_GAME_6();
                     break;
+                //~ case 7:
+                    //~ snake();
+                    //~ break;
             }
             break;
         case PRIM:
