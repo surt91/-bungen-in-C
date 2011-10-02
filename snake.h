@@ -20,4 +20,5 @@ int snake_get_status(int x, int y, struct snake_map map);
 void snake_random_pos(int *pos, struct snake_map map);
 struct snake_map snake_koerper(struct snake_map map);
 int snake_dead_or_eating(struct snake_map map);
+int snake_rand(struct snake_map map);
 #endif //SNAKE_H

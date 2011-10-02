@@ -10,7 +10,7 @@
 void snake()
 {
     struct snake_map map;
-    int runde=0;
+    int runde = 0, status = 1;
     //~ srand( (unsigned) time(NULL) ) ;
 
     map.x = map.y = 15;
@@ -21,24 +21,32 @@ void snake()
     snake_random_pos(map.futter, map);
     //~ map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
 
+    map.kopf[0]=1;
+    map.futter[0]=1;
+
     // Hauptspielschleife
-    while(1)
+    while(status)
     {
-        printf("Runde %03d\n",runde++);
+        snake_draw(map);
+        map.kopf[0]++;
+        status = snake_rand(map);
         switch (snake_dead_or_eating(map))
         {
-            case 2:
-                printf ("Leider verloren\n");
-                return;
             case 1:
                 map.length++;
+                printf ("Mampf\n");
+                break;
             case 0:
                 break;
+            case 2:
+                status = 0;
+                printf("In den Schwanz gebissen.\nVerloren");
+                break;
         }
-
+        printf("Runde:  %03d\nPunkte: %03d\n%d\n",runde++, map.length, status);
         map = snake_koerper(map);
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
-        snake_draw(map);
+
     }
 }
 
@@ -95,6 +103,16 @@ void snake_random_pos(int *pos, struct snake_map map)
     return;
 }
 
+int snake_rand(struct snake_map map)
+{
+    if(map.kopf[0] >= map.x || map.kopf[1] >= map.y)
+    {
+        printf("Gegen die Wand gelaufen.\nVerloren");
+        return 0;
+    }
+    return 1;
+}
+
 int snake_dead_or_eating(struct snake_map map)
 {
     // 0: leeres Feld
@@ -111,7 +129,11 @@ struct snake_map snake_koerper(struct snake_map map)
 {
     int i;
     for(i=0;i<map.x*map.y;i++)
+    {
         if(map.schlange[i])
             map.schlange[i]++;
+        if(map.schlange[i] > map.length)
+            map.schlange[i] = 0;
+    }
     return map;
 }
