@@ -16,6 +16,7 @@ conway/
 *.stat
 *.mat
 *.png
+*.sav
 
 *.exe
 
