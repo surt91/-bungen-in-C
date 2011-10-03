@@ -103,7 +103,7 @@ int menu(int argc, char **argv)
                     aufg_GAME_6();
                     break;
                 case 7:
-                    snake();
+                    snake_menu();
                     break;
             }
             break;
