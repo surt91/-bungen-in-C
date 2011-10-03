@@ -20,26 +20,36 @@ static const char *titel = "\
      ___) | |\\  |/ ___ \\| . \\| |___ \n\
     |____/|_| \\_/_/   \\_\\_|\\_\\_____|\n\
                                      \n";
-static const char *verloren ="\
+static const char *verloren = "\
 __     __        _                      _ \n\
 \\ \\   / /__ _ __| | ___  _ __ ___ _ __ | |\n\
  \\ \\ / / _ \\ '__| |/ _ \\| '__/ _ \\ '_ \\| |\n\
   \\ V /  __/ |  | | (_) | | |  __/ | | |_|\n\
    \\_/ \\___|_|  |_|\\___/|_|  \\___|_| |_(_)\n\
                                           \n";
+static const char *highscore = "\
+ _   _ _       _                                 \n\
+| | | (_) __ _| |__  ___  ___ ___  _ __ ___  ___ \n\
+| |_| | |/ _` | '_ \\/ __|/ __/ _ \\| '__/ _ \\/ __|\n\
+|  _  | | (_| | | | \\__ \\ (_| (_) | | |  __/\\__ \\\n\
+|_| |_|_|\\__, |_| |_|___/\\___\\___/|_|  \\___||___/\n\
+         |___/                                   \n";
+
 
 void snake_menu()
 {
     int exit = 0, m, level = 3, torus = 0;
     char k;
-
+    snake_load_config(&level, &torus);
+    snake_highscore_init();
     while(!exit)
     {
         m=0;
         printf("%s\n", titel);
         printf("Spiele Snake:  1\n");
         printf("Einstellungen: 2\n");
-        printf("Beende Snake:  3\n");
+        printf("Highscore:     3\n");
+        printf("Beende Snake:  4\n");
         scanf("%d", &m);
         switch(m)
         {
@@ -52,20 +62,25 @@ void snake_menu()
                     level = 3;
                 printf("Spiele auf Level %d\n", level);
 
-                printf("Torusförmiges Spielfeld y/n [n]\n");
+                printf("Torusförmiges Spielfeld y/n [y]\n");
                 getchar();
                 k = getchar();
-                torus = k == 'y' ? 1 : 0;
+                torus = k == 'n' ? 0 : 1;
                 if(torus)
                     printf("Spiele auf Torusförmigem Spielfeld\n");
                 else
                     printf("Spiele auf begrenztem Spielfeld\n");
 
+                snake_save_config(level, torus);
                 break;
+
             case 1:
                 snake(level, torus);
                 break;
             case 3:
+                snake_load_highscore();
+                break;
+            case 4:
                 return;
                 break;
         }
@@ -125,12 +140,14 @@ void snake(int schwierigkeit, int torus)
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
     }
     snake_verloren(map.punkte);
+    snake_show_highscore(map.punkte, schwierigkeit);
 }
 
 void snake_draw(struct snake_map map)
 {
     int i,j;
-    printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n", map.runde, map.length, map.punkte);
+    printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n",\
+                                    map.runde, map.length, map.punkte);
     for(i=0; i < map.x; i++)
         printf("-");
     printf("--\n");
@@ -247,7 +264,8 @@ void snake_random_pos(int *pos, struct snake_map map)
 
 int snake_rand(struct snake_map map)
 {
-    if(map.kopf[0] >= map.x || map.kopf[1] >= map.y || map.kopf[0] < 0 || map.kopf[1] < 0)
+    if(map.kopf[0] >= map.x || map.kopf[1] >= map.y\
+                || map.kopf[0] < 0 || map.kopf[1] < 0)
     {
         printf("Gegen die Wand gelaufen.\n");
         return 0;
@@ -293,6 +311,178 @@ struct snake_map snake_koerper(struct snake_map map)
     return map;
 }
 
+int snake_load_config(int *level, int *torus)
+{
+    FILE *datei;
+    printf("Lade letzte Einstellungen:\n");
+    datei = fopen (SNAKE_CONFIG_FILENAME, "r");
+    if (datei == NULL)
+    {
+        printf("Fehler beim Öffnen der Datei!\n");
+        return 1;
+    }
+    fscanf (datei, "%d;%d\n", level, torus);
+    fclose (datei);
+    printf("Einstellungen erfolgreich geladen!\n\n");
+    printf("Spiele auf Level %d\n", *level);
+    if(*torus)
+        printf("Spiele auf Torusförmigem Spielfeld\n");
+    else
+        printf("Spiele auf begrenztem Spielfeld\n");
+    return 0;
+    printf("\n");
+}
+
+int snake_save_config(int level, int torus)
+{
+    FILE *datei;
+    char *filename = SNAKE_CONFIG_FILENAME;
+
+    datei = fopen (filename, "w");
+    if (datei == NULL)
+    {
+        printf("Fehler beim Öffnen der Datei!\n");
+        return 1;
+    }
+
+    fprintf (datei, "%d;%d", level, torus);
+    fclose (datei);
+    printf("Einstellungen gespeichert in ./%s\n", SNAKE_CONFIG_FILENAME);
+    return 0;
+}
+
+int snake_show_highscore(int punkte, int level)
+{
+    char name[80];
+
+    printf("\nHighscore:\n\n");
+    printf("% 5d \t\t\t auf Level %d\n", punkte, level);
+    if(punkte > snake_load_highscore())
+    {
+        printf("Das ist ein neuer Highscore!\n");
+        printf("Trage deinen Namen ein:\n");
+        scanf("%s",name);
+        snake_save_highscore(punkte, level, name);
+    }
+    return 0;
+}
+
+int snake_load_highscore()
+{
+    FILE *datei;
+    int i, punkte, level, day, month, year, hour, min, tmp=0;
+    char *filename = SNAKE_HIGHSCORE_FILENAME;
+    char name[80];
+    datei = fopen (filename, "r");
+    if (datei == NULL)
+    {
+        printf("Fehler beim Öffnen der Datei!\n");
+        return 1;
+    }
+    printf("%s\n", highscore);
+    printf("\tName\t\tPunkte\t\tLevel\t\t     Datum\t  Uhr\n");
+    for(i=0;i<SNAKE_NUMHS;i++)
+    {
+        fscanf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", &punkte, &level,\
+                                &year, &month, &day, &hour, &min, name);
+        printf("\t%s", name);
+        printf("\t\t% 6d",punkte);
+        printf("\t\t    %d",level);
+        printf("\t\t%02d.%02d.%04d",day,month,year);
+        printf("\t%02d:%02d",hour,min);
+        printf("\n");
+    }
+    fclose (datei);
+    printf("\n");
+    tmp = punkte;
+    return tmp;
+}
+
+int snake_save_highscore(int punkte, int level, char *name)
+{
+    FILE *datei;
+    char *filename = SNAKE_HIGHSCORE_FILENAME;
+
+    struct tm *ts;
+    time_t t;
+
+    datei = fopen (filename, "a");
+    if (datei == NULL)
+    {
+        printf("Fehler beim Öffnen der Datei!\n");
+        return 1;
+    }
+
+    t = time(NULL);
+    ts = localtime(&t);
+
+    fprintf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", punkte, level,\
+    ts->tm_year+1900, ts->tm_mon+1, ts->tm_mday, ts->tm_hour, ts->tm_min,\
+    name);
+    fclose (datei);
+    snake_highscore_sort();
+    printf("Highscore gespeichert!\n");
+    return 0;
+}
+
+void snake_highscore_sort()
+{
+    FILE *datei;
+    int i, j, data[SNAKE_NUMHS+1], itmp, index[SNAKE_NUMHS+1];
+    char *filename = SNAKE_HIGHSCORE_FILENAME;
+    char rest[SNAKE_NUMHS+1][100];
+    for(i=0;i<SNAKE_NUMHS+1;i++)
+        index[i] = i;
+    datei = fopen (filename, "r");
+    if (datei == NULL)
+    {
+        printf("Fehler beim Öffnen der Datei!\n");
+        return;
+    }
+    for(i=0;i<SNAKE_NUMHS+1;i++)
+        fscanf (datei, "%d;%s\n", &data[i], rest[i]);
+    fclose (datei);
+    for(i=0;i<SNAKE_NUMHS+1;i++)
+        for(j=SNAKE_NUMHS;i<j;j--)
+            if(data[index[j-1]]<data[index[j]])
+            {
+                itmp = index[j-1];
+                index[j-1] = index[j];
+                index[j] = itmp;
+            }
+
+    datei = fopen (filename, "w");
+    for(i=0;i<SNAKE_NUMHS;i++)
+        fprintf(datei, "%d;%s\n", data[index[i]], rest[index[i]]);
+    fclose (datei);
+    return;
+}
+
+void snake_highscore_init()
+{
+    FILE *datei;
+    int i, tmp;
+    char *filename = SNAKE_HIGHSCORE_FILENAME;
+    datei = fopen (filename, "r");
+    if (datei != NULL)
+    {
+        tmp = fgetc(datei);
+        fclose(datei);
+    }
+    else
+    {
+        tmp = EOF;
+    }
+    if (tmp == EOF)
+    {
+        datei = fopen (filename, "w");
+        for (i = 0; i<10; i++)
+            fprintf(datei,"0;0;2011-10-3T15:31;Abe\n");
+        fclose(datei);
+    }
+    return;
+}
+
 int getch()
 {
     static int ch = -1, fd = 0;
@@ -309,18 +499,18 @@ int getch()
 
 int kbhit()
 {
-        struct termios term, oterm;
-        int fd = 0;
-        int c = 0;
-        tcgetattr(fd, &oterm);
-        memcpy(&term, &oterm, sizeof(term));
-        term.c_lflag = term.c_lflag & (!ICANON);
-        term.c_cc[VMIN] = 0;
-        term.c_cc[VTIME] = 1;
-        tcsetattr(fd, TCSANOW, &term);
-        c = getchar();
-        tcsetattr(fd, TCSANOW, &oterm);
-        if (c != -1)
-        ungetc(c, stdin);
-        return ((c != -1) ? 1 : 0);
+    struct termios term, oterm;
+    int fd = 0;
+    int c = 0;
+    tcgetattr(fd, &oterm);
+    memcpy(&term, &oterm, sizeof(term));
+    term.c_lflag = term.c_lflag & (!ICANON);
+    term.c_cc[VMIN] = 0;
+    term.c_cc[VTIME] = 1;
+    tcsetattr(fd, TCSANOW, &term);
+    c = getchar();
+    tcsetattr(fd, TCSANOW, &oterm);
+    if (c != -1)
+    ungetc(c, stdin);
+    return ((c != -1) ? 1 : 0);
 }
