@@ -19,10 +19,12 @@
 struct snake_map
 {
     int x,y;
-    int length;
     int *schlange;
     int kopf[2];
     int futter[2];
+    int level;
+    int runde, punkte, length;
+    char richtung, richtung_alt;
 };
 
 void snake(int schwierigkeit, int torus);
@@ -33,7 +35,9 @@ void snake_random_pos(int *pos, struct snake_map map);
 struct snake_map snake_koerper(struct snake_map map);
 int snake_dead_or_eating(struct snake_map map);
 int snake_rand(struct snake_map map);
+struct snake_map snake_torus(struct snake_map map);
 void snake_verloren(int punkte);
+struct snake_map snake_steuerung(struct snake_map map);
 
 int getch();
 int kbhit();

@@ -75,11 +75,12 @@ void snake_menu()
 void snake(int schwierigkeit, int torus)
 {
     struct snake_map map;
-    int runde = 0, status = 1, tmp = 0, punkte = 0;
-    char richtung = 's', richtung_alt = 's';
+    int status = 1;
     static const int stufen[9] =
     {LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6, LEVEL7, LEVEL8, LEVEL9};
-    int level = stufen[schwierigkeit];
+    map.level = stufen[schwierigkeit];
+    map.richtung = 's';
+    map.runde = 0;
     //~ srand( (unsigned) time(NULL) ) ;
 
     map.x = 30;
@@ -96,67 +97,15 @@ void snake(int schwierigkeit, int torus)
     // Hauptspielschleife
     while(status)
     {
-        punkte = (map.length - 3) * schwierigkeit;
-        printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n", runde++, map.length, punkte);
+        map.punkte = (map.length - 3) * schwierigkeit;
+        map.runde++;
         snake_draw(map);
-        usleep(level);
-        // Input Funktion
-        do
-        {
-            if(kbhit())
-            {
-                richtung = getch();
-            }
-            else
-            {
-                richtung = richtung_alt;
-            }
-            switch (richtung)
-            {
-                case 'w':
-                    if (richtung_alt == 's')
-                        tmp = 1;
-                    else
-                    {
-                        map.kopf[1]--;
-                        tmp = 0;
-                    }
-                    break;
-                case 'a':
-                    if (richtung_alt == 'd')
-                        tmp = 1;
-                    else
-                    {
-                        map.kopf[0]--;
-                        tmp = 0;
-                    }
-                    break;
-                case 's':
-                    if (richtung_alt == 'w')
-                        tmp = 1;
-                    else
-                    {
-                        map.kopf[1]++;
-                        tmp = 0;
-                    }
-                    break;
-                case 'd':
-                    if (richtung_alt == 'a')
-                        tmp = 1;
-                    else
-                    {
-                        map.kopf[0]++;
-                        tmp = 0;
-                    }
-                    break;
-                default:
-                    tmp = 1;
-                    break;
-            }
-        } while(tmp);
-        richtung_alt = richtung;
+        map = snake_steuerung(map);
 
-        status = snake_rand(map);
+        if(torus)
+            map = snake_torus(map);
+        else
+            status = snake_rand(map);
         switch (snake_dead_or_eating(map))
         {
             case 1:
@@ -175,12 +124,13 @@ void snake(int schwierigkeit, int torus)
         map = snake_koerper(map);
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
     }
-    snake_verloren(punkte);
+    snake_verloren(map.punkte);
 }
 
 void snake_draw(struct snake_map map)
 {
     int i,j;
+    printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n", map.runde, map.length, map.punkte);
     for(i=0; i < map.x; i++)
         printf("-");
     printf("--\n");
@@ -207,6 +157,65 @@ void snake_draw(struct snake_map map)
 
     return;
 }
+
+struct snake_map snake_steuerung(struct snake_map map)
+{
+    int tmp = 0;
+    usleep(map.level);
+    // Input Funktion
+    do
+    {
+        if(kbhit())
+            map.richtung = getch();
+        else
+            map.richtung = map.richtung_alt;
+        switch (map.richtung)
+        {
+            case 'w':
+                if (map.richtung_alt == 's')
+                    tmp = 1;
+                else
+                {
+                    map.kopf[1]--;
+                    tmp = 0;
+                }
+                break;
+            case 'a':
+                if (map.richtung_alt == 'd')
+                    tmp = 1;
+                else
+                {
+                    map.kopf[0]--;
+                    tmp = 0;
+                }
+                break;
+            case 's':
+                if (map.richtung_alt == 'w')
+                    tmp = 1;
+                else
+                {
+                    map.kopf[1]++;
+                    tmp = 0;
+                }
+                break;
+            case 'd':
+                if (map.richtung_alt == 'a')
+                    tmp = 1;
+                else
+                {
+                    map.kopf[0]++;
+                    tmp = 0;
+                }
+                break;
+            default:
+                tmp = 1;
+                break;
+        }
+    } while(tmp);
+    map.richtung_alt = map.richtung;
+    return map;
+}
+
 void snake_verloren(int punkte)
 {
     printf("%s\n", verloren);
@@ -244,6 +253,19 @@ int snake_rand(struct snake_map map)
         return 0;
     }
     return 1;
+}
+
+struct snake_map snake_torus(struct snake_map map)
+{
+    if(map.kopf[0] >= map.x)
+        map.kopf[0] = 0;
+    if(map.kopf[1] >= map.y)
+        map.kopf[1] = 0;
+    if(map.kopf[0] < 0)
+        map.kopf[0] = map.x-1;
+    if(map.kopf[1] < 0)
+        map.kopf[1] = map.y-1;
+    return map;
 }
 
 int snake_dead_or_eating(struct snake_map map)
