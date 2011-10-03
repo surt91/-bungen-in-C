@@ -39,8 +39,8 @@ struct snake_map
 
 void snake_menu();
 
-void snake(int schwierigkeit, int torus);
-void snake_draw(struct snake_map map);
+void snake(int schwierigkeit, int torus, int theme);
+void snake_draw(struct snake_map map, int theme);
 int snake_set_status(int x, int y, struct snake_map map, char state);
 int snake_get_status(int x, int y, struct snake_map map);
 void snake_random_pos(int *pos, struct snake_map map);
@@ -51,8 +51,8 @@ struct snake_map snake_torus(struct snake_map map);
 void snake_verloren(int punkte);
 struct snake_map snake_steuerung(struct snake_map map);
 
-int snake_load_config(int *level, int *torus);
-int snake_save_config(int level, int torus);
+int snake_load_config(int *level, int *torus, int *theme);
+int snake_save_config(int level, int torus, int theme);
 int snake_show_highscore(int punkte, int level);
 int snake_load_highscore();
 int snake_save_highscore(int punkte, int level, char *name);

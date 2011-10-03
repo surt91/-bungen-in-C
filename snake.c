@@ -35,12 +35,13 @@ static const char *highscore = "\
 |_| |_|_|\\__, |_| |_|___/\\___\\___/|_|  \\___||___/\n\
          |___/                                   \n";
 
+static const char snake_themes[3][4] = {{'+','0','X',}, {'o','O','X'}, {'*','X','@'}};
 
 void snake_menu()
 {
-    int exit = 0, m, level = 3, torus = 0;
+    int exit = 0, m, level = 3, torus = 0, theme = 0, i;
     char k;
-    snake_load_config(&level, &torus);
+    snake_load_config(&level, &torus, &theme);
     snake_highscore_init();
     while(!exit)
     {
@@ -71,11 +72,22 @@ void snake_menu()
                 else
                     printf("Spiele auf begrenztem Spielfeld\n");
 
-                snake_save_config(level, torus);
+                printf("Wähle Theme [1]\n");
+                for(i = 0;i<3;i++)
+                    printf("%d: %s\n", i+1, snake_themes[i]);
+                getchar();
+                k = getchar();
+                theme = k-48;
+                if(theme < 1 || theme >3)
+                    theme = 1;
+                printf("%d", theme);
+                theme--;
+
+                snake_save_config(level, torus, theme);
                 break;
 
             case 1:
-                snake(level, torus);
+                snake(level, torus, theme);
                 break;
             case 3:
                 snake_load_highscore();
@@ -87,7 +99,7 @@ void snake_menu()
     }
 }
 
-void snake(int schwierigkeit, int torus)
+void snake(int schwierigkeit, int torus, int theme)
 {
     struct snake_map map;
     int status = 1;
@@ -114,7 +126,7 @@ void snake(int schwierigkeit, int torus)
     {
         map.punkte = (map.length - 3) * schwierigkeit;
         map.runde++;
-        snake_draw(map);
+        snake_draw(map, theme);
         map = snake_steuerung(map);
 
         if(torus)
@@ -143,7 +155,7 @@ void snake(int schwierigkeit, int torus)
     snake_show_highscore(map.punkte, schwierigkeit);
 }
 
-void snake_draw(struct snake_map map)
+void snake_draw(struct snake_map map, int theme)
 {
     int i,j;
     printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n",\
@@ -157,13 +169,13 @@ void snake_draw(struct snake_map map)
         for(i=0; i < map.x; i++)
         {
             if(map.kopf[0] == i && map.kopf[1] == j)
-                printf("O");
+                putchar(snake_themes[theme][1]);
             else if(snake_get_status(i, j, map))
-                printf("o");
+                putchar(snake_themes[theme][0]);
             else if(map.futter[0] == i && map.futter[1] == j)
-                printf("X");
+                putchar(snake_themes[theme][2]);
             else
-                printf(" ");
+                putchar(' ');
         }
         printf("|\n");
     }
@@ -311,7 +323,7 @@ struct snake_map snake_koerper(struct snake_map map)
     return map;
 }
 
-int snake_load_config(int *level, int *torus)
+int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
     printf("Lade letzte Einstellungen:\n");
@@ -321,7 +333,7 @@ int snake_load_config(int *level, int *torus)
         printf("Fehler beim Öffnen der Datei!\n");
         return 1;
     }
-    fscanf (datei, "%d;%d\n", level, torus);
+    fscanf (datei, "%d;%d;%d\n", level, torus, theme);
     fclose (datei);
     printf("Einstellungen erfolgreich geladen!\n\n");
     printf("Spiele auf Level %d\n", *level);
@@ -329,11 +341,14 @@ int snake_load_config(int *level, int *torus)
         printf("Spiele auf Torusförmigem Spielfeld\n");
     else
         printf("Spiele auf begrenztem Spielfeld\n");
-    return 0;
+
+    printf("Du benutzt Theme \"%s\"", snake_themes[*theme]);
     printf("\n");
+
+    return 0;
 }
 
-int snake_save_config(int level, int torus)
+int snake_save_config(int level, int torus, int theme)
 {
     FILE *datei;
     char *filename = SNAKE_CONFIG_FILENAME;
@@ -345,7 +360,7 @@ int snake_save_config(int level, int torus)
         return 1;
     }
 
-    fprintf (datei, "%d;%d", level, torus);
+    fprintf (datei, "%d;%d;%d", level, torus, theme);
     fclose (datei);
     printf("Einstellungen gespeichert in ./%s\n", SNAKE_CONFIG_FILENAME);
     return 0;
