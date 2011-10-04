@@ -191,8 +191,10 @@ void snake_draw(struct snake_map map, int theme)
     mvprintw(map.y,   map.x+4, "Laenge: % 5d", map.length);
     mvprintw(map.y+1, map.x+4, "Punkte: % 5d", map.punkte);
     move(0,0);
-    for(i=0; i < map.x+2; i++)
+    addch('+');
+    for(i=0; i < map.x; i++)
         addch('-');
+    addch('+');
     move(1,0);
     for(j=0; j < map.y; j++)
     {
@@ -211,8 +213,10 @@ void snake_draw(struct snake_map map, int theme)
         addch('|');
         move(j+2,0);
     }
-    for(i=0; i < map.x+2; i++)
+    addch('+');
+    for(i=0; i < map.x; i++)
         addch('-');
+    addch('+');
     refresh();
     return;
 }
