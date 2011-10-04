@@ -41,8 +41,17 @@ static const char *highscore = "\
 |  _  | | (_| | | | \\__ \\ (_| (_) | | |  __/\\__ \\\n\
 |_| |_|_|\\__, |_| |_|___/\\___\\___/|_|  \\___||___/\n\
          |___/                                   \n";
+static const char *hilfe = "\
+         _   _ _ _  __      \n\
+        | | | (_) |/ _| ___ \n\
+        | |_| | | | |_ / _ \\\n\
+        |  _  | | |  _|  __/\n\
+        |_| |_|_|_|_|  \\___|\n\
+                            \n";
 
 static const char snake_themes[3][4] = {{'+','0','X',}, {'o','O','X'}, {'*','X','@'}};
+static const int geschw[9] =
+{LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6, LEVEL7, LEVEL8, LEVEL9};
 
 void snake_menu()
 {
@@ -60,15 +69,22 @@ void snake_menu()
         m=0;
         erase();
         mvprintw(0,0,"%s\n", titel);
-        printw("Spiele Snake:  1\n");
-        printw("Einstellungen: 2\n");
-        printw("Highscore:     3\n");
-        printw("Beende Snake:  4\n");
+        addch('S' | A_UNDERLINE);
+        printw("piele Snake:  1\n");
+        addch('E' | A_UNDERLINE);
+        printw("instellungen: 2\n");
+        addch('H' | A_UNDERLINE);
+        printw("ighscore:     3\n");
+        printw("Hilfe:         4\n");
+        addch('Q' | A_UNDERLINE);
+        printw("uit Snake:    5\n");
         refresh();
         m=getch();
         switch(m)
         {
             case '2':
+            case 'E':
+            case 'e':
                 erase();
                 mvprintw(0,0,"%s\n", optionen);
                 printw("Schwierigkeitsgrad zwischen 1 und 9 [3]\n");
@@ -104,14 +120,25 @@ void snake_menu()
                 break;
 
             case '1':
+            case 'S':
+            case 's':
                 erase();
                 snake(level, torus, theme);
                 break;
+            case 'H':
+            case 'h':
             case '3':
                 snake_load_highscore();
                 getch();
                 break;
             case '4':
+                erase();
+                snake_help();
+                getch();
+                break;
+            case 'Q':
+            case 'q':
+            case '5':
                 endwin();
                 return;
                 break;
@@ -119,15 +146,14 @@ void snake_menu()
     }
 }
 
-void snake(int schwierigkeit, int torus, int theme)
+void snake(int stufe, int torus, int theme)
 {
     struct snake_map map;
     int status = 1, timer = 0;
-    static const int stufen[9] =
-    {LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6, LEVEL7, LEVEL8, LEVEL9};
-    map.level = stufen[schwierigkeit];
+    map.level = stufe;
     map.richtung = 's';
     map.runde = 0;
+    map.punkte = 0;
     //~ srand( (unsigned) time(NULL) ) ;
 
     map.x = 30;
@@ -141,16 +167,15 @@ void snake(int schwierigkeit, int torus, int theme)
     map.kopf[0]=1;
     map.futter[0]=1;
 
-    timeout(1000/map.level);
-
     // Hauptspielschleife
     while(status)
     {
-        map.punkte = (map.length - 3) * schwierigkeit;
         map.runde++;
         timer++;
         snake_draw(map, theme);
         map = snake_steuerung(map);
+
+        timeout(1000/geschw[map.level]);
 
         if(torus)
             map = snake_torus(map);
@@ -161,6 +186,7 @@ void snake(int schwierigkeit, int torus, int theme)
             case 1:
                 map.length++;
                 mvprintw(3,map.x+5,"Mampf");
+                map.punkte += map.level;
                 timer = 0;
                 refresh();
                 snake_random_pos(map.futter, map);
@@ -182,12 +208,13 @@ void snake(int schwierigkeit, int torus, int theme)
     timeout(5000);
     snake_verloren(map.punkte);
     timeout(-1);
-    snake_show_highscore(map.punkte, schwierigkeit);
+    snake_show_highscore(map.punkte, map.length);
 }
 
 void snake_draw(struct snake_map map, int theme)
 {
     int i,j;
+    mvprintw(map.y-3, map.x+4, "Level:  % 5d", map.level);
     mvprintw(map.y-1, map.x+4, "Runde:  % 5d", map.runde);
     mvprintw(map.y,   map.x+4, "Laenge: % 5d", map.length);
     mvprintw(map.y+1, map.x+4, "Punkte: % 5d", map.punkte);
@@ -240,6 +267,7 @@ struct snake_map snake_steuerung(struct snake_map map)
                     tmp = 1;
                 else
                 {
+                    map.richtung = 'w';
                     map.kopf[1]--;
                     tmp = 0;
                 }
@@ -251,6 +279,7 @@ struct snake_map snake_steuerung(struct snake_map map)
                     tmp = 1;
                 else
                 {
+                    map.richtung = 'a';
                     map.kopf[0]--;
                     tmp = 0;
                 }
@@ -262,6 +291,7 @@ struct snake_map snake_steuerung(struct snake_map map)
                     tmp = 1;
                 else
                 {
+                    map.richtung = 's';
                     map.kopf[1]++;
                     tmp = 0;
                 }
@@ -273,9 +303,20 @@ struct snake_map snake_steuerung(struct snake_map map)
                     tmp = 1;
                 else
                 {
+                    map.richtung = 'd';
                     map.kopf[0]++;
                     tmp = 0;
                 }
+                break;
+            case '+':
+                if(map.level < 9)
+                    map.level++;
+                tmp = 1;
+                break;
+            case '-':
+                if(map.level > 1)
+                    map.level--;
+                tmp = 1;
                 break;
             default:
                 tmp = 1;
@@ -368,6 +409,13 @@ struct snake_map snake_koerper(struct snake_map map)
     return map;
 }
 
+void snake_help()
+{
+    printw("%s\n", hilfe);
+    printw("Steuere mit den Pfeiltasten oder WASD\n");
+    printw("Erhöhe mit + das Level und die Geschwindigkeit oder veringere sie mit -\n");
+}
+
 int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
@@ -403,7 +451,7 @@ int snake_show_highscore(int punkte, int level)
     char name[80];
 
     printw("\nHighscore:\n\n");
-    printw("% 5d \t\t\t auf Level %d\n", punkte, level);
+    printw("% 5d \t\t\t mit Länge %d\n", punkte, level);
     if(punkte > snake_load_highscore())
     {
         nocbreak();
@@ -432,7 +480,7 @@ int snake_load_highscore()
     }
     erase();
     printw("%s\n", highscore);
-    printw("\tName\t\tPunkte\t\tLevel\t\t     Datum\t  Uhr\n");
+    printw("\tName\t\tPunkte\t\tLänge\t\t     Datum\t  Uhr\n");
     for(i=0;i<SNAKE_NUMHS;i++)
     {
         fscanf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", &punkte, &level,\
