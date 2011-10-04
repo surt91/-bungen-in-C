@@ -11,8 +11,6 @@
  *
  ***/
 
-// TODO: ncurses
-
 #include "snake.h"
 
 static const char *titel = "\
