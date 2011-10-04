@@ -222,7 +222,6 @@ void snake_draw(struct snake_map map, int theme)
 struct snake_map snake_steuerung(struct snake_map map)
 {
     int tmp = 0;
-    //~ usleep(map.level);
     // Input Funktion
     do
     {
@@ -369,26 +368,13 @@ struct snake_map snake_koerper(struct snake_map map)
 int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
-    //~ printw("Lade letzte Einstellungen:\n");
     datei = fopen (SNAKE_CONFIG_FILENAME, "r");
     if (datei == NULL)
     {
-        //~ printw("Fehler beim Öffnen der Datei!\n");
-        //~ refresh();
         return 1;
     }
     fscanf (datei, "%d;%d;%d\n", level, torus, theme);
     fclose (datei);
-    //~ printw("Einstellungen erfolgreich geladen!\n\n");
-    //~ printw("Spiele auf Level %d\n", *level);
-    //~ if(*torus)
-        //~ printw("Spiele auf Torusförmigem Spielfeld\n");
-    //~ else
-        //~ printw("Spiele auf begrenztem Spielfeld\n");
-
-    //~ printw("Du benutzt Theme \"%s\"", snake_themes[*theme]);
-    //~ printw("\n");
-    //~ refresh();
 
     return 0;
 }
@@ -401,15 +387,11 @@ int snake_save_config(int level, int torus, int theme)
     datei = fopen (filename, "w");
     if (datei == NULL)
     {
-        //~ printw("Fehler beim Öffnen der Datei!\n");
-        //~ refresh();
         return 1;
     }
-
     fprintf (datei, "%d;%d;%d", level, torus, theme);
     fclose (datei);
-    //~ printw("Einstellungen gespeichert in ./%s\n", SNAKE_CONFIG_FILENAME);
-    //~ refresh();
+
     return 0;
 }
 
@@ -443,7 +425,6 @@ int snake_load_highscore()
     datei = fopen (filename, "r");
     if (datei == NULL)
     {
-        //~ printw("Fehler beim Öffnen der Datei!\n");
         return 1;
     }
     erase();
@@ -478,8 +459,6 @@ int snake_save_highscore(int punkte, int level, char *name)
     datei = fopen (filename, "a");
     if (datei == NULL)
     {
-        //~ printw("Fehler beim Öffnen der Datei!\n");
-        //~ refresh();
         return 1;
     }
 
@@ -491,7 +470,6 @@ int snake_save_highscore(int punkte, int level, char *name)
     name);
     fclose (datei);
     snake_highscore_sort();
-    //~ printw("Highscore gespeichert!\n");
     refresh();
     return 0;
 }
@@ -507,8 +485,6 @@ void snake_highscore_sort()
     datei = fopen (filename, "r");
     if (datei == NULL)
     {
-        //~ printw("Fehler beim Öffnen der Datei!\n");
-        //~ refresh();
         return;
     }
     for(i=0;i<SNAKE_NUMHS+1;i++)
@@ -554,35 +530,3 @@ void snake_highscore_init()
     }
     return;
 }
-//~
-//~ int sn_getch()
-//~ {
-    //~ static int ch = -1, fd = 0;
-    //~ struct termios neu, alt;
-    //~ fd = fileno(stdin);
-    //~ tcgetattr(fd, &alt);
-    //~ neu = alt;
-    //~ neu.c_lflag &= ~(ICANON|ECHO);
-    //~ tcsetattr(fd, TCSANOW, &neu);
-    //~ ch = getchar();
-    //~ tcsetattr(fd, TCSANOW, &alt);
-    //~ return ch;
-//~ }
-//~
-//~ int sn_kbhit()
-//~ {
-    //~ struct termios term, oterm;
-    //~ int fd = 0;
-    //~ int c = 0;
-    //~ tcgetattr(fd, &oterm);
-    //~ memcpy(&term, &oterm, sizeof(term));
-    //~ term.c_lflag = term.c_lflag & (!ICANON);
-    //~ term.c_cc[VMIN] = 0;
-    //~ term.c_cc[VTIME] = 1;
-    //~ tcsetattr(fd, TCSANOW, &term);
-    //~ c = getchar();
-    //~ tcsetattr(fd, TCSANOW, &oterm);
-    //~ if (c != -1)
-    //~ ungetc(c, stdin);
-    //~ return ((c != -1) ? 1 : 0);
-//~ }

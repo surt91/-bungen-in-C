@@ -7,11 +7,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-//~ #include <unistd.h>
 #include <termios.h>
 #include <ncurses.h>
 #include <time.h>
-//~ #include <time.h>
 
 #define LEVEL1 1
 #define LEVEL2 2
@@ -59,7 +57,5 @@ int snake_load_highscore();
 int snake_save_highscore(int punkte, int level, char *name);
 void snake_highscore_sort();
 void snake_highscore_init();
-//~
-//~ int sn_getch();
-//~ int sn_kbhit();
+
 #endif //SNAKE_H
