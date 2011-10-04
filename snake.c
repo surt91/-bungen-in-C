@@ -11,6 +11,8 @@
  *
  ***/
 
+// TODO: ncurses
+
 #include "snake.h"
 
 static const char *titel = "\
@@ -20,6 +22,13 @@ static const char *titel = "\
      ___) | |\\  |/ ___ \\| . \\| |___ \n\
     |____/|_| \\_/_/   \\_\\_|\\_\\_____|\n\
                                      \n";
+static const char *optionen = "\
+  ___        _   _                        \n\
+ / _ \\ _ __ | |_(_) ___  _ __   ___ _ __  \n\
+| | | | '_ \\| __| |/ _ \\| '_ \\ / _ \\ '_ \\ \n\
+| |_| | |_) | |_| | (_) | | | |  __/ | | |\n\
+ \\___/| .__/ \\__|_|\\___/|_| |_|\\___|_| |_|\n\
+      |_|                                 \n";
 static const char *verloren = "\
 __     __        _                      _ \n\
 \\ \\   / /__ _ __| | ___  _ __ ___ _ __ | |\n\
@@ -41,58 +50,71 @@ void snake_menu()
 {
     int exit = 0, m, level = 3, torus = 0, theme = 0, i;
     char k;
+    initscr();
+    raw();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
     snake_load_config(&level, &torus, &theme);
     snake_highscore_init();
     while(!exit)
     {
         m=0;
-        printf("%s\n", titel);
-        printf("Spiele Snake:  1\n");
-        printf("Einstellungen: 2\n");
-        printf("Highscore:     3\n");
-        printf("Beende Snake:  4\n");
-        scanf("%d", &m);
+        erase();
+        mvprintw(0,0,"%s\n", titel);
+        printw("Spiele Snake:  1\n");
+        printw("Einstellungen: 2\n");
+        printw("Highscore:     3\n");
+        printw("Beende Snake:  4\n");
+        refresh();
+        m=getch();
         switch(m)
         {
-            case 2:
-                printf("Schwierigkeitsgrad zwischen 1 und 9 [3]\n");
-                getchar();
-                k = getchar();
+            case '2':
+                erase();
+                mvprintw(0,0,"%s\n", optionen);
+                printw("Schwierigkeitsgrad zwischen 1 und 9 [3]\n");
+                refresh();
+                k = getch();
                 level = k-48;
                 if(level < 1 || level >9)
                     level = 3;
-                printf("Spiele auf Level %d\n", level);
+                printw("Spiele auf Level %d\n", level);
 
-                printf("Torusförmiges Spielfeld y/n [y]\n");
-                getchar();
-                k = getchar();
+                printw("Torusförmiges Spielfeld y/n [y]\n");
+                refresh();
+                k = getch();
                 torus = k == 'n' ? 0 : 1;
                 if(torus)
-                    printf("Spiele auf Torusförmigem Spielfeld\n");
+                    printw("Spiele auf Torusförmigem Spielfeld\n");
                 else
-                    printf("Spiele auf begrenztem Spielfeld\n");
+                    printw("Spiele auf begrenztem Spielfeld\n");
 
-                printf("Wähle Theme [1]\n");
+                printw("Wähle Theme [1]\n");
                 for(i = 0;i<3;i++)
-                    printf("%d: %s\n", i+1, snake_themes[i]);
-                getchar();
-                k = getchar();
+                    printw("%d: %s\n", i+1, snake_themes[i]);
+                refresh();
+                k = getch();
                 theme = k-48;
                 if(theme < 1 || theme >3)
                     theme = 1;
-                printf("%d", theme);
+                printw("%d", theme);
                 theme--;
+                refresh();
 
                 snake_save_config(level, torus, theme);
                 break;
 
-            case 1:
+            case '1':
+                erase();
                 snake(level, torus, theme);
                 break;
-            case 3:
+            case '3':
                 snake_load_highscore();
+                getch();
                 break;
-            case 4:
+            case '4':
+                endwin();
                 return;
                 break;
         }
@@ -102,7 +124,7 @@ void snake_menu()
 void snake(int schwierigkeit, int torus, int theme)
 {
     struct snake_map map;
-    int status = 1;
+    int status = 1, timer = 0;
     static const int stufen[9] =
     {LEVEL1, LEVEL2, LEVEL3, LEVEL4, LEVEL5, LEVEL6, LEVEL7, LEVEL8, LEVEL9};
     map.level = stufen[schwierigkeit];
@@ -121,11 +143,14 @@ void snake(int schwierigkeit, int torus, int theme)
     map.kopf[0]=1;
     map.futter[0]=1;
 
+    timeout(1000/map.level);
+
     // Hauptspielschleife
     while(status)
     {
         map.punkte = (map.length - 3) * schwierigkeit;
         map.runde++;
+        timer++;
         snake_draw(map, theme);
         map = snake_steuerung(map);
 
@@ -137,70 +162,78 @@ void snake(int schwierigkeit, int torus, int theme)
         {
             case 1:
                 map.length++;
-                printf ("Mampf\n");
+                mvprintw(3,map.x+5,"Mampf");
+                timer = 0;
+                refresh();
                 snake_random_pos(map.futter, map);
                 break;
             case 0:
+                if(timer > 3)
+                    mvprintw(3,map.x+5,"                        ");
                 break;
             case 2:
                 status = 0;
-                printf("In den Schwanz gebissen.\n");
-
+                mvprintw(3,map.x+5,"In den Schwanz gebissen.");
+                refresh();
                 break;
         }
         map = snake_koerper(map);
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
     }
+    timeout(5000);
     snake_verloren(map.punkte);
+    timeout(-1);
     snake_show_highscore(map.punkte, schwierigkeit);
 }
 
 void snake_draw(struct snake_map map, int theme)
 {
     int i,j;
-    printf("\nRunde:  % 5d\nLänge:  % 5d\nPunkte: % 5d\n",\
-                                    map.runde, map.length, map.punkte);
-    for(i=0; i < map.x; i++)
-        printf("-");
-    printf("--\n");
+    mvprintw(map.y-1, map.x+4, "Runde:  % 5d", map.runde);
+    mvprintw(map.y,   map.x+4, "Laenge: % 5d", map.length);
+    mvprintw(map.y+1, map.x+4, "Punkte: % 5d", map.punkte);
+    move(0,0);
+    for(i=0; i < map.x+2; i++)
+        addch('-');
+    move(1,0);
     for(j=0; j < map.y; j++)
     {
-        printf("|");
+        printw("|");
         for(i=0; i < map.x; i++)
         {
             if(map.kopf[0] == i && map.kopf[1] == j)
-                putchar(snake_themes[theme][1]);
+                addch(snake_themes[theme][1]);
             else if(snake_get_status(i, j, map))
-                putchar(snake_themes[theme][0]);
+                addch(snake_themes[theme][0]);
             else if(map.futter[0] == i && map.futter[1] == j)
-                putchar(snake_themes[theme][2]);
+                addch(snake_themes[theme][2]);
             else
-                putchar(' ');
+                addch(' ');
         }
-        printf("|\n");
+        addch('|');
+        move(j+2,0);
     }
-    printf("--");
-    for(i=0; i < map.x; i++)
-        printf("-");
-    printf("\n");
-
+    for(i=0; i < map.x+2; i++)
+        addch('-');
+    refresh();
     return;
 }
 
 struct snake_map snake_steuerung(struct snake_map map)
 {
     int tmp = 0;
-    usleep(map.level);
+    //~ usleep(map.level);
     // Input Funktion
     do
     {
-        if(kbhit())
-            map.richtung = getch();
-        else
+        map.richtung = getch();
+        if(map.richtung == ERR)
             map.richtung = map.richtung_alt;
         switch (map.richtung)
         {
             case 'w':
+            case 'W':
+            case KEY_UP:
                 if (map.richtung_alt == 's')
                     tmp = 1;
                 else
@@ -210,6 +243,8 @@ struct snake_map snake_steuerung(struct snake_map map)
                 }
                 break;
             case 'a':
+            case 'A':
+            case KEY_LEFT:
                 if (map.richtung_alt == 'd')
                     tmp = 1;
                 else
@@ -219,6 +254,8 @@ struct snake_map snake_steuerung(struct snake_map map)
                 }
                 break;
             case 's':
+            case 'S':
+            case KEY_DOWN:
                 if (map.richtung_alt == 'w')
                     tmp = 1;
                 else
@@ -228,6 +265,8 @@ struct snake_map snake_steuerung(struct snake_map map)
                 }
                 break;
             case 'd':
+            case 'D':
+            case KEY_RIGHT:
                 if (map.richtung_alt == 'a')
                     tmp = 1;
                 else
@@ -247,8 +286,11 @@ struct snake_map snake_steuerung(struct snake_map map)
 
 void snake_verloren(int punkte)
 {
-    printf("%s\n", verloren);
-    printf("Du hast -= %d =- Punkte erzielt\n", punkte);
+    erase();
+    mvprintw(0,0,"%s\n", verloren);
+    printw("Du hast -= %d =- Punkte erzielt", punkte);
+    refresh();
+    getch();
     return;
 }
 int snake_set_status(int x, int y, struct snake_map map, char state)
@@ -279,7 +321,8 @@ int snake_rand(struct snake_map map)
     if(map.kopf[0] >= map.x || map.kopf[1] >= map.y\
                 || map.kopf[0] < 0 || map.kopf[1] < 0)
     {
-        printf("Gegen die Wand gelaufen.\n");
+        mvprintw(3,map.x+5,"Gegen die Wand gelaufen.");
+        refresh();
         return 0;
     }
     return 1;
@@ -326,24 +369,26 @@ struct snake_map snake_koerper(struct snake_map map)
 int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
-    printf("Lade letzte Einstellungen:\n");
+    //~ printw("Lade letzte Einstellungen:\n");
     datei = fopen (SNAKE_CONFIG_FILENAME, "r");
     if (datei == NULL)
     {
-        printf("Fehler beim Öffnen der Datei!\n");
+        //~ printw("Fehler beim Öffnen der Datei!\n");
+        //~ refresh();
         return 1;
     }
     fscanf (datei, "%d;%d;%d\n", level, torus, theme);
     fclose (datei);
-    printf("Einstellungen erfolgreich geladen!\n\n");
-    printf("Spiele auf Level %d\n", *level);
-    if(*torus)
-        printf("Spiele auf Torusförmigem Spielfeld\n");
-    else
-        printf("Spiele auf begrenztem Spielfeld\n");
+    //~ printw("Einstellungen erfolgreich geladen!\n\n");
+    //~ printw("Spiele auf Level %d\n", *level);
+    //~ if(*torus)
+        //~ printw("Spiele auf Torusförmigem Spielfeld\n");
+    //~ else
+        //~ printw("Spiele auf begrenztem Spielfeld\n");
 
-    printf("Du benutzt Theme \"%s\"", snake_themes[*theme]);
-    printf("\n");
+    //~ printw("Du benutzt Theme \"%s\"", snake_themes[*theme]);
+    //~ printw("\n");
+    //~ refresh();
 
     return 0;
 }
@@ -356,13 +401,15 @@ int snake_save_config(int level, int torus, int theme)
     datei = fopen (filename, "w");
     if (datei == NULL)
     {
-        printf("Fehler beim Öffnen der Datei!\n");
+        //~ printw("Fehler beim Öffnen der Datei!\n");
+        //~ refresh();
         return 1;
     }
 
     fprintf (datei, "%d;%d;%d", level, torus, theme);
     fclose (datei);
-    printf("Einstellungen gespeichert in ./%s\n", SNAKE_CONFIG_FILENAME);
+    //~ printw("Einstellungen gespeichert in ./%s\n", SNAKE_CONFIG_FILENAME);
+    //~ refresh();
     return 0;
 }
 
@@ -370,14 +417,19 @@ int snake_show_highscore(int punkte, int level)
 {
     char name[80];
 
-    printf("\nHighscore:\n\n");
-    printf("% 5d \t\t\t auf Level %d\n", punkte, level);
+    printw("\nHighscore:\n\n");
+    printw("% 5d \t\t\t auf Level %d\n", punkte, level);
     if(punkte > snake_load_highscore())
     {
-        printf("Das ist ein neuer Highscore!\n");
-        printf("Trage deinen Namen ein:\n");
-        scanf("%s",name);
+        nocbreak();
+        printw("Das ist ein neuer Highscore!\n");
+        printw("Trage deinen Namen ein:\n");
+        refresh();
+        echo();
+        scanw("%s",name);
+        noecho();
         snake_save_highscore(punkte, level, name);
+        cbreak();
     }
     return 0;
 }
@@ -391,24 +443,26 @@ int snake_load_highscore()
     datei = fopen (filename, "r");
     if (datei == NULL)
     {
-        printf("Fehler beim Öffnen der Datei!\n");
+        //~ printw("Fehler beim Öffnen der Datei!\n");
         return 1;
     }
-    printf("%s\n", highscore);
-    printf("\tName\t\tPunkte\t\tLevel\t\t     Datum\t  Uhr\n");
+    erase();
+    printw("%s\n", highscore);
+    printw("\tName\t\tPunkte\t\tLevel\t\t     Datum\t  Uhr\n");
     for(i=0;i<SNAKE_NUMHS;i++)
     {
         fscanf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", &punkte, &level,\
                                 &year, &month, &day, &hour, &min, name);
-        printf("\t%s", name);
-        printf("\t\t% 6d",punkte);
-        printf("\t\t    %d",level);
-        printf("\t\t%02d.%02d.%04d",day,month,year);
-        printf("\t%02d:%02d",hour,min);
-        printf("\n");
+        printw("\t%s", name);
+        printw("\t\t% 6d",punkte);
+        printw("\t\t    %d",level);
+        printw("\t\t%02d.%02d.%04d",day,month,year);
+        printw("\t%02d:%02d",hour,min);
+        printw("\n");
     }
     fclose (datei);
-    printf("\n");
+    printw("\n");
+    refresh();
     tmp = punkte;
     return tmp;
 }
@@ -424,7 +478,8 @@ int snake_save_highscore(int punkte, int level, char *name)
     datei = fopen (filename, "a");
     if (datei == NULL)
     {
-        printf("Fehler beim Öffnen der Datei!\n");
+        //~ printw("Fehler beim Öffnen der Datei!\n");
+        //~ refresh();
         return 1;
     }
 
@@ -436,7 +491,8 @@ int snake_save_highscore(int punkte, int level, char *name)
     name);
     fclose (datei);
     snake_highscore_sort();
-    printf("Highscore gespeichert!\n");
+    //~ printw("Highscore gespeichert!\n");
+    refresh();
     return 0;
 }
 
@@ -451,7 +507,8 @@ void snake_highscore_sort()
     datei = fopen (filename, "r");
     if (datei == NULL)
     {
-        printf("Fehler beim Öffnen der Datei!\n");
+        //~ printw("Fehler beim Öffnen der Datei!\n");
+        //~ refresh();
         return;
     }
     for(i=0;i<SNAKE_NUMHS+1;i++)
@@ -497,35 +554,35 @@ void snake_highscore_init()
     }
     return;
 }
-
-int getch()
-{
-    static int ch = -1, fd = 0;
-    struct termios neu, alt;
-    fd = fileno(stdin);
-    tcgetattr(fd, &alt);
-    neu = alt;
-    neu.c_lflag &= ~(ICANON|ECHO);
-    tcsetattr(fd, TCSANOW, &neu);
-    ch = getchar();
-    tcsetattr(fd, TCSANOW, &alt);
-    return ch;
-}
-
-int kbhit()
-{
-    struct termios term, oterm;
-    int fd = 0;
-    int c = 0;
-    tcgetattr(fd, &oterm);
-    memcpy(&term, &oterm, sizeof(term));
-    term.c_lflag = term.c_lflag & (!ICANON);
-    term.c_cc[VMIN] = 0;
-    term.c_cc[VTIME] = 1;
-    tcsetattr(fd, TCSANOW, &term);
-    c = getchar();
-    tcsetattr(fd, TCSANOW, &oterm);
-    if (c != -1)
-    ungetc(c, stdin);
-    return ((c != -1) ? 1 : 0);
-}
+//~
+//~ int sn_getch()
+//~ {
+    //~ static int ch = -1, fd = 0;
+    //~ struct termios neu, alt;
+    //~ fd = fileno(stdin);
+    //~ tcgetattr(fd, &alt);
+    //~ neu = alt;
+    //~ neu.c_lflag &= ~(ICANON|ECHO);
+    //~ tcsetattr(fd, TCSANOW, &neu);
+    //~ ch = getchar();
+    //~ tcsetattr(fd, TCSANOW, &alt);
+    //~ return ch;
+//~ }
+//~
+//~ int sn_kbhit()
+//~ {
+    //~ struct termios term, oterm;
+    //~ int fd = 0;
+    //~ int c = 0;
+    //~ tcgetattr(fd, &oterm);
+    //~ memcpy(&term, &oterm, sizeof(term));
+    //~ term.c_lflag = term.c_lflag & (!ICANON);
+    //~ term.c_cc[VMIN] = 0;
+    //~ term.c_cc[VTIME] = 1;
+    //~ tcsetattr(fd, TCSANOW, &term);
+    //~ c = getchar();
+    //~ tcsetattr(fd, TCSANOW, &oterm);
+    //~ if (c != -1)
+    //~ ungetc(c, stdin);
+    //~ return ((c != -1) ? 1 : 0);
+//~ }

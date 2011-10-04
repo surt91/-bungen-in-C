@@ -7,20 +7,21 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <unistd.h>
+//~ #include <unistd.h>
 #include <termios.h>
+#include <ncurses.h>
 #include <time.h>
 //~ #include <time.h>
 
-#define LEVEL1 1000000
-#define LEVEL2 700000
-#define LEVEL3 500000
-#define LEVEL4 100000
-#define LEVEL5 50000
-#define LEVEL6 20000
-#define LEVEL7 10000
-#define LEVEL8 5000
-#define LEVEL9 1000
+#define LEVEL1 1
+#define LEVEL2 2
+#define LEVEL3 3
+#define LEVEL4 4
+#define LEVEL5 5
+#define LEVEL6 10
+#define LEVEL7 20
+#define LEVEL8 30
+#define LEVEL9 60
 
 #define SNAKE_CONFIG_FILENAME "snake_config.sav"
 #define SNAKE_HIGHSCORE_FILENAME "snake_highscore.sav"
@@ -34,7 +35,7 @@ struct snake_map
     int futter[2];
     int level;
     int runde, punkte, length;
-    char richtung, richtung_alt;
+    int richtung, richtung_alt;
 };
 
 void snake_menu();
@@ -58,7 +59,7 @@ int snake_load_highscore();
 int snake_save_highscore(int punkte, int level, char *name);
 void snake_highscore_sort();
 void snake_highscore_init();
-
-int getch();
-int kbhit();
+//~
+//~ int sn_getch();
+//~ int sn_kbhit();
 #endif //SNAKE_H
