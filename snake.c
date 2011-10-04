@@ -178,6 +178,7 @@ void snake(int schwierigkeit, int torus, int theme)
         map = snake_koerper(map);
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
     }
+    free(map.schlange);
     timeout(5000);
     snake_verloren(map.punkte);
     timeout(-1);
