@@ -181,16 +181,12 @@ void snake(int stufe, int torus, int theme)
     snake_random_pos(map.kopf, &map);
     snake_random_pos(map.futter, &map);
 
-    map.kopf[0]=1;
-    map.futter[0]=1;
-
     // Hauptspielschleife
     while(status)
     {
         map.runde++;
         timer++;
         snake_draw(&map, theme);
-        //~ map = snake_steuerung(map);
         snake_steuerung(&map);
 
         timeout(1000/geschw[map.level]);
@@ -347,7 +343,7 @@ void snake_steuerung(struct snake_map *map)
         }
     } while(tmp);
     map->richtung_alt = map->richtung;
-    //~ return map;
+    return;
 }
 
 void snake_verloren(int punkte)
@@ -377,7 +373,6 @@ void snake_random_pos(int *pos, struct snake_map *map)
         cordX = rand()%map->x;
         cordY = rand()%map->y;
     } while (map->schlange[cordY * map->x + cordX] || (map->kopf[0] == cordX && map->kopf[1] == cordY));
-    //~ # TODO: y ist am anfang immer 1?
     pos[0]=cordX;
     pos[1]=cordY;
     return;
