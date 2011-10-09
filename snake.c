@@ -55,6 +55,13 @@ static const char *credits = "\
 | |___| | |  __/ (_| | | |_\\__ \\\n\
  \\____|_|  \\___|\\__,_|_|\\__|___/\n\
                                 \n";
+static const char *pause = "\
+ ____                      \n\
+|  _ \\ __ _ _   _ ___  ___ \n\
+| |_) / _` | | | / __|/ _ \\\n\
+|  __/ (_| | |_| \\__ \\  __/\n\
+|_|   \\__,_|\\__,_|___/\\___|\n\
+                           \n";
 
 
 static const char snake_themes[3][4] = {{'+','0','X',}, {'o','O','X'}, {'*','X','@'}};
@@ -138,6 +145,7 @@ void snake_menu()
             case 'H':
             case 'h':
             case '3':
+                erase();
                 snake_load_highscore();
                 getch();
                 break;
@@ -207,7 +215,7 @@ void snake(int stufe, int torus, int theme)
                 break;
             case 0:
                 if(timer > 3)
-                    mvprintw(3,map.x+5,"                        ");
+                    erase();
                 break;
             case 2:
                 status = 0;
@@ -277,6 +285,23 @@ void snake_steuerung(struct snake_map *map)
             case 'p':
             case 'P':
                 timeout(-1);
+                //~ erase();
+                //~ mvprintw(1, map->x+4, "%s", pause);
+                int n = 0, i=0, j=0;
+                do {
+                    if(pause[n] == '\n')
+                    {
+                        j++;
+                        i=0;
+                    }
+                    else
+                    {
+                        mvaddch(1+j, map->x+4+i, pause[n]);
+                        i++;
+                    }
+                    n++;
+                } while(pause[n]!='\0');
+                refresh();
                 tmp=1;
                 break;
             case 'w':
