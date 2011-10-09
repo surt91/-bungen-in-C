@@ -50,6 +50,7 @@ struct snake_map snake_torus(struct snake_map map);
 void snake_verloren(int punkte);
 struct snake_map snake_steuerung(struct snake_map map);
 void snake_help();
+void snake_credits();
 
 int snake_load_config(int *level, int *torus, int *theme);
 int snake_save_config(int level, int torus, int theme);

@@ -14,12 +14,12 @@
 #include "snake.h"
 
 static const char *titel = "\
-     ____  _   _    _    _  _______ \n\
-    / ___|| \\ | |  / \\  | |/ / ____|\n\
-    \\___ \\|  \\| | / _ \\ | ' /|  _|  \n\
-     ___) | |\\  |/ ___ \\| . \\| |___ \n\
-    |____/|_| \\_/_/   \\_\\_|\\_\\_____|\n\
-                                     \n";
+ ____  _   _    _    _  _______ \n\
+/ ___|| \\ | |  / \\  | |/ / ____|\n\
+\\___ \\|  \\| | / _ \\ | ' /|  _|  \n\
+ ___) | |\\  |/ ___ \\| . \\| |___ \n\
+|____/|_| \\_/_/   \\_\\_|\\_\\_____|\n\
+                                 \n";
 static const char *optionen = "\
   ___        _   _                        \n\
  / _ \\ _ __ | |_(_) ___  _ __   ___ _ __  \n\
@@ -42,12 +42,20 @@ static const char *highscore = "\
 |_| |_|_|\\__, |_| |_|___/\\___\\___/|_|  \\___||___/\n\
          |___/                                   \n";
 static const char *hilfe = "\
-         _   _ _ _  __      \n\
-        | | | (_) |/ _| ___ \n\
-        | |_| | | | |_ / _ \\\n\
-        |  _  | | |  _|  __/\n\
-        |_| |_|_|_|_|  \\___|\n\
-                            \n";
+ _   _ _ _  __      \n\
+| | | (_) |/ _| ___ \n\
+| |_| | | | |_ / _ \\\n\
+|  _  | | |  _|  __/\n\
+|_| |_|_|_|_|  \\___|\n\
+                    \n";
+static const char *credits = "\
+  ____              _ _ _       \n\
+ / ___|_ __ ___  __| (_) |_ ___ \n\
+| |   | '__/ _ \\/ _` | | __/ __|\n\
+| |___| | |  __/ (_| | | |_\\__ \\\n\
+ \\____|_|  \\___|\\__,_|_|\\__|___/\n\
+                                \n";
+
 
 static const char snake_themes[3][4] = {{'+','0','X',}, {'o','O','X'}, {'*','X','@'}};
 static const int geschw[9] =
@@ -76,8 +84,10 @@ void snake_menu()
         addch('H' | A_UNDERLINE);
         printw("ighscore:     3\n");
         printw("Hilfe:         4\n");
+        addch('C' | A_UNDERLINE);
+        printw("redits:       5\n");
         addch('Q' | A_UNDERLINE);
-        printw("uit Snake:    5\n");
+        printw("uit Snake:    6\n");
         refresh();
         m=getch();
         switch(m)
@@ -136,9 +146,16 @@ void snake_menu()
                 snake_help();
                 getch();
                 break;
+            case '5':
+            case 'C':
+            case 'c':
+                erase();
+                snake_credits();
+                getch();
+                break;
             case 'Q':
             case 'q':
-            case '5':
+            case '6':
                 endwin();
                 return;
                 break;
@@ -260,6 +277,11 @@ struct snake_map snake_steuerung(struct snake_map map)
             map.richtung = map.richtung_alt;
         switch (map.richtung)
         {
+            case 'p':
+            case 'P':
+                timeout(-1);
+                tmp=1;
+                break;
             case 'w':
             case 'W':
             case KEY_UP:
@@ -414,6 +436,19 @@ void snake_help()
     printw("%s\n", hilfe);
     printw("Steuere mit den Pfeiltasten oder WASD\n");
     printw("Erhöhe mit + das Level und die Geschwindigkeit oder veringere sie mit -\n");
+}
+
+void snake_credits()
+{
+    printw("%s\n", credits);
+    printw("Snake\n\
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
+This is free software: you are free to change and redistribute it.\n\
+There is NO WARRANTY, to the extent permitted by law.\n\
+\n\
+Darstellung durch ncurses\
+\n\
+Hendrik Schawe <hendrik.schawe@gmail.com>");
 }
 
 int snake_load_config(int *level, int *torus, int *theme)
