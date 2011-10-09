@@ -90,7 +90,6 @@ void snake_menu()
     {
         m=0;
         erase();
-        //~ mvprintw(0,0,"%s\n", titel);
         snake_buchstabiere(0, 0, titel);
         addch('\n' | A_UNDERLINE);
         addch('S' | A_UNDERLINE);
@@ -112,7 +111,6 @@ void snake_menu()
             case 'E':
             case 'e':
                 erase();
-                //~ mvprintw(0,0,"%s\n", optionen);
                 snake_buchstabiere(0, 0, optionen);
                 printw("Schwierigkeitsgrad zwischen 1 und 9 [3]\n");
                 refresh();
@@ -205,6 +203,7 @@ void snake(int stufe, int torus, int theme)
         map.runde++;
         timer++;
         snake_draw(&map, theme);
+        refresh();
         snake_steuerung(&map);
 
         timeout(1000/geschw[map.level]);
@@ -217,11 +216,9 @@ void snake(int stufe, int torus, int theme)
         {
             case 1:
                 map.length++;
-                //~ mvprintw(3, map.x+5, "Mampf");
                 snake_buchstabiere(map.x+5, 1, mampf);
                 map.punkte += map.level;
                 timer = 0;
-                refresh();
                 snake_random_pos(map.futter, &map);
                 break;
             case 0:
@@ -231,7 +228,6 @@ void snake(int stufe, int torus, int theme)
             case 2:
                 status = 0;
                 mvprintw(3,map.x+5,"In den Schwanz gebissen.");
-                refresh();
                 break;
         }
         snake_koerper(&map);
@@ -278,7 +274,6 @@ void snake_draw(struct snake_map *map, int theme)
     for(i=0; i < map->x; i++)
         addch('-');
     addch('+');
-    refresh();
     return;
 }
 
@@ -370,7 +365,6 @@ void snake_steuerung(struct snake_map *map)
 void snake_verloren(int punkte)
 {
     erase();
-    //~ mvprintw(0,0,"%s\n", verloren);
     snake_buchstabiere(0, 0, verloren);
     printw("Du hast -= %d =- Punkte erzielt", punkte);
     refresh();
@@ -406,7 +400,6 @@ int snake_rand(struct snake_map *map)
                 || map->kopf[0] < 0 || map->kopf[1] < 0)
     {
         mvprintw(3,map->x+5,"Gegen die Wand gelaufen.");
-        refresh();
         return 0;
     }
     return 1;
@@ -472,7 +465,6 @@ void snake_buchstabiere(int x, int y, const char *wort)
 
 void snake_help()
 {
-    //~ printw("%s\n", hilfe);
     snake_buchstabiere(0, 0, hilfe);
     printw("Steuere mit den Pfeiltasten oder WASD\n");
     printw("Erhöhe mit + das Level und die Geschwindigkeit oder veringere sie mit -\n");
@@ -480,7 +472,6 @@ void snake_help()
 
 void snake_credits()
 {
-    //~ printw("%s\n", credits);
     snake_buchstabiere(0, 0, credits);
     printw("Snake\n\
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
@@ -597,7 +588,6 @@ int snake_save_highscore(int punkte, int level, char *name)
     name);
     fclose (datei);
     snake_highscore_sort();
-    refresh();
     return 0;
 }
 
