@@ -49,6 +49,7 @@ int snake_rand(struct snake_map *map);
 void snake_torus(struct snake_map *map);
 void snake_verloren(int punkte);
 void snake_steuerung(struct snake_map *map);
+void snake_buchstabiere(int x, int y, const char *wort);
 void snake_help();
 void snake_credits();
 

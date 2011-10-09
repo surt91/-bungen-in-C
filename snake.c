@@ -56,12 +56,19 @@ static const char *credits = "\
  \\____|_|  \\___|\\__,_|_|\\__|___/\n\
                                 \n";
 static const char *pause = "\
- ____                      \n\
-|  _ \\ __ _ _   _ ___  ___ \n\
-| |_) / _` | | | / __|/ _ \\\n\
-|  __/ (_| | |_| \\__ \\  __/\n\
-|_|   \\__,_|\\__,_|___/\\___|\n\
-                           \n";
+ ____                                      \n\
+|  _ \\ __ _ _   _ ___  ___                 \n\
+| |_) / _` | | | / __|/ _ \\                \n\
+|  __/ (_| | |_| \\__ \\  __/                \n\
+|_|   \\__,_|\\__,_|___/\\___|                \n\
+                                           \n";
+static const char *mampf = "\
+ __  __                        __ _ \n\
+|  \\/  | __ _ _ __ ___  _ __  / _| |\n\
+| |\\/| |/ _` | '_ ` _ \\| '_ \\| |_| |\n\
+| |  | | (_| | | | | | | |_) |  _|_|\n\
+|_|  |_|\\__,_|_| |_| |_| .__/|_| (_)\n\
+                       |_|          \n";
 
 
 static const char snake_themes[3][4] = {{'+','0','X',}, {'o','O','X'}, {'*','X','@'}};
@@ -83,7 +90,9 @@ void snake_menu()
     {
         m=0;
         erase();
-        mvprintw(0,0,"%s\n", titel);
+        //~ mvprintw(0,0,"%s\n", titel);
+        snake_buchstabiere(0, 0, titel);
+        addch('\n' | A_UNDERLINE);
         addch('S' | A_UNDERLINE);
         printw("piele Snake:  1\n");
         addch('E' | A_UNDERLINE);
@@ -103,7 +112,8 @@ void snake_menu()
             case 'E':
             case 'e':
                 erase();
-                mvprintw(0,0,"%s\n", optionen);
+                //~ mvprintw(0,0,"%s\n", optionen);
+                snake_buchstabiere(0, 0, optionen);
                 printw("Schwierigkeitsgrad zwischen 1 und 9 [3]\n");
                 refresh();
                 k = getch();
@@ -207,7 +217,8 @@ void snake(int stufe, int torus, int theme)
         {
             case 1:
                 map.length++;
-                mvprintw(3,map.x+5,"Mampf");
+                //~ mvprintw(3, map.x+5, "Mampf");
+                snake_buchstabiere(map.x+5, 1, mampf);
                 map.punkte += map.level;
                 timer = 0;
                 refresh();
@@ -285,22 +296,7 @@ void snake_steuerung(struct snake_map *map)
             case 'p':
             case 'P':
                 timeout(-1);
-                //~ erase();
-                //~ mvprintw(1, map->x+4, "%s", pause);
-                int n = 0, i=0, j=0;
-                do {
-                    if(pause[n] == '\n')
-                    {
-                        j++;
-                        i=0;
-                    }
-                    else
-                    {
-                        mvaddch(1+j, map->x+4+i, pause[n]);
-                        i++;
-                    }
-                    n++;
-                } while(pause[n]!='\0');
+                snake_buchstabiere(map->x+4, 1, pause);
                 refresh();
                 tmp=1;
                 break;
@@ -374,7 +370,8 @@ void snake_steuerung(struct snake_map *map)
 void snake_verloren(int punkte)
 {
     erase();
-    mvprintw(0,0,"%s\n", verloren);
+    //~ mvprintw(0,0,"%s\n", verloren);
+    snake_buchstabiere(0, 0, verloren);
     printw("Du hast -= %d =- Punkte erzielt", punkte);
     refresh();
     getch();
@@ -453,16 +450,38 @@ void snake_koerper(struct snake_map *map)
     return;
 }
 
+void snake_buchstabiere(int x, int y, const char *wort)
+{
+    int i=0, j=0, n=0;
+    do {
+        if(wort[n] == '\n')
+        {
+            j++;
+            i=0;
+        }
+        else
+        {
+            mvaddch(y+j, x+i, wort[n]);
+            i++;
+        }
+        n++;
+    } while(wort[n]!='\0');
+    move(y+j, x+i);
+    return;
+}
+
 void snake_help()
 {
-    printw("%s\n", hilfe);
+    //~ printw("%s\n", hilfe);
+    snake_buchstabiere(0, 0, hilfe);
     printw("Steuere mit den Pfeiltasten oder WASD\n");
     printw("Erhöhe mit + das Level und die Geschwindigkeit oder veringere sie mit -\n");
 }
 
 void snake_credits()
 {
-    printw("%s\n", credits);
+    //~ printw("%s\n", credits);
+    snake_buchstabiere(0, 0, credits);
     printw("Snake\n\
 License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.\n\
 This is free software: you are free to change and redistribute it.\n\
