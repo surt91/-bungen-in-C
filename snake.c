@@ -171,15 +171,15 @@ void snake(int stufe, int torus, int theme)
     map.richtung = 's';
     map.runde = 0;
     map.punkte = 0;
-    //~ srand( (unsigned) time(NULL) ) ;
+    srand( (unsigned) time(NULL) ) ;
 
     map.x = 30;
     map.y = 15;
     map.length = 3;
     map.schlange = (int *) calloc(map.x * map.y, sizeof(int));
 
-    snake_random_pos(map.kopf, map);
-    snake_random_pos(map.futter, map);
+    snake_random_pos(map.kopf, &map);
+    snake_random_pos(map.futter, &map);
 
     map.kopf[0]=1;
     map.futter[0]=1;
@@ -189,16 +189,17 @@ void snake(int stufe, int torus, int theme)
     {
         map.runde++;
         timer++;
-        snake_draw(map, theme);
-        map = snake_steuerung(map);
+        snake_draw(&map, theme);
+        //~ map = snake_steuerung(map);
+        snake_steuerung(&map);
 
         timeout(1000/geschw[map.level]);
 
         if(torus)
-            map = snake_torus(map);
+            snake_torus(&map);
         else
-            status = snake_rand(map);
-        switch (snake_dead_or_eating(map))
+            status = snake_rand(&map);
+        switch (snake_dead_or_eating(&map))
         {
             case 1:
                 map.length++;
@@ -206,7 +207,7 @@ void snake(int stufe, int torus, int theme)
                 map.punkte += map.level;
                 timer = 0;
                 refresh();
-                snake_random_pos(map.futter, map);
+                snake_random_pos(map.futter, &map);
                 break;
             case 0:
                 if(timer > 3)
@@ -218,7 +219,7 @@ void snake(int stufe, int torus, int theme)
                 refresh();
                 break;
         }
-        map = snake_koerper(map);
+        snake_koerper(&map);
         map.schlange[map.kopf[1] * map.x + map.kopf[0]] = 1;
     }
     free(map.schlange);
@@ -228,29 +229,29 @@ void snake(int stufe, int torus, int theme)
     snake_show_highscore(map.punkte, map.length);
 }
 
-void snake_draw(struct snake_map map, int theme)
+void snake_draw(struct snake_map *map, int theme)
 {
     int i,j;
-    mvprintw(map.y-3, map.x+4, "Level:  % 5d", map.level);
-    mvprintw(map.y-1, map.x+4, "Runde:  % 5d", map.runde);
-    mvprintw(map.y,   map.x+4, "Laenge: % 5d", map.length);
-    mvprintw(map.y+1, map.x+4, "Punkte: % 5d", map.punkte);
+    mvprintw(map->y-3, map->x+4, "Level:  % 5d", map->level);
+    mvprintw(map->y-1, map->x+4, "Runde:  % 5d", map->runde);
+    mvprintw(map->y,   map->x+4, "Laenge: % 5d", map->length);
+    mvprintw(map->y+1, map->x+4, "Punkte: % 5d", map->punkte);
     move(0,0);
     addch('+');
-    for(i=0; i < map.x; i++)
+    for(i=0; i < map->x; i++)
         addch('-');
     addch('+');
     move(1,0);
-    for(j=0; j < map.y; j++)
+    for(j=0; j < map->y; j++)
     {
         printw("|");
-        for(i=0; i < map.x; i++)
+        for(i=0; i < map->x; i++)
         {
-            if(map.kopf[0] == i && map.kopf[1] == j)
+            if(map->kopf[0] == i && map->kopf[1] == j)
                 addch(snake_themes[theme][1]);
             else if(snake_get_status(i, j, map))
                 addch(snake_themes[theme][0]);
-            else if(map.futter[0] == i && map.futter[1] == j)
+            else if(map->futter[0] == i && map->futter[1] == j)
                 addch(snake_themes[theme][2]);
             else
                 addch(' ');
@@ -259,23 +260,23 @@ void snake_draw(struct snake_map map, int theme)
         move(j+2,0);
     }
     addch('+');
-    for(i=0; i < map.x; i++)
+    for(i=0; i < map->x; i++)
         addch('-');
     addch('+');
     refresh();
     return;
 }
 
-struct snake_map snake_steuerung(struct snake_map map)
+void snake_steuerung(struct snake_map *map)
 {
     int tmp = 0;
     // Input Funktion
     do
     {
-        map.richtung = getch();
-        if(map.richtung == ERR)
-            map.richtung = map.richtung_alt;
-        switch (map.richtung)
+        map->richtung = getch();
+        if(map->richtung == ERR)
+            map->richtung = map->richtung_alt;
+        switch (map->richtung)
         {
             case 'p':
             case 'P':
@@ -285,59 +286,59 @@ struct snake_map snake_steuerung(struct snake_map map)
             case 'w':
             case 'W':
             case KEY_UP:
-                if (map.richtung_alt == 's')
+                if (map->richtung_alt == 's')
                     tmp = 1;
                 else
                 {
-                    map.richtung = 'w';
-                    map.kopf[1]--;
+                    map->richtung = 'w';
+                    map->kopf[1]--;
                     tmp = 0;
                 }
                 break;
             case 'a':
             case 'A':
             case KEY_LEFT:
-                if (map.richtung_alt == 'd')
+                if (map->richtung_alt == 'd')
                     tmp = 1;
                 else
                 {
-                    map.richtung = 'a';
-                    map.kopf[0]--;
+                    map->richtung = 'a';
+                    map->kopf[0]--;
                     tmp = 0;
                 }
                 break;
             case 's':
             case 'S':
             case KEY_DOWN:
-                if (map.richtung_alt == 'w')
+                if (map->richtung_alt == 'w')
                     tmp = 1;
                 else
                 {
-                    map.richtung = 's';
-                    map.kopf[1]++;
+                    map->richtung = 's';
+                    map->kopf[1]++;
                     tmp = 0;
                 }
                 break;
             case 'd':
             case 'D':
             case KEY_RIGHT:
-                if (map.richtung_alt == 'a')
+                if (map->richtung_alt == 'a')
                     tmp = 1;
                 else
                 {
-                    map.richtung = 'd';
-                    map.kopf[0]++;
+                    map->richtung = 'd';
+                    map->kopf[0]++;
                     tmp = 0;
                 }
                 break;
             case '+':
-                if(map.level < 9)
-                    map.level++;
+                if(map->level < 9)
+                    map->level++;
                 tmp = 1;
                 break;
             case '-':
-                if(map.level > 1)
-                    map.level--;
+                if(map->level > 1)
+                    map->level--;
                 tmp = 1;
                 break;
             default:
@@ -345,8 +346,8 @@ struct snake_map snake_steuerung(struct snake_map map)
                 break;
         }
     } while(tmp);
-    map.richtung_alt = map.richtung;
-    return map;
+    map->richtung_alt = map->richtung;
+    //~ return map;
 }
 
 void snake_verloren(int punkte)
@@ -358,77 +359,78 @@ void snake_verloren(int punkte)
     getch();
     return;
 }
-int snake_set_status(int x, int y, struct snake_map map, char state)
+int snake_set_status(int x, int y, struct snake_map *map, char state)
 {
-    map.schlange[y * map.x + x] = state;
+    map->schlange[y * map->x + x] = state;
     return 0;
 }
-int snake_get_status(int x, int y, struct snake_map map)
+int snake_get_status(int x, int y, struct snake_map *map)
 {
-    return map.schlange[y * map.x + x];
+    return map->schlange[y * map->x + x];
 }
 
-void snake_random_pos(int *pos, struct snake_map map)
+void snake_random_pos(int *pos, struct snake_map *map)
 {
     int cordX, cordY;
     do
     {
-        cordX = rand()%map.x;
-        cordY = rand()%map.y;
-    } while (map.schlange[cordY * map.x + cordX]);
+        cordX = rand()%map->x;
+        cordY = rand()%map->y;
+    } while (map->schlange[cordY * map->x + cordX] || (map->kopf[0] == cordX && map->kopf[1] == cordY));
+    //~ # TODO: y ist am anfang immer 1?
     pos[0]=cordX;
     pos[1]=cordY;
     return;
 }
 
-int snake_rand(struct snake_map map)
+int snake_rand(struct snake_map *map)
 {
-    if(map.kopf[0] >= map.x || map.kopf[1] >= map.y\
-                || map.kopf[0] < 0 || map.kopf[1] < 0)
+    if(map->kopf[0] >= map->x || map->kopf[1] >= map->y\
+                || map->kopf[0] < 0 || map->kopf[1] < 0)
     {
-        mvprintw(3,map.x+5,"Gegen die Wand gelaufen.");
+        mvprintw(3,map->x+5,"Gegen die Wand gelaufen.");
         refresh();
         return 0;
     }
     return 1;
 }
 
-struct snake_map snake_torus(struct snake_map map)
+void snake_torus(struct snake_map *map)
 {
-    if(map.kopf[0] >= map.x)
-        map.kopf[0] = 0;
-    if(map.kopf[1] >= map.y)
-        map.kopf[1] = 0;
-    if(map.kopf[0] < 0)
-        map.kopf[0] = map.x-1;
-    if(map.kopf[1] < 0)
-        map.kopf[1] = map.y-1;
-    return map;
+    if(map->kopf[0] >= map->x)
+        map->kopf[0] = 0;
+    if(map->kopf[1] >= map->y)
+        map->kopf[1] = 0;
+    if(map->kopf[0] < 0)
+        map->kopf[0] = map->x-1;
+    if(map->kopf[1] < 0)
+        map->kopf[1] = map->y-1;
+    return;
 }
 
-int snake_dead_or_eating(struct snake_map map)
+int snake_dead_or_eating(struct snake_map *map)
 {
     // 0: leeres Feld
     // 1: Essen
     // 2: tot
-    if(map.kopf[0] == map.futter[0] && map.kopf[1] == map.futter[1])
+    if(map->kopf[0] == map->futter[0] && map->kopf[1] == map->futter[1])
         return 1;
-    else if (map.schlange[map.kopf[1] * map.x + map.kopf[0]])
+    else if (map->schlange[map->kopf[1] * map->x + map->kopf[0]])
         return 2;
     return 0;
 }
 
-struct snake_map snake_koerper(struct snake_map map)
+void snake_koerper(struct snake_map *map)
 {
     int i;
-    for(i=0;i<map.x*map.y;i++)
+    for(i=0;i<map->x*map->y;i++)
     {
-        if(map.schlange[i])
-            map.schlange[i]++;
-        if(map.schlange[i] > map.length)
-            map.schlange[i] = 0;
+        if(map->schlange[i])
+            map->schlange[i]++;
+        if(map->schlange[i] > map->length)
+            map->schlange[i] = 0;
     }
-    return map;
+    return;
 }
 
 void snake_help()

@@ -39,16 +39,16 @@ struct snake_map
 void snake_menu();
 
 void snake(int schwierigkeit, int torus, int theme);
-void snake_draw(struct snake_map map, int theme);
-int snake_set_status(int x, int y, struct snake_map map, char state);
-int snake_get_status(int x, int y, struct snake_map map);
-void snake_random_pos(int *pos, struct snake_map map);
-struct snake_map snake_koerper(struct snake_map map);
-int snake_dead_or_eating(struct snake_map map);
-int snake_rand(struct snake_map map);
-struct snake_map snake_torus(struct snake_map map);
+void snake_draw(struct snake_map *map, int theme);
+int snake_set_status(int x, int y, struct snake_map *map, char state);
+int snake_get_status(int x, int y, struct snake_map *map);
+void snake_random_pos(int *pos, struct snake_map *map);
+void snake_koerper(struct snake_map *map);
+int snake_dead_or_eating(struct snake_map *map);
+int snake_rand(struct snake_map *map);
+void snake_torus(struct snake_map *map);
 void snake_verloren(int punkte);
-struct snake_map snake_steuerung(struct snake_map map);
+void snake_steuerung(struct snake_map *map);
 void snake_help();
 void snake_credits();
 
