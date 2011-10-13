@@ -3,18 +3,77 @@
 void karten_test()
 {
     int i;
-    struct deck *stapel;
+    struct deck *stapel, *spieler, *bank;
     stapel = (struct deck *) malloc(sizeof(struct deck));
     karten_init_deck(stapel, 1);
     // Mischen
     for(i=0;i<200;i++)
         karten_vertausche_zwei_karten(&stapel, rand()%53+1, rand()%53+1);
-    while(stapel->next != NULL)
-    {
-        karten_zeiger(karten_pop(&stapel));
-    }
+
     // TODO: Karten an Spieler ausgeben, und zählen (Blackjack Logik)
+    spieler = NULL;
+    bank = NULL;
+
+    karten_gebe_karte(&stapel, &spieler);
+    karten_gebe_karte(&stapel, &spieler);
+    //~ karten_gebe_karte(&stapel, &spieler);
+
+    printf("Deine Hand:\n");
+    karten_show(spieler);
+    printf("Punkte: %d\n", karten_summiere_augen(spieler));
+    //~ karten_show(stapel);
     return;
+}
+
+void karten_gebe_karte(struct deck **stapel, struct deck **hand)
+{
+    struct deck *tmp, *tmp2;
+    tmp2 = *stapel;
+    if(*hand == NULL)
+    {
+        *hand = (struct deck *) malloc(sizeof(struct deck));
+        (*hand) -> karte = karten_pop(&tmp2);
+        (*hand) -> next = NULL;
+    }
+    else
+    {
+        tmp = *hand;
+        while((*hand) -> next != NULL)
+        {
+            *hand = (*hand) -> next;
+        }
+        (*hand) -> next = (struct deck *) malloc(sizeof(struct deck));
+        *hand = (*hand) -> next;
+        (*hand) -> karte = karten_pop(&tmp2);
+        (*hand) -> next = NULL;
+        *hand = tmp;
+    }
+    *stapel = tmp2;
+}
+
+int karten_summiere_augen(struct deck *hand)
+{
+    int summe=0, n_ass=0;
+    enum wert now;
+    while(hand != NULL)
+    {
+        now = hand -> karte.w;
+        if(now == konig || now == dame || now == bube)
+            summe += 10;
+        else if(now == ass)
+            n_ass++;
+        else
+            summe += now;
+        hand = hand -> next;
+    }
+    if(n_ass)
+    {
+        if(summe < 11)
+            summe += 11;
+        else
+            summe += 1;
+    }
+    return summe;
 }
 
 void karten_init_deck(struct deck *stapel, int anz)
@@ -46,6 +105,16 @@ struct card karten_pop(struct deck **stapel)
     ctmp = tmp->karte;
     free(tmp);
     return ctmp;
+}
+
+void karten_show(struct deck *stapel)
+{
+    while(stapel != NULL)
+    {
+        karten_zeiger(stapel->karte);
+        stapel = stapel -> next;
+    }
+    return;
 }
 
 void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
