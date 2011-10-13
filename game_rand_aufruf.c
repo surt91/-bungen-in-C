@@ -5,7 +5,7 @@ void aufg_GAME_2()
     struct card hand[5];
     karten_geber(hand);
     karten_sortierer(hand);
-    karten_zeiger(hand);
+    karten_hand_zeiger(hand);
     return;
 }
 
@@ -25,14 +25,14 @@ void aufg_GAME_3()
                 royal_flush++;
                 runden++;
                 printf("#%4d: Royal Flush!", runden);
-                karten_zeiger(hand);
+                karten_hand_zeiger(hand);
             }
             else
             {
                 straight++;
                 runden++;
                 printf("#%4d: Straße!", runden);
-                karten_zeiger(hand);
+                karten_hand_zeiger(hand);
             }
         }
         else if(is_straight(hand))
@@ -42,14 +42,14 @@ void aufg_GAME_3()
                 straight_flush++;
                 runden++;
                 printf("#%4d: Straight Flush!", runden);
-                karten_zeiger(hand);
+                karten_hand_zeiger(hand);
             }
             else
             {
                 straight++;
                 runden++;
                 printf("#%4d: Straße!", runden);
-                karten_zeiger(hand);
+                karten_hand_zeiger(hand);
             }
         }
         else if(is_flush(hand))
@@ -57,14 +57,14 @@ void aufg_GAME_3()
             flush++;
             runden++;
             printf("#%4d: Flush!", runden);
-            karten_zeiger(hand);
+            karten_hand_zeiger(hand);
         }
         else if(is_fullhouse(hand))
         {
             fullhouse++;
             runden++;
             printf("#%4d: Fullhouse!", runden);
-            karten_zeiger(hand);
+            karten_hand_zeiger(hand);
         }
         else
         {

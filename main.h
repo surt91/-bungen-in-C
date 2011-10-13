@@ -20,6 +20,7 @@
 #include "conway.h"
 #include "snake.h"
 #include "roulette.h"
+#include "karten.h"
 //~ #include "polynom.h"
 //~ #include "polynom_aufruf.h"
 

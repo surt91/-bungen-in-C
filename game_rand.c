@@ -36,37 +36,45 @@ struct card *karten_geber(struct card *hand)
     return hand;
 }
 // Zeigt eine Pokerhand an
-void karten_zeiger(struct card *hand)
+void karten_hand_zeiger(struct card *hand)
 {
     int i;
     for(i=0;i<5;i++)
-    {
-        switch (hand[i].f)
-        {
-            case herz:  printf("\nHerz  "); break;
-            case pik:   printf("\nPik   "); break;
-            case karo:  printf("\nKaro  "); break;
-            case kreuz: printf("\nKreuz "); break;
-        }
-        switch (hand[i].w)
-        {
-            case ass: printf("Ass"); break;
-            case 2: printf("Zwei"); break;
-            case 3: printf("Drei"); break;
-            case 4: printf("Vier"); break;
-            case 5: printf("Fünf"); break;
-            case 6: printf("Sechs"); break;
-            case 7: printf("Sieben"); break;
-            case 8: printf("Acht"); break;
-            case 9: printf("Neun"); break;
-            case 10: printf("Zehn"); break;
-            case bube: printf("Bube"); break;
-            case dame: printf("Dame"); break;
-            case konig: printf("König"); break;
-        }
-    }
-    printf("\n\n");
+        karten_zeiger(&hand[i]);
+    return;
 }
+
+//~ void karten_zeiger(struct card *hand)
+//~ {
+    //~ int i;
+    //~ for(i=0;i<5;i++)
+    //~ {
+        //~ switch (hand[i].f)
+        //~ {
+            //~ case herz:  printf("Herz  "); break;
+            //~ case pik:   printf("Pik   "); break;
+            //~ case karo:  printf("Karo  "); break;
+            //~ case kreuz: printf("Kreuz "); break;
+        //~ }
+        //~ switch (hand[i].w)
+        //~ {
+            //~ case ass: printf("Ass"); break;
+            //~ case 2: printf("Zwei"); break;
+            //~ case 3: printf("Drei"); break;
+            //~ case 4: printf("Vier"); break;
+            //~ case 5: printf("Fünf"); break;
+            //~ case 6: printf("Sechs"); break;
+            //~ case 7: printf("Sieben"); break;
+            //~ case 8: printf("Acht"); break;
+            //~ case 9: printf("Neun"); break;
+            //~ case 10: printf("Zehn"); break;
+            //~ case bube: printf("Bube"); break;
+            //~ case dame: printf("Dame"); break;
+            //~ case konig: printf("König"); break;
+        //~ }
+        //~ printf("\n");
+    //~ }
+//~ }
 // überprüft, ob ein Fullhouse auf der Hand ist
 int is_fullhouse(struct card *hand)
 {

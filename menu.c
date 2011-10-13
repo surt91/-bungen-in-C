@@ -106,6 +106,9 @@ int menu(int argc, char **argv)
                 case 7:
                     snake_menu();
                     break;
+                case 8:
+                    karten_test();
+                    break;
             }
             break;
         case PRIM:
