@@ -2,12 +2,16 @@
 
 void karten_test()
 {
-    struct deck stapel;
-    karten_init_deck(&stapel);
+    struct deck *stapel;
+    stapel = (struct deck *) malloc(sizeof(struct deck));
+    karten_init_deck(stapel);
     printf("deck fertig\n");
-    karten_zeiger(&stapel.karte);
+    karten_zeiger(&stapel->karte);
     printf("das war die erste karte\n");
-    karten_zeiger(&stapel.next->karte);
+    karten_zeiger(&stapel->next->karte);
+    karten_delete_card_from_deck(&stapel);
+    karten_zeiger(&stapel->karte);
+    return;
 }
 
 void karten_init_deck(struct deck *stapel)
@@ -21,10 +25,19 @@ void karten_init_deck(struct deck *stapel)
             stapel -> next = (struct deck *) malloc(sizeof(struct deck));
             stapel = stapel->next;
         }
+    // TODO: Achtung leere karte am ende
     stapel -> next = NULL;
+    return;
 }
 
-//~ void karten_delete_card_from_deck(struct deck *stapel)
+void karten_delete_card_from_deck(struct deck **stapel)
+{
+    struct deck *tmp;
+    tmp = *stapel;
+    *stapel = tmp -> next;
+    free(tmp);
+    return;
+}
 
 void karten_zeiger(struct card *karte)
 {
@@ -54,4 +67,5 @@ void karten_zeiger(struct card *karte)
         default: printf("E"); break;
     }
     printf("\n");
+    return;
 }
