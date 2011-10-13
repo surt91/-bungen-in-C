@@ -2,30 +2,36 @@
 
 void karten_test()
 {
+    int i;
     struct deck *stapel;
     stapel = (struct deck *) malloc(sizeof(struct deck));
     karten_init_deck(stapel);
-    printf("deck fertig\n");
+    for(i=0;i<200;i++)
+        karten_vertausche_zwei_karten(&stapel, rand()%53+1, rand()%53+1);
     karten_zeiger(&stapel->karte);
-    printf("das war die erste karte\n");
-    karten_zeiger(&stapel->next->karte);
-    karten_delete_card_from_deck(&stapel);
-    karten_zeiger(&stapel->karte);
+    while(stapel->next != NULL)
+    {
+        karten_delete_card_from_deck(&stapel);
+        karten_zeiger(&stapel->karte);
+    }
     return;
 }
 
 void karten_init_deck(struct deck *stapel)
 {
-    int i,j;
+    int i,j, init=1;
     for(i=1; i<5; i++)
         for(j=1; j<14; j++)
         {
+            if(!init)
+            {
+                stapel -> next = (struct deck *) malloc(sizeof(struct deck));
+                stapel = stapel->next;
+            }
             stapel->karte.f = i;
             stapel->karte.w = j;
-            stapel -> next = (struct deck *) malloc(sizeof(struct deck));
-            stapel = stapel->next;
+            init = 0;
         }
-    // TODO: Achtung leere karte am ende
     stapel -> next = NULL;
     return;
 }
@@ -36,6 +42,43 @@ void karten_delete_card_from_deck(struct deck **stapel)
     tmp = *stapel;
     *stapel = tmp -> next;
     free(tmp);
+    return;
+}
+
+void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
+{
+    int i=1, t;
+    struct deck *tmp, *temp;
+    tmp = *stapel;
+    temp = *stapel;
+    struct card ctmp;
+
+    if(eins==zwei)
+        return;
+    if(zwei<eins)
+    {
+        t=eins;
+        eins=zwei;
+        zwei=t;
+    }
+
+    do
+    {
+        if(i==eins)
+        {
+            tmp = temp;
+            ctmp = temp->karte;
+        }
+        if(i==zwei)
+        {
+            tmp->karte = temp->karte;
+            temp->karte = ctmp;
+            break;
+        }
+        temp = temp->next;
+        i++;
+    } while(temp != NULL);
+    temp = *stapel;
     return;
 }
 

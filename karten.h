@@ -19,6 +19,7 @@ void karten_zeiger(struct card *hand);
 
 void karten_init_deck(struct deck *stapel);
 void karten_delete_card_from_deck(struct deck **stapel);
+void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei);
 
 void karten_test();
 
