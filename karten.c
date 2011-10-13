@@ -5,44 +5,47 @@ void karten_test()
     int i;
     struct deck *stapel;
     stapel = (struct deck *) malloc(sizeof(struct deck));
-    karten_init_deck(stapel);
+    karten_init_deck(stapel, 1);
+    // Mischen
     for(i=0;i<200;i++)
         karten_vertausche_zwei_karten(&stapel, rand()%53+1, rand()%53+1);
-    karten_zeiger(&stapel->karte);
     while(stapel->next != NULL)
     {
-        karten_delete_card_from_deck(&stapel);
-        karten_zeiger(&stapel->karte);
+        karten_zeiger(karten_pop(&stapel));
     }
+    // TODO: Karten an Spieler ausgeben, und zählen (Blackjack Logik)
     return;
 }
 
-void karten_init_deck(struct deck *stapel)
+void karten_init_deck(struct deck *stapel, int anz)
 {
-    int i,j, init=1;
-    for(i=1; i<5; i++)
-        for(j=1; j<14; j++)
-        {
-            if(!init)
+    int i,j,n, init=1;
+    for(n=0; n<anz; n++)
+        for(i=1; i<5; i++)
+            for(j=1; j<14; j++)
             {
-                stapel -> next = (struct deck *) malloc(sizeof(struct deck));
-                stapel = stapel->next;
+                if(!init)
+                {
+                    stapel -> next = (struct deck *) malloc(sizeof(struct deck));
+                    stapel = stapel->next;
+                }
+                stapel->karte.f = i;
+                stapel->karte.w = j;
+                init = 0;
             }
-            stapel->karte.f = i;
-            stapel->karte.w = j;
-            init = 0;
-        }
     stapel -> next = NULL;
     return;
 }
 
-void karten_delete_card_from_deck(struct deck **stapel)
+struct card karten_pop(struct deck **stapel)
 {
+    struct card ctmp;
     struct deck *tmp;
     tmp = *stapel;
     *stapel = tmp -> next;
+    ctmp = tmp->karte;
     free(tmp);
-    return;
+    return ctmp;
 }
 
 void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
@@ -82,9 +85,9 @@ void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
     return;
 }
 
-void karten_zeiger(struct card *karte)
+void karten_zeiger(struct card karte)
 {
-    switch (karte->f)
+    switch (karte.f)
     {
         case herz:  printf("♥"); break;
         case pik:   printf("♠"); break;
@@ -92,7 +95,7 @@ void karten_zeiger(struct card *karte)
         case kreuz: printf("♣"); break;
         default:    printf("E"); break;
     }
-    switch (karte->w)
+    switch (karte.w)
     {
         case ass: printf(" A"); break;
         case 2: printf(" 2"); break;

@@ -40,7 +40,7 @@ void karten_hand_zeiger(struct card *hand)
 {
     int i;
     for(i=0;i<5;i++)
-        karten_zeiger(&hand[i]);
+        karten_zeiger(hand[i]);
     return;
 }
 
