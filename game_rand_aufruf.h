@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-void aufg_GAME_1();
+//~ void aufg_GAME_1();
 void aufg_GAME_2();
 void aufg_GAME_3();
 void aufg_GAME_4();

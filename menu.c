@@ -85,7 +85,8 @@ int menu(int argc, char **argv)
             switch (aufgnr)
             {
                 case 1:
-                    aufg_GAME_1();
+                    //~ aufg_GAME_1();
+                    roulette_start();
                     break;
                 case 2:
                     aufg_GAME_2();
