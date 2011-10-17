@@ -24,14 +24,14 @@ void aufg_GAME_3()
             {
                 royal_flush++;
                 runden++;
-                printf("#%4d: Royal Flush!", runden);
+                printf("\n#%4d: Royal Flush!\n", runden);
                 karten_hand_zeiger(hand);
             }
             else
             {
                 straight++;
                 runden++;
-                printf("#%4d: Straße!", runden);
+                printf("\n#%4d: Straße!\n", runden);
                 karten_hand_zeiger(hand);
             }
         }
@@ -41,14 +41,14 @@ void aufg_GAME_3()
             {
                 straight_flush++;
                 runden++;
-                printf("#%4d: Straight Flush!", runden);
+                printf("\n#%4d: Straight Flush!\n", runden);
                 karten_hand_zeiger(hand);
             }
             else
             {
                 straight++;
                 runden++;
-                printf("#%4d: Straße!", runden);
+                printf("\n#%4d: Straße!\n", runden);
                 karten_hand_zeiger(hand);
             }
         }
@@ -56,14 +56,14 @@ void aufg_GAME_3()
         {
             flush++;
             runden++;
-            printf("#%4d: Flush!", runden);
+            printf("\n#%4d: Flush!\n", runden);
             karten_hand_zeiger(hand);
         }
         else if(is_fullhouse(hand))
         {
             fullhouse++;
             runden++;
-            printf("#%4d: Fullhouse!", runden);
+            printf("\n#%4d: Fullhouse!\n", runden);
             karten_hand_zeiger(hand);
         }
         else
@@ -71,7 +71,7 @@ void aufg_GAME_3()
             runden++;
         }
     }
-    printf("In %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
+    printf("\nIn %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
     return;
 }
 void aufg_GAME_4()
