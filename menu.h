@@ -12,6 +12,7 @@
 #include "roulette.h"
 #include "poker.h"
 #include "blackjack.h"
+#include "benchmark.h"
 
 //~ int menu(int argc, char **argv);
 

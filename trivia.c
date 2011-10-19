@@ -199,19 +199,3 @@ char* dec2base(unsigned number, unsigned base, char *out)
 	}
 	return out;
 }
-
-int benchmark_save(double ma, double pi, double pr)
-{
-	char* filename = "bench.stat";
-	FILE *datei;
-	datei = fopen (filename, "w");
-	if (datei == NULL)
-	{
-		printf("Fehler beim Öffnen der Datei!\n");
-		return 1;
-	}
-	fprintf (datei, "%f,%f,%f\n", ma, pi, pr);
-	fclose (datei);
-	printf("Benchmark Ergebnisse erfolgreich nach %s geschrieben\n", filename);
-	return 0;
-}

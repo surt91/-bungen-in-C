@@ -194,7 +194,8 @@ int menu(int argc, char **argv)
                     aufg_TRIV_13();
                     break;
                 case 15:
-                    aufg_TRIV_15();
+                    //~ aufg_TRIV_15();
+                    benchmark_start();
                     break;
             }
             break;
