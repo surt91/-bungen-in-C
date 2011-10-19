@@ -1,8 +1,12 @@
 #ifndef TRIVIAAUFRUF_H
 #define TRIVIAAUFRUF_H
 
-#include "main.h"
+//~ #include "main.h"
 #include "trivia.h"
+
+#include "mat.h"
+#include "game_rand.h"
+#include "prim.h"
 
 void aufg_TRIV_1();
 void aufg_TRIV_2();

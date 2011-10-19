@@ -1,79 +1,79 @@
 #include "game_rand_aufruf.h"
 
-void aufg_GAME_2()
-{
-    struct card hand[5];
-    karten_geber(hand);
-    karten_sortierer(hand);
-    karten_hand_zeiger(hand);
-    return;
-}
+//~ void aufg_GAME_2()
+//~ {
+    //~ struct card hand[5];
+    //~ karten_geber(hand);
+    //~ karten_sortierer(hand);
+    //~ karten_hand_zeiger(hand);
+    //~ return;
+//~ }
 
-void aufg_GAME_3()
-{
-    struct card hand[5];
-    int i, flush=0, fullhouse=0, straight=0, straight_flush=0, royal_flush=0, runden=0, limit;
-    printf("Wieviele Runden sollen gegeben werden?\n");
-    scanf("%d", &limit);
-    for(i=0;i<limit;i++)
-    {
-        karten_geber(hand);
-        if(is_straight(hand)==2)
-        {
-            if(is_flush(hand))
-            {
-                royal_flush++;
-                runden++;
-                printf("\n#%4d: Royal Flush!\n", runden);
-                karten_hand_zeiger(hand);
-            }
-            else
-            {
-                straight++;
-                runden++;
-                printf("\n#%4d: Straße!\n", runden);
-                karten_hand_zeiger(hand);
-            }
-        }
-        else if(is_straight(hand))
-        {
-            if(is_flush(hand))
-            {
-                straight_flush++;
-                runden++;
-                printf("\n#%4d: Straight Flush!\n", runden);
-                karten_hand_zeiger(hand);
-            }
-            else
-            {
-                straight++;
-                runden++;
-                printf("\n#%4d: Straße!\n", runden);
-                karten_hand_zeiger(hand);
-            }
-        }
-        else if(is_flush(hand))
-        {
-            flush++;
-            runden++;
-            printf("\n#%4d: Flush!\n", runden);
-            karten_hand_zeiger(hand);
-        }
-        else if(is_fullhouse(hand))
-        {
-            fullhouse++;
-            runden++;
-            printf("\n#%4d: Fullhouse!\n", runden);
-            karten_hand_zeiger(hand);
-        }
-        else
-        {
-            runden++;
-        }
-    }
-    printf("\nIn %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
-    return;
-}
+//~ void aufg_GAME_3()
+//~ {
+    //~ struct card hand[5];
+    //~ int i, flush=0, fullhouse=0, straight=0, straight_flush=0, royal_flush=0, runden=0, limit;
+    //~ printf("Wieviele Runden sollen gegeben werden?\n");
+    //~ scanf("%d", &limit);
+    //~ for(i=0;i<limit;i++)
+    //~ {
+        //~ karten_geber(hand);
+        //~ if(is_straight(hand)==2)
+        //~ {
+            //~ if(is_flush(hand))
+            //~ {
+                //~ royal_flush++;
+                //~ runden++;
+                //~ printf("\n#%4d: Royal Flush!\n", runden);
+                //~ karten_hand_zeiger(hand);
+            //~ }
+            //~ else
+            //~ {
+                //~ straight++;
+                //~ runden++;
+                //~ printf("\n#%4d: Straße!\n", runden);
+                //~ karten_hand_zeiger(hand);
+            //~ }
+        //~ }
+        //~ else if(is_straight(hand))
+        //~ {
+            //~ if(is_flush(hand))
+            //~ {
+                //~ straight_flush++;
+                //~ runden++;
+                //~ printf("\n#%4d: Straight Flush!\n", runden);
+                //~ karten_hand_zeiger(hand);
+            //~ }
+            //~ else
+            //~ {
+                //~ straight++;
+                //~ runden++;
+                //~ printf("\n#%4d: Straße!\n", runden);
+                //~ karten_hand_zeiger(hand);
+            //~ }
+        //~ }
+        //~ else if(is_flush(hand))
+        //~ {
+            //~ flush++;
+            //~ runden++;
+            //~ printf("\n#%4d: Flush!\n", runden);
+            //~ karten_hand_zeiger(hand);
+        //~ }
+        //~ else if(is_fullhouse(hand))
+        //~ {
+            //~ fullhouse++;
+            //~ runden++;
+            //~ printf("\n#%4d: Fullhouse!\n", runden);
+            //~ karten_hand_zeiger(hand);
+        //~ }
+        //~ else
+        //~ {
+            //~ runden++;
+        //~ }
+    //~ }
+    //~ printf("\nIn %d Runden wurden\n %4d Straßen\n %4d Flushs\n %4d Fullhouses\n %4d Straight Flush\n %4d Royal Flush\nverteilt\n", runden, straight, flush, fullhouse, straight_flush, royal_flush);
+    //~ return;
+//~ }
 void aufg_GAME_4()
 {
     int zahl=0, kopf=0, k;

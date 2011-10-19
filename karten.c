@@ -1,30 +1,5 @@
 #include "karten.h"
 
-void karten_test()
-{
-    int i;
-    struct deck *stapel, *spieler, *bank;
-    stapel = (struct deck *) malloc(sizeof(struct deck));
-    karten_init_deck(stapel, 1);
-    // Mischen
-    for(i=0;i<200;i++)
-        karten_vertausche_zwei_karten(&stapel, rand()%53+1, rand()%53+1);
-
-    // TODO: Karten an Spieler ausgeben, und zählen (Blackjack Logik)
-    spieler = NULL;
-    bank = NULL;
-
-    karten_gebe_karte(&stapel, &spieler);
-    karten_gebe_karte(&stapel, &spieler);
-    //~ karten_gebe_karte(&stapel, &spieler);
-
-    printf("Deine Hand:\n");
-    karten_show(spieler);
-    printf("Punkte: %d\n", karten_summiere_augen(spieler));
-    //~ karten_show(stapel);
-    return;
-}
-
 void karten_gebe_karte(struct deck **stapel, struct deck **hand)
 {
     struct deck *tmp, *tmp2;
@@ -49,31 +24,6 @@ void karten_gebe_karte(struct deck **stapel, struct deck **hand)
         *hand = tmp;
     }
     *stapel = tmp2;
-}
-
-int karten_summiere_augen(struct deck *hand)
-{
-    int summe=0, n_ass=0;
-    enum wert now;
-    while(hand != NULL)
-    {
-        now = hand -> karte.w;
-        if(now == konig || now == dame || now == bube)
-            summe += 10;
-        else if(now == ass)
-            n_ass++;
-        else
-            summe += now;
-        hand = hand -> next;
-    }
-    if(n_ass)
-    {
-        if(summe < 11)
-            summe += 11;
-        else
-            summe += 1;
-    }
-    return summe;
 }
 
 void karten_init_deck(struct deck *stapel, int anz)
@@ -183,4 +133,28 @@ void karten_zeiger(struct card karte)
     }
     printf("\n");
     return;
+}
+
+// sortiert aufsteigend, (ass, zwei, drei, ...)
+struct card *karten_sortierer(struct card *hand)
+{
+    int i, j, temp, n=0;
+    // Bubble Sort; effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
+    // n ist ein Zähler, der feststellt, ob in der Sortierschleife etwas umgestellt wurde, falls nicht, bricht die Schleife ab
+    // marginale Geschwindigkeitsvorteile. durch overhead eventuell sogar Nachteile
+	for(i=0;i<4;i++)
+	{
+        for(j=4;i<j;j--)
+            if(hand[j-1].w>hand[j].w)
+            {
+                temp = hand[j-1].w;
+                hand[j-1].w = hand[j].w;
+                hand[j].w = temp;
+                n++;
+            }
+            if(n==0)
+				break;
+			n=0;
+    }
+    return(hand);
 }

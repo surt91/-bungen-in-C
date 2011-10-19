@@ -1,48 +1,48 @@
 #include "game_rand.h"
 
 // gibt eine Pokerhand
-struct card *karten_geber(struct card *hand)
-{
-    int karte[5], i;
-//    srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
-    for(i=0;i<5;i++)
-    {
-        do
-        {
-        karte[i]=((rand()%52)+1);
-        } while((karte[i]==karte[0] && i!=0 ) || (karte[i]==karte[1] && i!=1) || (karte[i]==karte[2] && i!=2) || (karte[i]==karte[3] && i!=3) || (karte[i]==karte[4] && i!=4));
-
-        if(karte[i] <= 13)
-        {
-            hand[i].f=herz;
-            hand[i].w=karte[i];
-        }
-        else if(karte[i] <= 26)
-        {
-            hand[i].f=pik;
-            hand[i].w=karte[i]-13;
-        }
-        else if(karte[i] <= 39)
-        {
-            hand[i].f=karo;
-            hand[i].w=karte[i]-26;
-        }
-        else if(karte[i] <= 52)
-        {
-            hand[i].f=kreuz;
-            hand[i].w=karte[i]-39;
-        }
-    }
-    return hand;
-}
-// Zeigt eine Pokerhand an
-void karten_hand_zeiger(struct card *hand)
-{
-    int i;
-    for(i=0;i<5;i++)
-        karten_zeiger(hand[i]);
-    return;
-}
+//~ struct card *karten_geber(struct card *hand)
+//~ {
+    //~ int karte[5], i;
+//~ //    srand( (unsigned) time(NULL) ) ; //schon am Anfang von main()
+    //~ for(i=0;i<5;i++)
+    //~ {
+        //~ do
+        //~ {
+        //~ karte[i]=((rand()%52)+1);
+        //~ } while((karte[i]==karte[0] && i!=0 ) || (karte[i]==karte[1] && i!=1) || (karte[i]==karte[2] && i!=2) || (karte[i]==karte[3] && i!=3) || (karte[i]==karte[4] && i!=4));
+//~
+        //~ if(karte[i] <= 13)
+        //~ {
+            //~ hand[i].f=herz;
+            //~ hand[i].w=karte[i];
+        //~ }
+        //~ else if(karte[i] <= 26)
+        //~ {
+            //~ hand[i].f=pik;
+            //~ hand[i].w=karte[i]-13;
+        //~ }
+        //~ else if(karte[i] <= 39)
+        //~ {
+            //~ hand[i].f=karo;
+            //~ hand[i].w=karte[i]-26;
+        //~ }
+        //~ else if(karte[i] <= 52)
+        //~ {
+            //~ hand[i].f=kreuz;
+            //~ hand[i].w=karte[i]-39;
+        //~ }
+    //~ }
+    //~ return hand;
+//~ }
+//~ // Zeigt eine Pokerhand an
+//~ void karten_hand_zeiger(struct card *hand)
+//~ {
+    //~ int i;
+    //~ for(i=0;i<5;i++)
+        //~ karten_zeiger(hand[i]);
+    //~ return;
+//~ }
 
 //~ void karten_zeiger(struct card *hand)
 //~ {
@@ -75,84 +75,8 @@ void karten_hand_zeiger(struct card *hand)
         //~ printf("\n");
     //~ }
 //~ }
-// überprüft, ob ein Fullhouse auf der Hand ist
-int is_fullhouse(struct card *hand)
-{
-    int i,n=1,l,m=1;
-    for(i=1;i<5;i++)
-    {
-        if(hand[0].w==hand[i].w)
-        {
-            n++;
-        }
-    }
-    if( (n==2) || (n==3) )
-    {
-        i=1;
-        while(hand[0].w==hand[i].w)
-        {
-            i++;
-        }
-        for(l=i+1;l<5;l++)
-        {
-            if(hand[i].w==hand[l].w)
-            {
-                m++;
-            }
-        }
-    }
-    if( ( (m==2) && (n==3) ) || ( (m==3) && (n==2) ) )
-    {
-        return 1;
-    }
-    return 0;
-}
-// überprüft, ob ein Flush auf der Hand ist
-int is_flush(struct card *hand)
-{
-    int i;
-    for(i=1;i<5;i++)
-        if(hand[0].f!=hand[i].f)
-            return 0;
-    return 1;
-}
-// überprüft, ob eine Straße auf der Hand ist
-int is_straight(struct card *hand)
-{
-	int i;
-    karten_sortierer(hand);
-    if(hand[1].w==10 && hand[2].w==bube && hand[3].w==dame && hand[4].w==konig && hand[0].w==ass)
-        return 2;
 
-    for(i=0;i<4;i++)
-        if(hand[i].w+1!=hand[i+1].w)
-            return 0;
 
-    return 1;
-}
-// sortiert eine Pokerhand aufsteigend, (ass, zwei, drei...)
-struct card *karten_sortierer(struct card *hand)
-{
-    int i, j, temp, n=0;
-    // Bubble Sort; effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
-    // n ist ein Zähler, der feststellt, ob in der Sortierschleife etwas umgestellt wurde, falls nicht, bricht die Schleife ab
-    // marginale Geschwindigkeitsvorteile. durch overhead eventuell sogar Nachteile
-	for(i=0;i<4;i++)
-	{
-        for(j=4;i<j;j--)
-            if(hand[j-1].w>hand[j].w)
-            {
-                temp = hand[j-1].w;
-                hand[j-1].w = hand[j].w;
-                hand[j].w = temp;
-                n++;
-            }
-            if(n==0)
-				break;
-			n=0;
-    }
-    return(hand);
-}
 
 // für qsort
 //int cmp_integer(const void *wert1, const void *wert2) {

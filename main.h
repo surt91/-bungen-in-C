@@ -7,22 +7,17 @@
 #include <stdint.h>
 #include <math.h>
 #include <time.h>
-#include "menu.h"
 #include "help.h"
-#include "mat.h"
-#include "mat_aufruf.h"
-#include "trivia.h"
-#include "trivia_aufruf.h"
-#include "game_rand.h"
-#include "game_rand_aufruf.h"
-#include "prim.h"
-#include "prim_aufruf.h"
-#include "conway.h"
-#include "snake.h"
-#include "roulette.h"
-#include "karten.h"
+//~ #include "mat.h"
+//~ #include "trivia.h"
+//~ #include "game_rand.h"
+//~ #include "prim.h"
+//~ #include "karten.h"
+
 //~ #include "polynom.h"
 //~ #include "polynom_aufruf.h"
+
+int menu(int argc, char **argv);
 
 #define V_MAJOR 0
 #define V_MINOR 1

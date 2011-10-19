@@ -88,12 +88,12 @@ int menu(int argc, char **argv)
                     //~ aufg_GAME_1();
                     roulette_start();
                     break;
-                case 2:
-                    aufg_GAME_2();
-                    break;
-                case 3:
-                    aufg_GAME_3();
-                    break;
+                //~ case 2:
+                    //~ aufg_GAME_2();
+                    //~ break;
+                //~ case 3:
+                    //~ aufg_GAME_3();
+                    //~ break;
                 case 4:
                     aufg_GAME_4();
                     break;
@@ -107,7 +107,7 @@ int menu(int argc, char **argv)
                     snake_menu();
                     break;
                 case 8:
-                    karten_test();
+                    bj_test();
                     break;
             }
             break;
