@@ -14,7 +14,7 @@ TARGET	= Ubung
 LINK	= gcc
 CC		= gcc
 CFLAGS	= -march=native -O2 -pipe -fomit-frame-pointer -funroll-all-loops -ffast-math -finline-functions
-LFLAGS	= -lm -lcairo -lncurses
+LFLAGS	= -lm -lcairo -lncursesw
 #~ WARNLEVEL= -Wall -pedantic
 WARNLEVEL= -Wall
 

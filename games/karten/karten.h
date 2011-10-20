@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <ncurses.h>
+#include <locale.h>
+
 struct card
 {
     enum farbe {herz = 1, pik, karo, kreuz} f;

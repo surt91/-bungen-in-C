@@ -5,32 +5,21 @@ int is_fullhouse(struct card *hand)
 {
     int i,n=1,l,m=1;
     for(i=1;i<5;i++)
-    {
         if(hand[0].w==hand[i].w)
-        {
             n++;
-        }
-    }
     if( (n==2) || (n==3) )
     {
         i=1;
         while(hand[0].w==hand[i].w)
-        {
             i++;
-        }
         for(l=i+1;l<5;l++)
-        {
             if(hand[i].w==hand[l].w)
-            {
                 m++;
-            }
-        }
     }
     if( ( (m==2) && (n==3) ) || ( (m==3) && (n==2) ) )
-    {
         return 1;
-    }
-    return 0;
+    else
+        return 0;
 }
 // überprüft, ob ein Flush auf der Hand ist
 int is_flush(struct card *hand)

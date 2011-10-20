@@ -106,32 +106,35 @@ void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
 
 void karten_zeiger(struct card karte)
 {
+    int x, y;
     switch (karte.f)
     {
-        case herz:  printf("♥"); break;
-        case pik:   printf("♠"); break;
-        case karo:  printf("♦"); break;
-        case kreuz: printf("♣"); break;
-        default:    printf("E"); break;
+        case herz:  printw("♥"); break;
+        case pik:   printw("♠"); break;
+        case karo:  printw("♦"); break;
+        case kreuz: printw("♣"); break;
+        default:    printw("E"); break;
     }
     switch (karte.w)
     {
-        case ass: printf(" A"); break;
-        case 2: printf(" 2"); break;
-        case 3: printf(" 3"); break;
-        case 4: printf(" 4"); break;
-        case 5: printf(" 5"); break;
-        case 6: printf(" 6"); break;
-        case 7: printf(" 7"); break;
-        case 8: printf(" 8"); break;
-        case 9: printf(" 9"); break;
-        case 10: printf("10"); break;
-        case bube: printf(" J"); break;
-        case dame: printf(" Q"); break;
-        case konig: printf(" K"); break;
-        default: printf("E"); break;
+        case ass: printw(" A"); break;
+        case 2: printw(" 2"); break;
+        case 3: printw(" 3"); break;
+        case 4: printw(" 4"); break;
+        case 5: printw(" 5"); break;
+        case 6: printw(" 6"); break;
+        case 7: printw(" 7"); break;
+        case 8: printw(" 8"); break;
+        case 9: printw(" 9"); break;
+        case 10: printw("10"); break;
+        case bube: printw(" J"); break;
+        case dame: printw(" Q"); break;
+        case konig: printw(" K"); break;
+        default: printw("E"); break;
     }
-    printf("\n");
+    getyx(stdscr, y, x);
+    move(y+1,x-3);
+    refresh();
     return;
 }
 
@@ -142,8 +145,8 @@ struct card *karten_sortierer(struct card *hand)
     // Bubble Sort; effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
     // n ist ein Zähler, der feststellt, ob in der Sortierschleife etwas umgestellt wurde, falls nicht, bricht die Schleife ab
     // marginale Geschwindigkeitsvorteile. durch overhead eventuell sogar Nachteile
-	for(i=0;i<4;i++)
-	{
+    for(i=0;i<4;i++)
+    {
         for(j=4;i<j;j--)
             if(hand[j-1].w>hand[j].w)
             {
@@ -153,8 +156,13 @@ struct card *karten_sortierer(struct card *hand)
                 n++;
             }
             if(n==0)
-				break;
-			n=0;
+                break;
+            n=0;
     }
     return(hand);
+}
+
+void karten_delete_stapel(struct card *stapel)
+{
+    // TODO: Diese Funktion
 }
