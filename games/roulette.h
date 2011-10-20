@@ -1,7 +1,9 @@
 #ifndef ROULETTE_H
 #define ROULETTE_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define GERADE 37
 #define UNGERADE 38

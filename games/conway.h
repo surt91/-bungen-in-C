@@ -1,7 +1,8 @@
 #ifndef CONWAY_H
 #define CONWAY_H
 
-#include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
 #include <cairo/cairo.h>
 
 struct conway_map

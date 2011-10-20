@@ -1,7 +1,6 @@
 #ifndef POLYNOM_AUFRUF_H
 #define POLYNOM_AUFRUF_H
 
-//~ #include "main.h"
 #include "polynom.h"
 
 void aufg_POLY_1();

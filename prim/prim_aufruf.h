@@ -1,7 +1,6 @@
 #ifndef PRIM_AUFRUF_H
 #define PRIM_AUFRUF_H
 
-//~ #include "main.h"
 #include "prim.h"
 
 void aufg_PRIM_1();

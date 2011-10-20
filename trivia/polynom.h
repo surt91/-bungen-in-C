@@ -1,7 +1,7 @@
 #ifndef POLYNOM_H
 #define POLYNOM_H
 
-#include "main.h"
+#include <stdio.h>
 
 //7.8
 int *polynom_eingabe(int *polynom, int *grad);

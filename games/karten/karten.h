@@ -1,7 +1,8 @@
 #ifndef KARTEN_H
 #define KARTEN_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 struct card
 {

@@ -1,4 +1,4 @@
-#include "game_rand_aufruf.h"
+#include "random_aufruf.h"
 
 //~ void aufg_GAME_2()
 //~ {

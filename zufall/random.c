@@ -1,4 +1,4 @@
-#include "game_rand.h"
+#include "random.h"
 
 // gibt eine Pokerhand
 //~ struct card *karten_geber(struct card *hand)
@@ -143,26 +143,17 @@ int monteCarloGeburtstagsProblem(k)
 // Monte Carlo Pi
 double pi(int versuche)
 {
-	int i;
-	double x,y, betrag, treffer=0;
-	for(i=0;i<versuche;i++)
-	{
-		x = rand();
-		x /= RAND_MAX;
-		y = rand();
-		y /= RAND_MAX;
-		betrag = x*x + y*y;
-		if(betrag<=1)
-			treffer++;
-	}
-	return(treffer/versuche*4);
-}
-
-double pi_benchmark(double *v)
-{
-	int begin,end;
-	begin = clock();
-	*v=pi(100000000);
-	end = clock();
-	return((double)(end-begin)/CLOCKS_PER_SEC);
+    int i;
+    double x,y, betrag, treffer=0;
+    for(i=0;i<versuche;i++)
+    {
+        x = rand();
+        x /= RAND_MAX;
+        y = rand();
+        y /= RAND_MAX;
+        betrag = x*x + y*y;
+        if(betrag<=1)
+            treffer++;
+    }
+    return(treffer/versuche*4);
 }

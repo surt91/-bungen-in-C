@@ -1,7 +1,8 @@
 #ifndef TRIVIA_H
 #define TRIVIA_H
 
-#include "main.h"
+#include <stdio.h>
+#include <math.h>
 
 //4.13
 int aufsummieren(int n);

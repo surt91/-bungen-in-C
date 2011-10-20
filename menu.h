@@ -3,16 +3,16 @@
 
 #include "main.h"
 
-#include "mat_aufruf.h"
-#include "trivia_aufruf.h"
-#include "game_rand_aufruf.h"
-#include "prim_aufruf.h"
-#include "conway.h"
-#include "snake.h"
-#include "roulette.h"
-#include "poker.h"
-#include "blackjack.h"
-#include "benchmark.h"
+#include "lina/mat_aufruf.h"
+#include "trivia/trivia_aufruf.h"
+#include "zufall/random_aufruf.h"
+#include "prim/prim_aufruf.h"
+#include "games/conway.h"
+#include "games/snake.h"
+#include "games/roulette.h"
+#include "games/karten/poker.h"
+#include "games/karten/blackjack.h"
+#include "trivia/benchmark.h"
 
 //~ int menu(int argc, char **argv);
 

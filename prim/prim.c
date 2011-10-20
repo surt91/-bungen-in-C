@@ -27,11 +27,11 @@ int power(int x,int n)
     int i;
     long long y=x;
     if(n==0)
-		return 1;
-	if(n==1)
-		return x;
-	if(n<=0)
-		return -1;
+        return 1;
+    if(n==1)
+        return x;
+    if(n<=0)
+        return -1;
     for(i=2;i<=n; i++)
     {
         y=x*y;
@@ -70,7 +70,7 @@ int *fibonacci_array(int n, int *fibo_array)
     fibo_array[2]=1;
     for(i=3;i<=n;i++)
     {
-		fibo_array[i]=fibo_array[i-2]+fibo_array[i-1];
+        fibo_array[i]=fibo_array[i-2]+fibo_array[i-1];
     }
     return fibo_array;
 }
@@ -173,35 +173,16 @@ void prim_ausgabe(unsigned *prim_liste, unsigned anzahl_prim)
 }
 int ist_prim_array(test)
 {
-	short *array=0;
-	unsigned *prim_liste, laenge;
-	if(test<=1)
-		return 0;
-	array = (short *) calloc(test, sizeof(short));
-	primzahl(test, array);
-	prim_liste = prim_array_bereinigen(array, test, &laenge);
-	free(array);
-	if(prim_max(prim_liste, laenge) == test)
-		return 1;
-	else
-		return 0;
-}
-
-double prim_benchmark(unsigned *w)
-{
-	int begin,end;
-
-	//~ unsigned  *prim_liste;
     short *array=0;
-    int max = 100000000;
-    array = (short *) calloc(max, sizeof(short));
-//    printf("test");
-    begin = clock();
-    primzahl(max, array);
-    //~ prim_liste = prim_array_bereinigen(array, max, w);
-    prim_array_bereinigen(array, max, w);
-    end = clock();
+    unsigned *prim_liste, laenge;
+    if(test<=1)
+        return 0;
+    array = (short *) calloc(test, sizeof(short));
+    primzahl(test, array);
+    prim_liste = prim_array_bereinigen(array, test, &laenge);
     free(array);
-
-	return((double)(end-begin)/CLOCKS_PER_SEC);
+    if(prim_max(prim_liste, laenge) == test)
+        return 1;
+    else
+        return 0;
 }

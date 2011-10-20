@@ -1,6 +1,6 @@
-OBJ 	= main.o menu.o help.o mat.o mat_aufruf.o trivia.o trivia_aufruf.o\
-			game_rand.o game_rand_aufruf.o prim.o prim_aufruf.o conway.o\
-			snake.o roulette.o karten.o poker.o blackjack.o benchmark.o
+OBJ 	= main.o menu.o help.o lina/mat.o lina/mat_aufruf.o trivia/trivia.o trivia/trivia_aufruf.o\
+			zufall/random.o zufall/random_aufruf.o prim/prim.o prim/prim_aufruf.o games/conway.o\
+			games/snake.o games/roulette.o games/karten/karten.o games/karten/poker.o games/karten/blackjack.o trivia/benchmark.o
 TARGET	= Ubung
 LINK	= gcc
 CC		= gcc
@@ -11,11 +11,11 @@ WARNLEVEL= -Wall
 
 all: $(TARGET)
 
-%.o: %.c
+%.o: %.c %.h
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJ)
 	$(CC) $(LFLAGS) -o $(TARGET) $(OBJ)
 
 clean:
-	rm *.o $(TARGET)
+	rm -rf $(OBJ) $(TARGET)

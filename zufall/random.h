@@ -1,7 +1,8 @@
 #ifndef GAME_RAND_H
 #define GAME_RAND_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 //6.23
 //~ struct card
@@ -20,6 +21,5 @@ void muenzwurf(int wuerfe, int *kopf, int *zahl);
 int monteCarloGeburtstagsProblem(int k);
 //7.12
 double pi(int versuche);
-double pi_benchmark();
 
 #endif //GAME_RAND_H

@@ -1,7 +1,7 @@
 #ifndef GAME_RAND_AUFRUF_H
 #define GAME_RAND_AUFRUF_H
 
-#include "game_rand.h"
+#include "random.h"
 
 //~ void aufg_GAME_1();
 //~ void aufg_GAME_2();

@@ -1,7 +1,8 @@
 #ifndef POKER_H
 #define POKER_H
 
-#include "main.h"
+#include <stdio.h>
+
 #include "karten.h"
 
 int is_fullhouse(struct card *hand);

@@ -1,7 +1,8 @@
 #ifndef MAT_H
 #define MAT_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define FLOATNULL 0.000004
 
@@ -34,6 +35,5 @@ double matrix_det(struct mat matrix_in);
 struct mat matrix_streichen(struct mat matrix_in, int i, int j);
 struct mat matrix_adjunkte(struct mat matrix_in);
 struct mat matrix_invertieren_adjunkte(struct mat matrix_in);
-double matrix_benchmark();
 
 #endif //MAT_H

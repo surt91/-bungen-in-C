@@ -1,7 +1,9 @@
 #ifndef BLACKJACK_H
 #define BLACKJACK_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "karten.h"
 
 int bj_summiere_augen(struct deck *hand);

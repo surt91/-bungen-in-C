@@ -1,7 +1,6 @@
 #ifndef TRIVIAAUFRUF_H
 #define TRIVIAAUFRUF_H
 
-//~ #include "main.h"
 #include "trivia.h"
 
 void aufg_TRIV_1();

@@ -1,7 +1,6 @@
 #ifndef MATAUFRUF_H
 #define MATAUFRUF_H
 
-//~ #include "main.h"
 #include "mat.h"
 
 void aufg_MAT_1();

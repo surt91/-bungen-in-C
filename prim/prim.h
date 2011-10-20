@@ -1,7 +1,9 @@
 #ifndef PRIM_H
 #define PRIM_H
 
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 //5.2
 int power(int x,int n);
@@ -17,6 +19,5 @@ void prim_ausgabe(unsigned *prim_liste, unsigned anzahl_prim);
 int ist_prim_array(int test);
 //5.14
 void primfaktoren(int zahl);
-double prim_benchmark(unsigned *laenge);
 
 #endif //PRIM_H
