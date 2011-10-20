@@ -81,11 +81,10 @@ void aufg_PRIM_6()
     primzahl(prim_max, prim_array);
     for(i=1;i<=n;i++)
     {
-		if(!prim_array[fibo_array[i]])
-			printf("%d, ", fibo_array[i]);
-	}
-	free(prim_array);
-	free(fibo_array);
+        if(!prim_array[fibo_array[i]])
+            printf("%d, ", fibo_array[i]);
+    }
+    free(prim_array);
+    free(fibo_array);
     printf("sind die Primzahlen unter den ersten %d Fibonacci Zahlen\n",n);
 }
-

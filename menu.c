@@ -7,17 +7,17 @@ int menu(int argc, char **argv)
 
     if(argc != 3)
     {
-		if(argc == 2)
-		{
-			help(atoi(argv[1]));
-		}
-		else
-		{
-			version();
-			help(0);
-			todo();
-		}
-	}
+        if(argc == 2)
+        {
+            help(atoi(argv[1]));
+        }
+        else
+        {
+            version();
+            help(0);
+            todo();
+        }
+    }
     else
     {
         kapitel=atoi(argv[1]);
@@ -28,7 +28,7 @@ int menu(int argc, char **argv)
         case MAT:
             switch (aufgnr)
             {
-				case 1:
+                case 1:
                     aufg_MAT_1();
                     break;
                 case 2:
@@ -79,8 +79,8 @@ int menu(int argc, char **argv)
                 case 17:
                     aufg_MAT_17();
                     break;
-			}
-			break;
+            }
+            break;
         case GAME:
             switch (aufgnr)
             {
@@ -117,9 +117,9 @@ int menu(int argc, char **argv)
                 case 1:
                     aufg_PRIM_1();
                     break;
-				case 2:
-					aufg_PRIM_2();
-					break;
+                case 2:
+                    aufg_PRIM_2();
+                    break;
                 case 3:
                     aufg_PRIM_3();
                     break;
@@ -140,9 +140,9 @@ int menu(int argc, char **argv)
                 //~ case 1:
                     //~ aufg_POLY_1();
                     //~ break;
-				//~ case 2:
-					//~ aufg_POLY_2();
-					//~ break;
+                //~ case 2:
+                    //~ aufg_POLY_2();
+                    //~ break;
                 //~ case 3:
                     //~ aufg_POLY_3();
                     //~ break;
@@ -157,9 +157,9 @@ int menu(int argc, char **argv)
                 case 1:
                     aufg_TRIV_1();
                     break;
-				case 2:
-					aufg_TRIV_2();
-					break;
+                case 2:
+                    aufg_TRIV_2();
+                    break;
                 case 3:
                     aufg_TRIV_3();
                     break;

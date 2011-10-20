@@ -91,7 +91,7 @@ void aufg_TRIV_8()
     scanf("%d", &n);
     printf("%d\n", zyklischer_shift(a,n));
     d2b(zyklischer_shift(a,n),16);
-	printf("\n");
+    printf("\n");
     return;
 }
 
@@ -170,12 +170,12 @@ void aufg_TRIV_11()
 
 void aufg_TRIV_13()
 {
-	unsigned base, number;
-	char out[100];
-	printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 32 bit unsigned)\n");
-	scanf("%ull", &number);
-	printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
-	scanf("%d", &base);
-	printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,dec2base(number,base,out));
-	return;
+    unsigned base, number;
+    char out[100];
+    printf("Welche Zahl soll in einer anderen Basis dargestellt werden? (max. 32 bit unsigned)\n");
+    scanf("%ull", &number);
+    printf("auf welcher Basis soll die Zahl dargestellt werden? (2 - 36)\n");
+    scanf("%d", &base);
+    printf("Basis 10:\t %d\nBasis %d:\t %s\n",number,base,dec2base(number,base,out));
+    return;
 }

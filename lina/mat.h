@@ -7,11 +7,11 @@
 #define FLOATNULL 0.000004
 
 struct mat
-	{
-		double *matrix;
-		int zeilen;
-		int spalten;
-	};
+    {
+        double *matrix;
+        int zeilen;
+        int spalten;
+    };
 void alloc_fail();
 struct mat matrix_eingabe(struct mat matrix_out);
 struct mat matrix_e(int n);

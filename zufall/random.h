@@ -7,8 +7,8 @@
 //6.23
 //~ struct card
 //~ {
-	//~ enum farbe {herz = 1, pik, karo, kreuz} f;
-	//~ enum wert {ass = 1, zwei, drei, vier, funf, sechs, sieben, acht, neun, zehn, bube, dame, konig} w;
+    //~ enum farbe {herz = 1, pik, karo, kreuz} f;
+    //~ enum wert {ass = 1, zwei, drei, vier, funf, sechs, sieben, acht, neun, zehn, bube, dame, konig} w;
 //~ };
 //~ struct card *karten_geber(struct card *hand);
 //~ void karten_zeiger(struct card *hand);

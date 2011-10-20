@@ -25,7 +25,7 @@ void summe_g_ug(int n, int *sum_g, int *sum_ug)
 {
     int i;
     for(i=0; i<n; *sum_ug+=2*i+1 , *sum_g+=2*(i+1) , i++)
-		;
+        ;
     return;
 }
 
@@ -120,11 +120,11 @@ int max4(x,y,z,w)
 }
 int max2(int x,int y)
 {
-	return( (x>y) ? x : y );
+    return( (x>y) ? x : y );
 }
 int min2(int x,int y)
 {
-	return( (x<y) ? x : y );
+    return( (x<y) ? x : y );
 }
 
 // verpackt ein dd.mm.yy Datum in ein short
@@ -176,26 +176,26 @@ void datum_entpacker(short gepackt, int *tag, int *monat, int *jahr)
 
 char* dec2base(unsigned number, unsigned base, char *out)
 {
-	static const char digit[36] = {"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
-	char tmp[256];
-	int i=0,n=0;
-	if(base > 36)
-	{
-		printf("Bitte wähle eine Basis kleiner gleich 36");
-		return NULL;
-	}
-	do {
-		tmp[i] = digit[number % base];
-		number /= base;
-		i++;
-	} while(number > 0);
-	//~ out = (char *) calloc(i+1, sizeof(char));
-	i--;
-	while(i>=0)
-	{
-		out[n]=tmp[i];
-		n++;
-		i--;
-	}
-	return out;
+    static const char digit[36] = {"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+    char tmp[256];
+    int i=0,n=0;
+    if(base > 36)
+    {
+        printf("Bitte wähle eine Basis kleiner gleich 36");
+        return NULL;
+    }
+    do {
+        tmp[i] = digit[number % base];
+        number /= base;
+        i++;
+    } while(number > 0);
+    //~ out = (char *) calloc(i+1, sizeof(char));
+    i--;
+    while(i>=0)
+    {
+        out[n]=tmp[i];
+        n++;
+        i--;
+    }
+    return out;
 }

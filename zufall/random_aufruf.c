@@ -95,10 +95,10 @@ void aufg_GAME_5()
 }
 void aufg_GAME_6()
 {
-	int versuche;
-	printf("Hier ermitteln wir Pi, indem wir Dartpfeile auf eine Kreisscheibe werfen. Weil wir nicht gut sind im Dart, treffen wir gleichverteilt. Anhand der Treffer können wir dann Pi ermitteln.\n");
-	printf("Wieviele Dartpfeile sollen geworfen werden?\n");
-	scanf("%d", &versuche);
-	printf("Mit %d Dartpfeilen haben wir Pi als %.9f ermittelt:\n", versuche, pi(versuche));
-	return;
+    int versuche;
+    printf("Hier ermitteln wir Pi, indem wir Dartpfeile auf eine Kreisscheibe werfen. Weil wir nicht gut sind im Dart, treffen wir gleichverteilt. Anhand der Treffer können wir dann Pi ermitteln.\n");
+    printf("Wieviele Dartpfeile sollen geworfen werden?\n");
+    scanf("%d", &versuche);
+    printf("Mit %d Dartpfeilen haben wir Pi als %.9f ermittelt:\n", versuche, pi(versuche));
+    return;
 }
