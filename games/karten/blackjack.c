@@ -1,8 +1,8 @@
 #include "blackjack.h"
 
-void bj_test()
+void blackjack_start()
 {
-    int i, tmpS, tmpB, status, x, y;
+    int i, tmpS, tmpB, status, x, y, konto = 100, einsatz = 0, tmp, runde = 0;
     char yn;
     struct deck *stapel, *spieler, *bank;
 
@@ -13,31 +13,64 @@ void bj_test()
     echo();
     keypad(stdscr, TRUE);
 
+    hs_highscore_init(BLACKJACK_HIGHSCORE_FILENAME);
+
     stapel = (struct deck *) malloc(sizeof(struct deck));
     karten_init_deck(stapel, 1);
     // Mischen
     for(i=0;i<200;i++)
         karten_vertausche_zwei_karten(&stapel, rand()%53+1, rand()%53+1);
 
-    // TODO: Wetteinsätze
-
-    status = 0;
-
-    spieler = NULL;
-    bank    = NULL;
-
-    karten_gebe_karte(&stapel, &spieler);
-    karten_gebe_karte(&stapel, &bank);
-    karten_gebe_karte(&stapel, &spieler);
-
-    if(bj_summiere_augen(spieler) == 21)
+    while(1)
     {
-        printw("Blackjack! Du gewinnst.\n");
-        status = 2;
-    }
-    if(!status)
-        while(1)
+        einsatz = 0;
+        mvprintw(1, 0, "Konto   % 5d", konto);
+        mvprintw(2, 0, "Einsatz % 5d", einsatz);
+        mvprintw(3, 0, "Runde   % 5d", ++runde);
+
+        do
         {
+            mvprintw(15, 0, "Wieviel setzt du? ");
+            move(16,0);
+            scanw("%d", &tmp);
+            if(tmp>konto)
+            {
+                mvprintw(17, 0,"Soviel Geld hast du nicht!");
+                getch();
+            }
+            mvprintw(17, 0,"                          ");
+            move(16,0);
+        } while(tmp > konto);
+        mvprintw(15, 0, "                 ");
+        mvprintw(16, 0, "                 ");
+        einsatz = tmp;
+        konto -=einsatz;
+        mvprintw(1, 0, "Konto   % 5d", konto);
+        mvprintw(2, 0, "Einsatz % 5d", einsatz);
+        refresh();
+
+        status = BJ_HIT;
+
+        spieler = NULL;
+        bank    = NULL;
+
+        karten_gebe_karte(&stapel, &spieler);
+        karten_gebe_karte(&stapel, &bank);
+        karten_gebe_karte(&stapel, &spieler);
+
+        if(bj_summiere_augen(spieler) == 21)
+        {
+            mvprintw(15, 0,"Blackjack! Du gewinnst %d€.", 3*einsatz);
+            konto += 3*einsatz;
+            karten_show(spieler);
+            status = BJ_BLACKJACK;
+        }
+
+        while(status == BJ_HIT)
+        {
+            move(BJ_TOP, 0);
+            clrtobot();
+
             move(BJ_TOP, 0);
             printw("Croupier:");
             move(BJ_TOP + 1, 0);
@@ -54,47 +87,103 @@ void bj_test()
             move(y+1, BJ_RIGHT);
             printw("Punkte: %d", tmpS);
             move(y+2, BJ_RIGHT);
-            if(tmpS > 21)
+            printw("Weitere Karte? Verdoppeln? (y/n/d) ");
+            refresh();
+            yn = getch();
+            if(yn == 'd')
+            {
+                if(einsatz > konto)
+                    mvprintw(y+3, BJ_RIGHT, "Dazu bist du zu arm");
+                else
+                {
+                    konto -= einsatz;
+                    einsatz *= 2;
+                    karten_gebe_karte(&stapel, &spieler);
+                    status = BJ_STAY;
+                }
+            }
+            else if(yn == 'y' || yn == 1)
+                karten_gebe_karte(&stapel, &spieler);
+            else if(yn == 'n' || yn == 0)
+               status = BJ_STAY;
+            if(bj_summiere_augen(spieler) > 21)
             {
                 move(y+3, 7);
                 printw("Du hast dich überkauft! Die Bank gewinnt.");
-                status = 1;
-                break;
+                status = BJ_BUST;
             }
-            printw("Weitere Karte? (y/n) ");
             refresh();
-            yn = getch();
-            if(yn == 'n' || yn == 0)
-                break;
-            karten_gebe_karte(&stapel, &spieler);
-            erase();
         }
 
-    if(!status)
-    {
-        while(bj_summiere_augen(bank)<17)
-            karten_gebe_karte(&stapel, &bank);
+        if(status != BJ_BLACKJACK && status != BJ_BUST)
+        {
+            while(bj_summiere_augen(bank)<17)
+                karten_gebe_karte(&stapel, &bank);
+            move(BJ_TOP, 0);
+            printw("Croupier:");
+            move(BJ_TOP + 1, 0);
+            karten_show(bank);
+            tmpB =  bj_summiere_augen(bank);
+            move(y+1, 0);
+            printw("Punkte: %d", tmpB);
+            move(y+1, BJ_RIGHT);
+            printw("Punkte: %d", tmpS);
+            move(y+5, 0);
+            if(tmpB > 21)
+            {
+                mvprintw(15, 0,"Die Bank hat sich überkauft! Du gewinnst %d€.", 2*einsatz);
+                konto += 2*einsatz;
+            }
+            else if(tmpS > tmpB)
+            {
+                mvprintw(15, 0,"Du gewinnst %d€.", 2*einsatz);
+                konto += 2*einsatz;
+            }
+            else if(tmpS < tmpB)
+            {
+                mvprintw(15, 0,"Die Bank gewinnt.");
+            }
+            else if(tmpS == tmpB)
+            {
+                mvprintw(15, 0,"Unentschieden. Du erhälst die %d€ Einsatz zurück.", einsatz);
+                konto += einsatz;
+            }
+        }
         move(BJ_TOP, 0);
         printw("Croupier:");
         move(BJ_TOP + 1, 0);
         karten_show(bank);
+        move(BJ_TOP, BJ_RIGHT);
+        printw("Deine Hand:");
+        move(BJ_TOP + 1, BJ_RIGHT);
+        karten_show(spieler);
+        tmpS =  bj_summiere_augen(spieler);
         tmpB =  bj_summiere_augen(bank);
+        getyx(stdscr, y, x);
         move(y+1, 0);
         printw("Punkte: %d", tmpB);
         move(y+1, BJ_RIGHT);
         printw("Punkte: %d", tmpS);
-        move(y+5, 0);
-        if(tmpB > 21)
-            printw("Die Bank hat sich überkauft! Du gewinnst.");
-        else if(tmpS > tmpB)
-            printw("Du gewinnst.");
-        else if(tmpS < tmpB)
-            printw("Die Bank gewinnt.");
-        else if(tmpS == tmpB)
-            printw("Unentschieden.");
+        move(y+2, BJ_RIGHT);
+        refresh();
+        if(konto <= 0)
+        {
+            getch();
+            hs_show_highscore(konto, "Geld", runde, "Runde", BLACKJACK_HIGHSCORE_FILENAME);
+            getch();
+            break;
+        }
+        mvprintw(17, 0, "Enter zum Weiterspielen. Q zum Beenden.");
+        yn = 0;
+        yn = getch();
+        if(yn == 'Q' || yn == 'q')
+        {
+            hs_show_highscore(konto, "Geld", runde, "Runde", BLACKJACK_HIGHSCORE_FILENAME);
+            break;
+        }
+        erase();
+        refresh();
     }
-    refresh();
-    getch();
     endwin();
     return;
 }
