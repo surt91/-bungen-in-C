@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <termios.h>
 #include <ncurses.h>
-#include <time.h>
+
+#include "highscore.h"
 
 #define LEVEL1 1
 #define LEVEL2 2
@@ -21,7 +21,6 @@
 
 #define SNAKE_CONFIG_FILENAME "snake_config.sav"
 #define SNAKE_HIGHSCORE_FILENAME "snake_highscore.sav"
-#define SNAKE_NUMHS 10
 
 struct snake_map
 {
@@ -53,10 +52,5 @@ void snake_credits();
 
 int snake_load_config(int *level, int *torus, int *theme);
 int snake_save_config(int level, int torus, int theme);
-int snake_show_highscore(int punkte, int level);
-int snake_load_highscore();
-int snake_save_highscore(int punkte, int level, char *name);
-void snake_highscore_sort();
-void snake_highscore_init();
 
 #endif //SNAKE_H

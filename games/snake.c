@@ -34,13 +34,6 @@ __     __        _                      _ \n\
   \\ V /  __/ |  | | (_) | | |  __/ | | |_|\n\
    \\_/ \\___|_|  |_|\\___/|_|  \\___|_| |_(_)\n\
                                           \n";
-static const char *highscore = "\
- _   _ _       _                                 \n\
-| | | (_) __ _| |__  ___  ___ ___  _ __ ___  ___ \n\
-| |_| | |/ _` | '_ \\/ __|/ __/ _ \\| '__/ _ \\/ __|\n\
-|  _  | | (_| | | | \\__ \\ (_| (_) | | |  __/\\__ \\\n\
-|_| |_|_|\\__, |_| |_|___/\\___\\___/|_|  \\___||___/\n\
-         |___/                                   \n";
 static const char *hilfe = "\
  _   _ _ _  __      \n\
 | | | (_) |/ _| ___ \n\
@@ -85,7 +78,7 @@ void snake_menu()
     noecho();
     keypad(stdscr, TRUE);
     snake_load_config(&level, &torus, &theme);
-    snake_highscore_init();
+    hs_highscore_init(SNAKE_HIGHSCORE_FILENAME);
     while(!exit)
     {
         m=0;
@@ -154,7 +147,7 @@ void snake_menu()
             case 'h':
             case '3':
                 erase();
-                snake_load_highscore();
+                hs_load_highscore(SNAKE_HIGHSCORE_FILENAME);
                 getch();
                 break;
             case '4':
@@ -237,7 +230,7 @@ void snake(int stufe, int torus, int theme)
     timeout(5000);
     snake_verloren(map.punkte);
     timeout(-1);
-    snake_show_highscore(map.punkte, map.length);
+    hs_show_highscore(map.punkte, "Punkte", map.length, "Länge", SNAKE_HIGHSCORE_FILENAME);
 }
 
 void snake_draw(struct snake_map *map, int theme)
@@ -483,6 +476,8 @@ Darstellung durch ncurses\
 Hendrik Schawe <hendrik.schawe@gmail.com>");
 }
 
+// TODO: Highscores verallgemeinern
+
 int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
@@ -511,139 +506,4 @@ int snake_save_config(int level, int torus, int theme)
     fclose (datei);
 
     return 0;
-}
-
-int snake_show_highscore(int punkte, int level)
-{
-    char name[80];
-
-    printw("\nHighscore:\n\n");
-    printw("% 5d \t\t\t mit Länge %d\n", punkte, level);
-    if(punkte > snake_load_highscore())
-    {
-        nocbreak();
-        printw("Das ist ein neuer Highscore!\n");
-        printw("Trage deinen Namen ein:\n");
-        refresh();
-        echo();
-        scanw("%s",name);
-        noecho();
-        snake_save_highscore(punkte, level, name);
-        cbreak();
-    }
-    return 0;
-}
-
-int snake_load_highscore()
-{
-    FILE *datei;
-    int i, punkte, level, day, month, year, hour, min, tmp=0;
-    char *filename = SNAKE_HIGHSCORE_FILENAME;
-    char name[80];
-    datei = fopen (filename, "r");
-    if (datei == NULL)
-    {
-        return 1;
-    }
-    erase();
-    printw("%s\n", highscore);
-    printw("\tName\t\tPunkte\t\tLänge\t\t     Datum\t  Uhr\n");
-    for(i=0;i<SNAKE_NUMHS;i++)
-    {
-        fscanf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", &punkte, &level,\
-                                &year, &month, &day, &hour, &min, name);
-        printw("\t%s", name);
-        printw("\t\t% 6d",punkte);
-        printw("\t\t    %d",level);
-        printw("\t\t%02d.%02d.%04d",day,month,year);
-        printw("\t%02d:%02d",hour,min);
-        printw("\n");
-    }
-    fclose (datei);
-    printw("\n");
-    refresh();
-    tmp = punkte;
-    return tmp;
-}
-
-int snake_save_highscore(int punkte, int level, char *name)
-{
-    FILE *datei;
-    char *filename = SNAKE_HIGHSCORE_FILENAME;
-
-    struct tm *ts;
-    time_t t;
-
-    datei = fopen (filename, "a");
-    if (datei == NULL)
-    {
-        return 1;
-    }
-
-    t = time(NULL);
-    ts = localtime(&t);
-
-    fprintf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", punkte, level,\
-    ts->tm_year+1900, ts->tm_mon+1, ts->tm_mday, ts->tm_hour, ts->tm_min,\
-    name);
-    fclose (datei);
-    snake_highscore_sort();
-    return 0;
-}
-
-void snake_highscore_sort()
-{
-    FILE *datei;
-    int i, j, data[SNAKE_NUMHS+1], itmp, index[SNAKE_NUMHS+1];
-    char *filename = SNAKE_HIGHSCORE_FILENAME;
-    char rest[SNAKE_NUMHS+1][100];
-    for(i=0;i<SNAKE_NUMHS+1;i++)
-        index[i] = i;
-    datei = fopen (filename, "r");
-    if (datei == NULL)
-    {
-        return;
-    }
-    for(i=0;i<SNAKE_NUMHS+1;i++)
-        fscanf (datei, "%d;%s\n", &data[i], rest[i]);
-    fclose (datei);
-    for(i=0;i<SNAKE_NUMHS+1;i++)
-        for(j=SNAKE_NUMHS;i<j;j--)
-            if(data[index[j-1]]<data[index[j]])
-            {
-                itmp = index[j-1];
-                index[j-1] = index[j];
-                index[j] = itmp;
-            }
-
-    datei = fopen (filename, "w");
-    for(i=0;i<SNAKE_NUMHS;i++)
-        fprintf(datei, "%d;%s\n", data[index[i]], rest[index[i]]);
-    fclose (datei);
-    return;
-}
-
-void snake_highscore_init()
-{
-    FILE *datei;
-    int i, tmp;
-    char *filename = SNAKE_HIGHSCORE_FILENAME;
-    datei = fopen (filename, "r");
-    if (datei != NULL)
-    {
-        tmp = fgetc(datei);
-        fclose(datei);
-    }
-    else
-    {
-        tmp = EOF;
-    }
-    if (tmp == EOF)
-    {
-        datei = fopen (filename, "w");
-        for (i = 0; i<10; i++)
-            fprintf(datei,"0;0;2011-10-3T15:31;Abe\n");
-        fclose(datei);
-    }
-    return;
 }

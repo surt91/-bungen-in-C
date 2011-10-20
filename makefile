@@ -3,9 +3,10 @@ OTRIVIA	= trivia/trivia.o trivia/trivia_aufruf.o trivia/benchmark.o
 OZUFALL	= zufall/random.o zufall/random_aufruf.o
 OPRIM	= prim/prim.o prim/prim_aufruf.o
 OPOLY	= trivia/polynom.o trivia/polynom_aufruf.o
-OGAMES	= games/conway.o games/snake.o games/roulette.o\
-		  games/karten/karten.o games/karten/poker.o\
-		  games/karten/blackjack.o
+OGAMES	= games/highscore.o\
+		  games/conway.o games/snake.o games/roulette.o\
+		  games/karten/karten.o\
+		  games/karten/poker.o games/karten/blackjack.o
 
 OBJ 	= main.o menu.o help.o \
 		  $(OLINA) $(OTRIVIA) $(OZUFALL) $(OPRIM) $(OGAMES)
