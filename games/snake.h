@@ -19,8 +19,8 @@
 #define LEVEL8 30
 #define LEVEL9 60
 
-#define SNAKE_CONFIG_FILENAME "snake_config.sav"
-#define SNAKE_HIGHSCORE_FILENAME "snake_highscore.sav"
+#define SNAKE_CONFIG_FILENAME "snake_config_save.dat"
+#define SNAKE_HIGHSCORE_FILENAME "snake_highscore_save.dat"
 
 struct snake_map
 {
