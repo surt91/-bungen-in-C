@@ -147,7 +147,7 @@ void snake_menu()
             case 'h':
             case '3':
                 erase();
-                hs_load_highscore(SNAKE_HIGHSCORE_FILENAME);
+                hs_load_highscore(SNAKE_HIGHSCORE_FILENAME, "Punkte", "Laenge");
                 getch();
                 break;
             case '4':

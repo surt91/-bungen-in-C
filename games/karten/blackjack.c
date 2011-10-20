@@ -2,7 +2,7 @@
 
 void blackjack_start()
 {
-    int i, tmpS, tmpB, status, x, y, konto = 100, einsatz = 0, tmp, runde = 0;
+    int i, tmpS, tmpB, status, x=0, y=0, konto = 100, einsatz = 0, tmp, runde = 0;
     char yn;
     struct deck *stapel, *spieler, *bank;
 
@@ -24,7 +24,7 @@ void blackjack_start()
     while(1)
     {
         einsatz = 0;
-        mvprintw(1, 0, "Konto   % 5d", konto);
+        mvprintw(1, x, "Konto   % 5d", konto);
         mvprintw(2, 0, "Einsatz % 5d", einsatz);
         mvprintw(3, 0, "Runde   % 5d", ++runde);
 
@@ -38,13 +38,16 @@ void blackjack_start()
                 mvprintw(17, 0,"Soviel Geld hast du nicht!");
                 getch();
             }
-            mvprintw(17, 0,"                          ");
-            move(16,0);
+            move(17, 0);
+            clrtoeol();
         } while(tmp > konto);
-        mvprintw(15, 0, "                 ");
-        mvprintw(16, 0, "                 ");
+        move(15, 0);
+        clrtoeol();
+        move(16, 0);
+        clrtoeol();
+
         einsatz = tmp;
-        konto -=einsatz;
+        konto -= einsatz;
         mvprintw(1, 0, "Konto   % 5d", konto);
         mvprintw(2, 0, "Einsatz % 5d", einsatz);
         refresh();
@@ -68,25 +71,7 @@ void blackjack_start()
 
         while(status == BJ_HIT)
         {
-            move(BJ_TOP, 0);
-            clrtobot();
-
-            move(BJ_TOP, 0);
-            printw("Croupier:");
-            move(BJ_TOP + 1, 0);
-            karten_show(bank);
-            move(BJ_TOP, BJ_RIGHT);
-            printw("Deine Hand:");
-            move(BJ_TOP + 1, BJ_RIGHT);
-            karten_show(spieler);
-            tmpS =  bj_summiere_augen(spieler);
-            tmpB =  bj_summiere_augen(bank);
-            getyx(stdscr, y, x);
-            move(y+1, 0);
-            printw("Punkte: %d", tmpB);
-            move(y+1, BJ_RIGHT);
-            printw("Punkte: %d", tmpS);
-            move(y+2, BJ_RIGHT);
+            bj_zeige_hande(spieler, bank);
             printw("Weitere Karte? Verdoppeln? (y/n/d) ");
             refresh();
             yn = getch();
@@ -119,16 +104,10 @@ void blackjack_start()
         {
             while(bj_summiere_augen(bank)<17)
                 karten_gebe_karte(&stapel, &bank);
-            move(BJ_TOP, 0);
-            printw("Croupier:");
-            move(BJ_TOP + 1, 0);
-            karten_show(bank);
+
+            tmpS =  bj_summiere_augen(spieler);
             tmpB =  bj_summiere_augen(bank);
-            move(y+1, 0);
-            printw("Punkte: %d", tmpB);
-            move(y+1, BJ_RIGHT);
-            printw("Punkte: %d", tmpS);
-            move(y+5, 0);
+            bj_zeige_hande(spieler, bank);
             if(tmpB > 21)
             {
                 mvprintw(15, 0,"Die Bank hat sich überkauft! Du gewinnst %d€.", 2*einsatz);
@@ -149,23 +128,7 @@ void blackjack_start()
                 konto += einsatz;
             }
         }
-        move(BJ_TOP, 0);
-        printw("Croupier:");
-        move(BJ_TOP + 1, 0);
-        karten_show(bank);
-        move(BJ_TOP, BJ_RIGHT);
-        printw("Deine Hand:");
-        move(BJ_TOP + 1, BJ_RIGHT);
-        karten_show(spieler);
-        tmpS =  bj_summiere_augen(spieler);
-        tmpB =  bj_summiere_augen(bank);
-        getyx(stdscr, y, x);
-        move(y+1, 0);
-        printw("Punkte: %d", tmpB);
-        move(y+1, BJ_RIGHT);
-        printw("Punkte: %d", tmpS);
-        move(y+2, BJ_RIGHT);
-        refresh();
+        bj_zeige_hande(spieler, bank);
         if(konto <= 0)
         {
             getch();
@@ -211,4 +174,29 @@ int bj_summiere_augen(struct deck *hand)
             summe += 1;
     }
     return summe;
+}
+
+void bj_zeige_hande(struct deck *spieler, struct deck *bank)
+{
+    int x=0, y=0, tmpB, tmpS;
+    move(BJ_TOP, 0);
+    clrtobot();
+    move(BJ_TOP, x);
+    printw("Croupier:");
+    move(BJ_TOP + 1, x);
+    karten_show(bank);
+    move(BJ_TOP, BJ_RIGHT);
+    printw("Deine Hand:");
+    move(BJ_TOP + 1, BJ_RIGHT);
+    karten_show(spieler);
+    tmpS =  bj_summiere_augen(spieler);
+    tmpB =  bj_summiere_augen(bank);
+    getyx(stdscr, y, x);
+    move(y+1, 0);
+    printw("Punkte: %d", tmpB);
+    move(y+1, BJ_RIGHT);
+    printw("Punkte: %d", tmpS);
+    move(y+2, BJ_RIGHT);
+    refresh();
+    return;
 }

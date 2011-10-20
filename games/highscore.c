@@ -18,7 +18,7 @@ int hs_show_highscore(int punkte, char* sPunkte, int level, char* sLevel, char *
     printw("% 5d\n", punkte);
     printw("%s: ", sLevel);
     printw("% 5d\n", level);
-    if(punkte > hs_load_highscore(filename))
+    if(punkte > hs_load_highscore(filename, sPunkte, sLevel))
     {
         nocbreak();
         printw("Das ist ein neuer Highscore!\n");
@@ -33,7 +33,7 @@ int hs_show_highscore(int punkte, char* sPunkte, int level, char* sLevel, char *
     return 0;
 }
 
-int hs_load_highscore(char *filename)
+int hs_load_highscore(char *filename, char* sPunkte, char* sLevel)
 {
     FILE *datei;
     int i, punkte, level, day, month, year, hour, min, tmp=0;
@@ -45,7 +45,7 @@ int hs_load_highscore(char *filename)
     }
     erase();
     printw("%s\n", highscore);
-    printw("\tName\t\tPunkte\t\tLänge\t\t     Datum\t  Uhr\n");
+    printw("\tName\t\t% 6s\t\t% 6s\t\t     Datum\t  Uhr\n", sPunkte, sLevel);
     for(i=0;i<NUMHS;i++)
     {
         fscanf (datei, "%d;%d;%d-%d-%dT%d:%d;%s\n", &punkte, &level,\

@@ -11,7 +11,7 @@
 #define NUMHS 10
 
 int hs_show_highscore(int punkte, char* sPunkte, int level, char* sLevel, char *filename);
-int hs_load_highscore(char *filename);
+int hs_load_highscore(char *filename, char* sPunkte, char* sLevel);
 int hs_save_highscore(int punkte, int level, char *name, char *filename);
 void hs_highscore_sort(char *filename);
 void hs_highscore_init(char *filename);

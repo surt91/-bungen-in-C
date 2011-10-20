@@ -21,7 +21,7 @@
 #define BJ_BUST 0
 
 int bj_summiere_augen(struct deck *hand);
-//~ int bj_summiere_augen();
+void bj_zeige_hande(struct deck *spieler, struct deck *bank);
 
 void blackjack_start();
 

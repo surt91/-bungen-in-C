@@ -101,7 +101,7 @@ void roulette_start()
                 return;
             case 'h':
             case 'H':
-                hs_load_highscore(ROULETTE_HIGHSCORE_FILENAME);
+                hs_load_highscore(ROULETTE_HIGHSCORE_FILENAME, "Geld", "Runde");
                 break;
             case 's':
             case 'S':
@@ -221,10 +221,10 @@ int roulette_gewinn(int *liste, int kugel)
 }
 void roulette_setzen(int *besitz, int *liste, int k)
 {
-    int x,y;
+    int x=0,y;
     getyx(stdscr, y, x);
-    mvprintw(y+2, 0, "Du hast %d€", *besitz);
-    mvprintw(y+3, 0, "Wieviel setzt du? ");
+    mvprintw(y+2, x, "Du hast %d€", *besitz);
+    mvprintw(y+3, x, "Wieviel setzt du? ");
     refresh();
     echo();
     scanw("%d", &liste[k]);
@@ -235,7 +235,7 @@ void roulette_setzen(int *besitz, int *liste, int k)
 }
 int roulette_drehen(int *liste, int *besitz)
 {
-    int kugel, gewinn, einsatz=0, i, x ,y;
+    int kugel, gewinn, einsatz=0, i, y;
     kugel = rand()%37;
     mvprintw(2,ROULETTE_RIGHT,"Die Kugel ist auf %d liegen geblieben!", kugel);
 
@@ -244,7 +244,7 @@ int roulette_drehen(int *liste, int *besitz)
 
     gewinn=roulette_gewinn(liste, kugel);
     *besitz+=gewinn;
-    getyx(stdscr, y, x);
+    getyx(stdscr, y, i);
     y++;
     if(gewinn-einsatz > 0)
     {
