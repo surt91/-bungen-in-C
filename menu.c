@@ -107,8 +107,11 @@ int menu(int argc, char **argv)
                     snake_menu();
                     break;
                 case 8:
-                    bj_test();
+                    blackjack_start();
                     break;
+                //~ case 9:
+                    //~ poker_start();
+                    //~ break;
             }
             break;
         case PRIM:

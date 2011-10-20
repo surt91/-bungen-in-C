@@ -65,6 +65,8 @@ void help( int chap )
             printf("%d\t 5\t//Geburtstagsproblem\n",GAME);
             printf("%d\t 6\t//Monte Carlo Pi (Dart)\n",GAME);
             printf("%d\t 7\t//Snake\n",GAME);
+            printf("%d\t 8\t//Blackjack\n",GAME);
+            printf("%d\t 9\t//Poker\n",GAME);
             if(chap==GAME) break;
         //~ case KRYPTO:
             //~ printf("\nKapitel %d: Krypto\n\n",KRYPTO);
