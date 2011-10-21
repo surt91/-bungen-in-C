@@ -13,7 +13,6 @@ int hs_show_highscore(int punkte, char* sPunkte, int level, char* sLevel, char *
     char name[80];
 
     printw("\nHighscore:\n\n");
-    //~ printw("% 5d \t\t\t mit Länge %d\n", punkte, level);
     printw("%s: ", sPunkte);
     printw("% 5d\n", punkte);
     printw("%s: ", sLevel);

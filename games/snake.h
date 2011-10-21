@@ -9,6 +9,7 @@
 
 #include "highscore.h"
 
+// Level definiert in Schritte pro Sekunde
 #define LEVEL1 1
 #define LEVEL2 2
 #define LEVEL3 3

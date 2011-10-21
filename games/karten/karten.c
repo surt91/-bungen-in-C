@@ -117,20 +117,20 @@ void karten_zeiger(struct card karte)
     }
     switch (karte.w)
     {
-        case ass: printw(" A"); break;
-        case 2: printw(" 2"); break;
-        case 3: printw(" 3"); break;
-        case 4: printw(" 4"); break;
-        case 5: printw(" 5"); break;
-        case 6: printw(" 6"); break;
-        case 7: printw(" 7"); break;
-        case 8: printw(" 8"); break;
-        case 9: printw(" 9"); break;
-        case 10: printw("10"); break;
-        case bube: printw(" J"); break;
-        case dame: printw(" Q"); break;
+        case ass:   printw(" A"); break;
+        case 2:     printw(" 2"); break;
+        case 3:     printw(" 3"); break;
+        case 4:     printw(" 4"); break;
+        case 5:     printw(" 5"); break;
+        case 6:     printw(" 6"); break;
+        case 7:     printw(" 7"); break;
+        case 8:     printw(" 8"); break;
+        case 9:     printw(" 9"); break;
+        case 10:    printw("10"); break;
+        case bube:  printw(" J"); break;
+        case dame:  printw(" Q"); break;
         case konig: printw(" K"); break;
-        default: printw("E"); break;
+        default:    printw(" E"); break;
     }
     getyx(stdscr, y, x);
     move(y+1,x-3);
