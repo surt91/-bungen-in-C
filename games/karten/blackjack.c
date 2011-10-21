@@ -2,7 +2,7 @@
 
 void blackjack_start()
 {
-    int i, tmpS, tmpB, status, tmp, anzKarten = 0;
+    int i, tmpS, tmpB, status, anzKarten = 0;
     int konto = 100, einsatz = 0, runde = 0;
     const static int anzDecks = 6, anzPerDeck = 52;
     char yn;
@@ -31,33 +31,19 @@ void blackjack_start()
         }
 
         einsatz = 0;
+        status = BJ_START;
+
         mvprintw(1, 0, "Konto                % 5d", konto);
         mvprintw(2, 0, "Einsatz              % 5d", einsatz);
         mvprintw(3, 0, "Runde                % 5d", ++runde);
         mvprintw(4, 0, "Karten im Schlitten  % 5d", anzKarten);
 
-        do
-        {
-            mvprintw(BJ_BOT, 0, "Wieviel setzt du? ");
-            move(BJ_BOT + 1, 0);
-            scanw("%d", &tmp);
-            if(tmp>konto)
-            {
-                mvprintw(BJ_BOT + 2, 0,"Soviel Geld hast du nicht!");
-                move(BJ_BOT + 1, 0);
-                clrtoeol();
-            }
-        } while(tmp > konto);
-        move(BJ_BOT, 0);
-        clrtobot();
-
-        einsatz = tmp;
+        einsatz = bj_setzen(konto);
         konto -= einsatz;
+
         mvprintw(1, 0, "Konto                % 5d", konto);
         mvprintw(2, 0, "Einsatz              % 5d", einsatz);
         refresh();
-
-        status = BJ_HIT;
 
         karten_gebe_karte(&stapel, &spieler);
         karten_gebe_karte(&stapel, &bank);
@@ -71,9 +57,12 @@ void blackjack_start()
         {
             mvprintw(4, 0, "Karten im Schlitten  % 5d", anzKarten);
             bj_zeige_hande(spieler, bank);
+
             printw("Weitere Karte? Verdoppeln? (y/n/d) ");
             refresh();
+
             yn = getch();
+
             if(yn == 'd')
             {
                 if(einsatz > konto)
@@ -93,7 +82,7 @@ void blackjack_start()
                 anzKarten--;
             }
             else if(yn == 'n' || yn == 0)
-               status = BJ_STAY;
+                status = BJ_STAY;
             if(bj_summiere_augen(spieler) > 21)
                 status = BJ_BUST;
         }
@@ -108,7 +97,6 @@ void blackjack_start()
 
             tmpS =  bj_summiere_augen(spieler);
             tmpB =  bj_summiere_augen(bank);
-
 
             if(tmpB > 21)
                 status = BJ_BANK_BUST;
@@ -135,15 +123,21 @@ void blackjack_start()
             getch();
             break;
         }
-        mvprintw(BJ_BOT + 2, 0, "Enter zum Weiterspielen. Q zum Beenden.");
+
+        mvprintw(BJ_BOT + 2, 0, "Enter: zum Weiterspielen.");
+        mvprintw(BJ_BOT + 3, 0, "    Q: Beenden.");
+        //~ mvprintw(BJ_BOT + 4, 0, "   F1: Hilfe");
         refresh();
+
         yn = 0;
         yn = getch();
+
         if(yn == 'Q' || yn == 'q')
         {
             hs_show_highscore(konto, "Geld", runde, "Runde", BLACKJACK_HIGHSCORE_FILENAME);
             break;
         }
+
         erase();
         refresh();
     }
@@ -181,23 +175,19 @@ void bj_zeige_hande(struct deck *spieler, struct deck *bank)
     int yS=0, yB=0, tmpB, tmpS, y=0, x=0;
     move(BJ_TOP, 0);
     clrtobot();
-    move(BJ_TOP, x);
-    printw("Croupier:");
+    mvprintw(BJ_TOP, x, "Croupier:");
     move(BJ_TOP + 1, x);
     karten_show(bank);
     getyx(stdscr, yB, x);
-    move(BJ_TOP, BJ_RIGHT);
-    printw("Deine Hand:");
+    mvprintw(BJ_TOP, BJ_RIGHT, "Deine Hand:");
     move(BJ_TOP + 1, BJ_RIGHT);
     karten_show(spieler);
     getyx(stdscr, yS, x);
     tmpS =  bj_summiere_augen(spieler);
     tmpB =  bj_summiere_augen(bank);
     y = yS > yB ? yS : yB;
-    move(y+1, 0);
-    printw("Punkte: %d", tmpB);
-    move(y+1, BJ_RIGHT);
-    printw("Punkte: %d", tmpS);
+    mvprintw(y+1, BJ_LEFT,  "Punkte: %d", tmpB);
+    mvprintw(y+1, BJ_RIGHT, "Punkte: %d", tmpS);
     move(y+2, BJ_RIGHT);
     refresh();
     return;
@@ -241,4 +231,24 @@ int bj_gewinn(int status, int einsatz)
     mvprintw(BJ_BOT, 0, nachricht, faktor * einsatz);
     refresh();
     return faktor * einsatz;
+}
+
+int bj_setzen(int konto)
+{
+    int tmp;
+    do
+    {
+        mvprintw(BJ_BOT, 0, "Wieviel setzt du? ");
+        move(BJ_BOT + 1, 0);
+        scanw("%d", &tmp);
+        if(tmp>konto)
+        {
+            mvprintw(BJ_BOT + 2, 0,"Soviel Geld hast du nicht!");
+            move(BJ_BOT + 1, 0);
+            clrtoeol();
+        }
+    } while(tmp > konto);
+    move(BJ_BOT, 0);
+    clrtobot();
+    return tmp;
 }

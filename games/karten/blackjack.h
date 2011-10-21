@@ -13,10 +13,11 @@
 #define BJ_TOP 8
 #define BJ_BOT 17
 #define BJ_RIGHT 15
+#define BJ_LEFT  0
 #define BLACKJACK_HIGHSCORE_FILENAME "blackjack_highscore_save.dat"
 
 #define BJ_HIT 1
-#define BJ_START 1
+#define BJ_START BJ_HIT
 #define BJ_BLACKJACK 3
 #define BJ_STAY 2
 #define BJ_BUST 0
@@ -28,6 +29,7 @@
 int bj_summiere_augen(struct deck *hand);
 void bj_zeige_hande(struct deck *spieler, struct deck *bank);
 int bj_gewinn(int status, int einsatz);
+int bj_setzen(int konto);
 
 void blackjack_start();
 
