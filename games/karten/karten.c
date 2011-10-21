@@ -2,7 +2,7 @@
 
 void karten_gebe_karte(struct deck **stapel, struct deck **hand)
 {
-    struct deck *tmp, *tmp2;
+    struct deck *tmp1, *tmp2;
     tmp2 = *stapel;
     if(*hand == NULL)
     {
@@ -12,7 +12,7 @@ void karten_gebe_karte(struct deck **stapel, struct deck **hand)
     }
     else
     {
-        tmp = *hand;
+        tmp1 = *hand;
         while((*hand) -> next != NULL)
         {
             *hand = (*hand) -> next;
@@ -21,7 +21,7 @@ void karten_gebe_karte(struct deck **stapel, struct deck **hand)
         *hand = (*hand) -> next;
         (*hand) -> karte = karten_pop(&tmp2);
         (*hand) -> next = NULL;
-        *hand = tmp;
+        *hand = tmp1;
     }
     *stapel = tmp2;
 }
