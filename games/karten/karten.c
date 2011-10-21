@@ -70,9 +70,9 @@ void karten_show(struct deck *stapel)
 void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
 {
     int i=1, t;
-    struct deck *tmp, *temp;
-    tmp = *stapel;
-    temp = *stapel;
+    struct deck *tmp1, *tmp2;
+    tmp1 = *stapel;
+    tmp2 = *stapel;
     struct card ctmp;
 
     if(eins==zwei)
@@ -88,19 +88,19 @@ void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
     {
         if(i==eins)
         {
-            tmp = temp;
-            ctmp = temp->karte;
+            tmp1 = tmp2;
+            ctmp = tmp2->karte;
         }
         if(i==zwei)
         {
-            tmp->karte = temp->karte;
-            temp->karte = ctmp;
+            tmp1->karte = tmp2->karte;
+            tmp2->karte = ctmp;
             break;
         }
-        temp = temp->next;
+        tmp2 = tmp2->next;
         i++;
-    } while(temp != NULL);
-    temp = *stapel;
+    } while(tmp2 != NULL);
+    tmp2 = *stapel;
     return;
 }
 

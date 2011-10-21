@@ -476,8 +476,6 @@ Darstellung durch ncurses\
 Hendrik Schawe <hendrik.schawe@gmail.com>");
 }
 
-// TODO: Highscores verallgemeinern
-
 int snake_load_config(int *level, int *torus, int *theme)
 {
     FILE *datei;
