@@ -162,7 +162,15 @@ struct card *karten_sortierer(struct card *hand)
     return(hand);
 }
 
-void karten_delete_stapel(struct card *stapel)
+void karten_delete_stapel(struct deck **stapel)
 {
-    // TODO: Diese Funktion
+    struct deck *tmp;
+    tmp = *stapel;
+    while(*stapel != NULL)
+    {
+        tmp = *stapel;
+        *stapel = tmp -> next;
+        free(tmp);
+    }
+    return;
 }

@@ -27,6 +27,7 @@ struct card karten_pop(struct deck **stapel);
 void karten_show(struct deck *stapel);
 void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei);
 struct card *karten_sortierer(struct card *hand);
+void karten_delete_stapel(struct deck **stapel);
 
 //~ void karten_test();
 
