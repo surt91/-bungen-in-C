@@ -69,7 +69,7 @@ void blackjack_start()
         if(bj_summiere_augen(spieler) == 21)
         {
             move(BJ_TOP, BJ_RIGHT);
-            karten_show(spieler);
+            bj_zeige_hande(spieler, bank);
             mvprintw(15, 0,"Blackjack! Du gewinnst %d€.", 3*einsatz);
             konto += 3*einsatz;
             status = BJ_BLACKJACK;

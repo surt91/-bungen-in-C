@@ -51,7 +51,7 @@ int hs_load_highscore(char *filename, char* sPunkte, char* sLevel)
                                 &year, &month, &day, &hour, &min, name);
         printw("\t%s", name);
         printw("\t\t% 6d",punkte);
-        printw("\t\t% 5d",level);
+        printw("\t\t% 6d",level);
         printw("\t\t%02d.%02d.%04d",day,month,year);
         printw("\t%02d:%02d",hour,min);
         printw("\n");
