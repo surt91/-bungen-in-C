@@ -31,32 +31,30 @@ void blackjack_start()
         }
 
         einsatz = 0;
-        mvprintw(1, 0, "Konto   % 5d", konto);
-        mvprintw(2, 0, "Einsatz % 5d", einsatz);
-        mvprintw(3, 0, "Runde   % 5d", ++runde);
+        mvprintw(1, 0, "Konto                % 5d", konto);
+        mvprintw(2, 0, "Einsatz              % 5d", einsatz);
+        mvprintw(3, 0, "Runde                % 5d", ++runde);
+        mvprintw(4, 0, "Karten im Schlitten  % 5d", anzKarten);
 
         do
         {
-            mvprintw(15, 0, "Wieviel setzt du? ");
-            move(16,0);
+            mvprintw(BJ_BOT, 0, "Wieviel setzt du? ");
+            move(BJ_BOT + 1, 0);
             scanw("%d", &tmp);
             if(tmp>konto)
             {
-                mvprintw(17, 0,"Soviel Geld hast du nicht!");
-                getch();
+                mvprintw(BJ_BOT + 2, 0,"Soviel Geld hast du nicht!");
+                move(BJ_BOT + 1, 0);
+                clrtoeol();
             }
-            move(17, 0);
-            clrtoeol();
         } while(tmp > konto);
-        move(15, 0);
-        clrtoeol();
-        move(16, 0);
-        clrtoeol();
+        move(BJ_BOT, 0);
+        clrtobot();
 
         einsatz = tmp;
         konto -= einsatz;
-        mvprintw(1, 0, "Konto   % 5d", konto);
-        mvprintw(2, 0, "Einsatz % 5d", einsatz);
+        mvprintw(1, 0, "Konto                % 5d", konto);
+        mvprintw(2, 0, "Einsatz              % 5d", einsatz);
         refresh();
 
         status = BJ_HIT;
@@ -67,16 +65,11 @@ void blackjack_start()
         anzKarten -= 3;
 
         if(bj_summiere_augen(spieler) == 21)
-        {
-            move(BJ_TOP, BJ_RIGHT);
-            bj_zeige_hande(spieler, bank);
-            mvprintw(15, 0,"Blackjack! Du gewinnst %d€.", 3*einsatz);
-            konto += 3*einsatz;
             status = BJ_BLACKJACK;
-        }
 
         while(status == BJ_HIT)
         {
+            mvprintw(4, 0, "Karten im Schlitten  % 5d", anzKarten);
             bj_zeige_hande(spieler, bank);
             printw("Weitere Karte? Verdoppeln? (y/n/d) ");
             refresh();
@@ -84,7 +77,7 @@ void blackjack_start()
             if(yn == 'd')
             {
                 if(einsatz > konto)
-                    mvprintw(17, BJ_RIGHT, "Dazu bist du zu arm");
+                    mvprintw(BJ_BOT + 2, BJ_RIGHT, "Dazu bist du zu arm");
                 else
                 {
                     konto -= einsatz;
@@ -102,45 +95,35 @@ void blackjack_start()
             else if(yn == 'n' || yn == 0)
                status = BJ_STAY;
             if(bj_summiere_augen(spieler) > 21)
-            {
-                bj_zeige_hande(spieler, bank);
-                move(15, 0);
-                printw("Du hast dich überkauft! Die Bank gewinnt.");
                 status = BJ_BUST;
-            }
-            refresh();
         }
 
         if(status != BJ_BLACKJACK && status != BJ_BUST)
         {
             while(bj_summiere_augen(bank)<17)
+            {
                 karten_gebe_karte(&stapel, &bank);
                 anzKarten--;
+            }
 
             tmpS =  bj_summiere_augen(spieler);
             tmpB =  bj_summiere_augen(bank);
-            bj_zeige_hande(spieler, bank);
+
 
             if(tmpB > 21)
-            {
-                mvprintw(15, 0,"Die Bank hat sich überkauft! Du gewinnst %d€.", 2*einsatz);
-                konto += 2*einsatz;
-            }
+                status = BJ_BANK_BUST;
             else if(tmpS > tmpB)
-            {
-                mvprintw(15, 0,"Du gewinnst %d€.", 2*einsatz);
-                konto += 2*einsatz;
-            }
+                status = BJ_WIN;
             else if(tmpS < tmpB)
-            {
-                mvprintw(15, 0,"Die Bank gewinnt.");
-            }
+                status = BJ_LOST;
             else if(tmpS == tmpB)
-            {
-                mvprintw(15, 0,"Unentschieden. Du erhälst die %d€ Einsatz zurück.", einsatz);
-                konto += einsatz;
-            }
+                status = BJ_REMIS;
+
         }
+
+        mvprintw(4, 0, "Karten im Schlitten  % 5d", anzKarten);
+        bj_zeige_hande(spieler, bank);
+        konto += bj_gewinn(status, einsatz);
 
         karten_delete_stapel(&spieler);
         karten_delete_stapel(&bank);
@@ -152,7 +135,7 @@ void blackjack_start()
             getch();
             break;
         }
-        mvprintw(17, 0, "Enter zum Weiterspielen. Q zum Beenden.");
+        mvprintw(BJ_BOT + 2, 0, "Enter zum Weiterspielen. Q zum Beenden.");
         refresh();
         yn = 0;
         yn = getch();
@@ -218,4 +201,44 @@ void bj_zeige_hande(struct deck *spieler, struct deck *bank)
     move(y+2, BJ_RIGHT);
     refresh();
     return;
+}
+
+int bj_gewinn(int status, int einsatz)
+{
+    int faktor;
+    char *nachricht;
+    switch(status)
+    {
+        case BJ_WIN:
+            faktor = 2;
+            nachricht = "Du gewinnst %d€.";
+            break;
+        case BJ_LOST:
+            faktor = 0;
+            nachricht = "Die Bank gewinnt.";
+            break;
+        case BJ_REMIS:
+            faktor = 1;
+            nachricht = "Unentschieden. Du erhälst die %d€ Einsatz zurück.";
+            break;
+        case BJ_BUST:
+            faktor = 0;
+            nachricht = "Du hast dich überkauft! Die Bank gewinnt.";
+            break;
+        case BJ_BANK_BUST:
+            faktor = 0;
+            nachricht = "Die Bank hat sich überkauft! Du gewinnst %d€.";
+            break;
+        case BJ_BLACKJACK:
+            faktor = 3;
+            nachricht = "Blackjack! Du gewinnst %d€.";
+            break;
+        default:
+            faktor = 666;
+            nachricht = "Irgendetwas böses geht hier ab!";
+            break;
+    }
+    mvprintw(BJ_BOT, 0, nachricht, faktor * einsatz);
+    refresh();
+    return faktor * einsatz;
 }
