@@ -3,26 +3,36 @@
 void benchmark_start()
 {
     unsigned w;
-    double ma, pi, pr, v;
+    int *u;
+    //~ double runden;
+    double ma, pi, pr, v, po;
     char yn;
     printf("Benchmark des Systems durch das Lösen von 200 zufälligen 200x200 Matrizen. (Diagonalform)\n");
     ma = matrix_benchmark();
     printf("Time: %4.2f s\n", ma);
+
     printf("Benchmark des Systems durch das Zählen der Treffer bei 100.000.000 Darts auf eine Dartscheibe (und dabei angenäherter Wert von PI)\n");
     pi = pi_benchmark(&v);
     printf("Time: %4.2f s (pi=%f)\n", pi, v);
+
     printf("Benchmark des Systems durch das Ermitteln aller Primzahlen < 100.000.000\n");
     pr = prim_benchmark(&w);
     printf("Time: %4.2f s (%d Stück)\n", pr, w);
 
+    printf("Benchmark des Systems durch das verteilen und auswerten von je 250.000 Pokerhände an 8 Spieler (10.000.000 verteilte Karten) \n");
+    po = poker_benchmark(&u);
+    printf("Time: %4.2f s \n", po);
+    poker_monte_carlo_darstellen(u);
+
+
     printf("save? (y,n)");
     scanf("%c", &yn);
     if( yn == 'y' || yn == 'Y' || yn == '1')
-        benchmark_save(ma,pi,pr);
+        benchmark_save(ma,pi,pr,po);
     return;
 }
 
-int benchmark_save(double ma, double pi, double pr)
+int benchmark_save(double ma, double pi, double pr, double po)
 {
     char* filename = "bench.stat";
     FILE *datei;
@@ -32,7 +42,7 @@ int benchmark_save(double ma, double pi, double pr)
         printf("Fehler beim Öffnen der Datei!\n");
         return 1;
     }
-    fprintf (datei, "%f,%f,%f\n", ma, pi, pr);
+    fprintf (datei, "%f,%f,%f,%f\n", ma, pi, pr, po);
     fclose (datei);
     printf("Benchmark Ergebnisse erfolgreich nach %s geschrieben\n", filename);
     return 0;
@@ -79,6 +89,15 @@ double pi_benchmark(double *v)
     int begin,end;
     begin = clock();
     *v=pi(100000000);
+    end = clock();
+    return((double)(end-begin)/CLOCKS_PER_SEC);
+}
+
+double poker_benchmark(int **u)
+{
+    int begin,end;
+    begin = clock();
+    poker_monte_carlo(250000, 8, u);
     end = clock();
     return((double)(end-begin)/CLOCKS_PER_SEC);
 }

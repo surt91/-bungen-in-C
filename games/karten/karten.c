@@ -138,28 +138,51 @@ void karten_zeiger(struct card karte)
     return;
 }
 
-// sortiert aufsteigend, (ass, zwei, drei, ...)
-struct card *karten_sortierer(struct card *hand)
+int karten_counter(struct deck *stapel)
 {
-    int i, j, temp, n=0;
-    // Bubble Sort; effizient, da nur 5 Werte sortiert werden müssen; qsort würde mehr "overhead" erzeugen
-    // n ist ein Zähler, der feststellt, ob in der Sortierschleife etwas umgestellt wurde, falls nicht, bricht die Schleife ab
-    // marginale Geschwindigkeitsvorteile. durch overhead eventuell sogar Nachteile
-    for(i=0;i<4;i++)
+    int ret=0;
+    while(stapel != NULL)
     {
-        for(j=4;i<j;j--)
-            if(hand[j-1].w>hand[j].w)
+        ret++;
+        stapel = stapel -> next;
+    }
+    return ret;
+}
+
+// sortiert aufsteigend, (ass, zwei, drei, ...)
+void karten_sortierer(struct deck **hand)
+{
+    struct deck *kopf, *q;
+    struct card tmp;
+    int n = 0, i, j, m, c;
+    // Bubble Sort
+
+    kopf = *hand;
+    q  = kopf;
+
+    c = karten_counter(*hand);
+
+    for(i=0;i<c-1;i++)
+    {
+        for(j=c-1;i<j;j--)
+        {
+            for(m=0; m<j-1; m++)
             {
-                temp = hand[j-1].w;
-                hand[j-1].w = hand[j].w;
-                hand[j].w = temp;
+                q = q -> next;
+            }
+            if(q -> karte.w > q -> next -> karte.w)
+            {
+                tmp = q -> karte;
+                q -> karte = q -> next -> karte;
+                q -> next -> karte = tmp;
                 n++;
             }
-            if(n==0)
-                break;
-            n=0;
+            q = kopf;
+        }
+        if(n==0)
+            break;
+        n=0;
     }
-    return(hand);
 }
 
 void karten_delete_stapel(struct deck **stapel)
@@ -173,4 +196,17 @@ void karten_delete_stapel(struct deck **stapel)
         free(tmp);
     }
     return;
+}
+
+struct card karten_get_card_by_index(struct deck *stapel, int idx)
+{
+    int i;
+    // erste karte => idx = 0;
+    for(i=0; i<idx; i++)
+    {
+        if(stapel -> next == NULL)
+            break;
+        stapel = stapel -> next;
+    }
+    return stapel -> karte;
 }

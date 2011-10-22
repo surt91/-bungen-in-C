@@ -13,7 +13,7 @@
 #define BJ_TOP 8
 #define BJ_BOT 17
 #define BJ_RIGHT 15
-#define BJ_LEFT  0
+#define BJ_LEFT 0
 #define BLACKJACK_HIGHSCORE_FILENAME "blackjack_highscore_save.dat"
 
 #define BJ_HIT 1

@@ -109,9 +109,9 @@ int menu(int argc, char **argv)
                 case 8:
                     blackjack_start();
                     break;
-                //~ case 9:
-                    //~ poker_start();
-                    //~ break;
+                case 9:
+                    poker_start();
+                    break;
             }
             break;
         case PRIM:
