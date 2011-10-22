@@ -4,7 +4,6 @@ void benchmark_start()
 {
     unsigned w;
     int *u;
-    //~ double runden;
     double ma, pi, pr, v, po;
     char yn;
     printf("Benchmark des Systems durch das Lösen von 200 zufälligen 200x200 Matrizen. (Diagonalform)\n");
@@ -58,7 +57,6 @@ double matrix_benchmark()
     begin = clock();
     for(i=0;i<200;i++)
         matrix_dgf(rand);
-        //~ matrix_dgf(matrix_rand(100,100,0,0,100));
     end = clock();
 
     free(rand.matrix);
@@ -68,15 +66,11 @@ double matrix_benchmark()
 double prim_benchmark(unsigned *w)
 {
     int begin,end;
-
-    //~ unsigned  *prim_liste;
     short *array=0;
     int max = 100000000;
     array = (short *) calloc(max, sizeof(short));
-//    printf("test");
     begin = clock();
     primzahl(max, array);
-    //~ prim_liste = prim_array_bereinigen(array, max, w);
     prim_array_bereinigen(array, max, w);
     end = clock();
     free(array);
