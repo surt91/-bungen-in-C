@@ -9,6 +9,8 @@
 
 #define POKER_HIGHSCORE_FILENAME "poker_highscore_save.dat"
 
+void poker_start();
+
 int is_pair(struct deck *hand);
 int is_fullhouse(struct deck *hand);
 int is_flush(struct deck *hand);
