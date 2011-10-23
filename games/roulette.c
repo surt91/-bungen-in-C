@@ -5,7 +5,7 @@ void roulette_start()
     int x, besitz, runde, i, k;
     int max_geld;
     int max_runde;
-    int liste[42];
+    int liste[43];
 
     setlocale(LC_ALL,"");
     initscr();
