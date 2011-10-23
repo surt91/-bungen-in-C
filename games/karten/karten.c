@@ -91,15 +91,11 @@ void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
         {
             tmp1 = tmp2;
             ctmp = tmp2->karte;
-            move(21,0);
-            karten_zeiger(ctmp);
         }
         if(i==zwei)
         {
             tmp1->karte = tmp2->karte;
             tmp2->karte = ctmp;
-            move(22,0);
-            karten_zeiger(tmp1->karte);
             break;
         }
         tmp2 = tmp2->next;
