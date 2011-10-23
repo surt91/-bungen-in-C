@@ -14,6 +14,8 @@ void roulette_start()
     noecho();
     keypad(stdscr, TRUE);
 
+    hs_highscore_init(ROULETTE_HIGHSCORE_FILENAME);
+
     for(i=0;i<=42;i++)
         liste[i] = 0;
     k=-1;
@@ -102,6 +104,8 @@ void roulette_start()
             case 'h':
             case 'H':
                 hs_load_highscore(ROULETTE_HIGHSCORE_FILENAME, "Geld", "Runde");
+                getch();
+                erase();
                 break;
             case 's':
             case 'S':
@@ -110,6 +114,7 @@ void roulette_start()
             case 'l':
             case 'L':
                 roulette_load(&runde, &besitz, &max_geld, "roulette_save.dat");
+                erase();
                 break;
             default:
                 printw("unzulässig, bitte wähle erneut");
