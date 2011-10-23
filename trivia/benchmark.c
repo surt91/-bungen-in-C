@@ -21,7 +21,7 @@ void benchmark_start()
     printf("Benchmark des Systems durch das verteilen und auswerten von je 250.000 Pokerhände an 8 Spieler (10.000.000 verteilte Karten) \n");
     po = poker_benchmark(&u);
     printf("Time: %4.2f s \n", po);
-    poker_monte_carlo_darstellen(u);
+    poker_monte_carlo_darstellen(u, 8);
 
 
     printf("save? (y,n)");

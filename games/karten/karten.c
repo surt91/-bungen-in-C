@@ -30,8 +30,8 @@ void karten_init_deck(struct deck *stapel, int anz)
 {
     int i,j,n, init=1;
     for(n=0; n<anz; n++)
-        for(i=1; i<5; i++)
-            for(j=1; j<14; j++)
+        for(i=0; i<4; i++)
+            for(j=0; j<13; j++)
             {
                 if(!init)
                 {
@@ -118,15 +118,15 @@ void karten_zeiger(struct card karte)
     switch (karte.w)
     {
         case ass:   printw(" A"); break;
-        case 2:     printw(" 2"); break;
-        case 3:     printw(" 3"); break;
-        case 4:     printw(" 4"); break;
-        case 5:     printw(" 5"); break;
-        case 6:     printw(" 6"); break;
-        case 7:     printw(" 7"); break;
-        case 8:     printw(" 8"); break;
-        case 9:     printw(" 9"); break;
-        case 10:    printw("10"); break;
+        case zwei:  printw(" 2"); break;
+        case drei:  printw(" 3"); break;
+        case vier:  printw(" 4"); break;
+        case funf:  printw(" 5"); break;
+        case sechs: printw(" 6"); break;
+        case sieben:printw(" 7"); break;
+        case acht:  printw(" 8"); break;
+        case neun:  printw(" 9"); break;
+        case zehn:  printw("10"); break;
         case bube:  printw(" J"); break;
         case dame:  printw(" Q"); break;
         case konig: printw(" K"); break;

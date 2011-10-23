@@ -9,8 +9,8 @@
 
 struct card
 {
-    enum farbe {herz = 1, pik, karo, kreuz} f;
-    enum wert {ass = 1, zwei, drei, vier, funf, sechs, sieben, acht, neun, zehn, bube, dame, konig} w;
+    enum farbe {herz = 0, pik, karo, kreuz} f;
+    enum wert {zwei = 0, drei, vier, funf, sechs, sieben, acht, neun, zehn, bube, dame, konig, ass} w;
 };
 
 struct deck

@@ -3,10 +3,10 @@
 void poker_start()
 {
     struct deck *stapel = NULL, *spieler = NULL;
-    int i, n;
-    const static int anzHand = 5, anzDeck = 1, anzPerDeck = 52;
-    int flush = 0, straight = 0, straight_flush = 0, royal_flush = 0;
-    int fullhouse = 0, runden = 0;
+    int i, konto = 100, einsatz = 0;
+    char yn;
+    const static int anzHand = 5, anzDecks = 1, anzPerDeck = 52;
+    int runde = 0;
     setlocale(LC_ALL,"");
     initscr();
     raw();
@@ -14,57 +14,123 @@ void poker_start()
     echo();
     keypad(stdscr, TRUE);
 
-    for(n=0; n<10000; n++)
+    hs_highscore_init(POKER_HIGHSCORE_FILENAME);
+
+    while(1)
     {
-        karten_delete_stapel(&spieler);
         karten_delete_stapel(&stapel);
-
         stapel = (struct deck *) malloc(sizeof(struct deck));
-        karten_init_deck(stapel, anzDeck);
-        for(i=0;i<200*anzDeck;i++)
-            karten_vertausche_zwei_karten(&stapel, \
-                                    rand()%(anzDeck*anzPerDeck+1)+1, \
-                                    rand()%(anzDeck*anzPerDeck+1)+1);
+        karten_init_deck(stapel, anzDecks);
+        //~ // Mischen
+        for(i=0;i<200*anzDecks;i++)
+            karten_vertausche_zwei_karten(&stapel, rand()%(anzPerDeck*anzDecks+1)+1, rand()%(anzPerDeck*anzDecks+1)+1);
 
-        for(i=0; i < anzHand; i++)
-        {
+        einsatz = 0;
+
+        mvprintw(1, 0, "Konto                % 5d", konto);
+        mvprintw(2, 0, "Einsatz              % 5d", einsatz);
+        mvprintw(3, 0, "Runde                % 5d", ++runde);
+
+        einsatz = bj_setzen(konto);
+        konto -= einsatz;
+
+        mvprintw(1, 0, "Konto                % 5d", konto);
+        mvprintw(2, 0, "Einsatz              % 5d", einsatz);
+        refresh();
+        move(5,0);
+
+        for(i=0;i<anzHand;i++)
             karten_gebe_karte(&stapel, &spieler);
-        }
-        if(is_straight(spieler)==2)
+        karten_show(spieler);
+
+        konto += poker_gewinn(spieler, einsatz);
+        karten_delete_stapel(&spieler);
+
+        if(konto <= 0)
         {
-            if(is_flush(spieler))
-                royal_flush++;
-            else
-                straight++;
+            getch();
+            hs_show_highscore(konto, "Geld", runde, "Runde", POKER_HIGHSCORE_FILENAME);
+            getch();
+            break;
         }
-        else if(is_straight(spieler))
+
+        mvprintw(BJ_BOT + 2, 0, "Enter: zum Weiterspielen.");
+        mvprintw(BJ_BOT + 3, 0, "    Q: Beenden.");
+        //~ mvprintw(BJ_BOT + 4, 0, "   F1: Hilfe");
+        refresh();
+
+        yn = 0;
+        yn = getch();
+
+        if(yn == 'Q' || yn == 'q')
         {
-            if(is_flush(spieler))
-                straight_flush++;
-            else
-                straight++;
+            hs_show_highscore(konto, "Geld", runde, "Runde", POKER_HIGHSCORE_FILENAME);
+            break;
         }
-        else if(is_flush(spieler))
-            flush++;
-        else if(is_fullhouse(spieler))
-            fullhouse++;
-        runden++;
+
+        erase();
+        refresh();
     }
-
-    printw("Verteilung über\n\
-    % 12d Runden:\n\
-    \n\
-    % 12d Straßen\n\
-    % 12d Flushs\n\
-    % 12d Fullhouses\n\
-    % 12d Straight Flush\n\
-    % 12d Royal Flush\n",\
-    runden, straight, flush, fullhouse, straight_flush, royal_flush);
-
-    getch();
     endwin();
+    return;
 }
 
+int poker_gewinn(struct deck *hand, int einsatz)
+{
+    int faktor = 0;
+    char *nachricht   = "Nichts!          Verloren!";
+    switch(is_pair(hand))
+    {
+        case 1:
+            faktor = 0;
+            nachricht = "Pair!            Verloren!";
+            break;
+        case 2:
+            faktor = 1;
+            nachricht = "Jacks or Better! Gewinn: %d";
+            break;
+        case 5:
+            faktor = 2;
+            nachricht = "Two Pair!        Gewinn: %d";
+            break;
+        case 3:
+            faktor = 3;
+            nachricht = "Three of a Kind! Gewinn: %d";
+            break;
+        case 4:
+            faktor = 25;
+            nachricht = "Four of a Kind!  Gewinn: %d";
+            break;
+    }
+    if(is_fullhouse(hand))
+    {
+        faktor = 9;
+        nachricht     = "Fullhouse!       Gewinn: %d";
+    }
+    if(is_royal_flush(hand))
+    {
+        faktor = 250;
+        nachricht     = "Royal Flush!     Gewinn: %d";
+    }
+    else if (is_straight_flush(hand))
+    {
+        faktor = 50;
+        nachricht     = "Straight Flush!  Gewinn: %d";
+    }
+    else if (is_straight(hand))
+    {
+        faktor = 4;
+        nachricht     = "Straight!        Gewinn: %d";
+    }
+    else if (is_flush(hand) && faktor != 25)
+    {
+        faktor = 6;
+        nachricht     = "Flush!           Gewinn: %d";
+    }
+    mvprintw(BJ_BOT, 0, nachricht, faktor * einsatz);
+    refresh();
+    return faktor;
+}
 void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
 {
     struct deck *stapel = NULL, *spieler[leute];
@@ -72,11 +138,14 @@ void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
     const static int anzHand = 5, anzDeck = 1, anzPerDeck = 52;
     int flush[leute], straight[leute], royal_flush[leute];
     int fullhouse[leute], runden[leute], straight_flush[leute];
+    int pair[leute], three_of_a_kind[leute], two_pair[leute];
+    int four_of_a_kind[leute], flag=0;
 
     for(j=0; j<leute; j++)
     {
-        flush[j] = straight[j] = straight_flush[j]\
-         = royal_flush[j] = fullhouse[j] = runden[j] = 0;
+        flush[j] = straight[j] = straight_flush[j] \
+         = royal_flush[j] = fullhouse[j] = pair[j] =two_pair[j] \
+         = three_of_a_kind[j] = four_of_a_kind[j] = runden[j] = 0;
          spieler[j] = NULL;
     }
     for(n=0; n<anzahl; n++)
@@ -98,78 +167,164 @@ void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
 
         for(j=0; j<leute; j++)
         {
-            if(is_straight(spieler[j])==2)
+            flag = 0;
+            switch(is_pair(spieler[j]))
             {
-                if(is_flush(spieler[j]))
-                    royal_flush[j]++;
-                else
-                    straight[j]++;
+                case 1:
+                case 2:
+                    pair[j]++;
+                    break;
+                case 5:
+                    two_pair[j]++;
+                    break;
+                case 3:
+                    three_of_a_kind[j]++;
+                    break;
+                case 4:
+                    four_of_a_kind[j]++;
+                    flag = 1;
+                    break;
+                case 6:
+                    fullhouse[j]++;
+                    flag = 1;
+                    break;
             }
-            else if(is_straight(spieler[j]))
+            if(!flag)
             {
-                if(is_flush(spieler[j]))
-                    straight_flush[j]++;
-                else
-                    straight[j]++;
+                if(is_straight(spieler[j])==2)
+                {
+                    if(is_flush(spieler[j]))
+                        royal_flush[j]++;
+                    else
+                        straight[j]++;
+                }
+                else if(is_straight(spieler[j]))
+                {
+                    if(is_flush(spieler[j]))
+                        straight_flush[j]++;
+                    else
+                        straight[j]++;
+                }
+                else if(is_flush(spieler[j]))
+                    flush[j]++;
             }
-            else if(is_flush(spieler[j]))
-                flush[j]++;
-            else if(is_fullhouse(spieler[j]))
-                fullhouse[j]++;
             runden[j]++;
         }
     }
-    *ergebnis = (int *) malloc(6 * leute * sizeof(int));
+    *ergebnis = (int *) malloc(10 * leute * sizeof(int));
     for(j=0; j<leute; j++)
     {
-        (*ergebnis)[6 * j + 0] = straight[j];
-        (*ergebnis)[6 * j + 1] = flush[j];
-        (*ergebnis)[6 * j + 2] = fullhouse[j];
-        (*ergebnis)[6 * j + 3] = straight_flush[j];
-        (*ergebnis)[6 * j + 4] = royal_flush[j];
-        (*ergebnis)[6 * j + 5] = runden[j];
+        (*ergebnis)[10 * j + 0] = pair[j];
+        (*ergebnis)[10 * j + 1] = two_pair[j];
+        (*ergebnis)[10 * j + 2] = three_of_a_kind[j];
+        (*ergebnis)[10 * j + 3] = straight[j];
+        (*ergebnis)[10 * j + 4] = flush[j];
+        (*ergebnis)[10 * j + 5] = fullhouse[j];
+        (*ergebnis)[10 * j + 6] = four_of_a_kind[j];
+        (*ergebnis)[10 * j + 7] = straight_flush[j];
+        (*ergebnis)[10 * j + 8] = royal_flush[j];
+        (*ergebnis)[10 * j + 9] = runden[j];
     }
 }
 
-void poker_monte_carlo_darstellen(int *u)
+void poker_monte_carlo_darstellen(int *u, int anzSpieler)
 {
     int i, j, tmp;
     double runden = 0;
+    const static int anzWins = 9;
 
-    char *bezeichnungen[5];
-    char *straight       = "      Straight", \
-                      *flush          = "         Flush", \
-                      *fullhouse      = "     Fullhouse", \
-                      *straight_flush = "Straight Flush", \
-                      *royal_flush    = "   Royal Flush";
+    char *bezeichnungen[anzWins];
+    char  *pair            = "           Pair", \
+          *two_pair        = "       Two Pair", \
+          *three_of_a_kind = "Three of a Kind", \
+          *straight        = "       Straight", \
+          *flush           = "          Flush", \
+          *fullhouse       = "      Fullhouse", \
+          *four_of_a_kind  = " Four of a Kind", \
+          *straight_flush  = " Straight Flush", \
+          *royal_flush     = "    Royal Flush";
 
-    bezeichnungen[0] = straight;
-    bezeichnungen[1] = flush;
-    bezeichnungen[2] = fullhouse;
-    bezeichnungen[3] = straight_flush;
-    bezeichnungen[4] = royal_flush;
+    bezeichnungen[0] = pair;
+    bezeichnungen[1] = two_pair;
+    bezeichnungen[2] = three_of_a_kind;
+    bezeichnungen[3] = straight;
+    bezeichnungen[4] = flush;
+    bezeichnungen[5] = fullhouse;
+    bezeichnungen[6] = four_of_a_kind;
+    bezeichnungen[7] = straight_flush;
+    bezeichnungen[8] = royal_flush;
 
-    for (i=5; i < 48; i+=6)
+    for (i=anzWins; i < anzSpieler*(anzWins+1); i+=(anzWins+1))
         runden += u[i];
 
     printf("Über %g Runden (%g verteilte Karten) gesammelte Messwerte\n", runden, runden*5);
-    printf("             # % 5d % 5d % 5d % 5d % 5d % 5d % 5d % 5d  Summe          %%\n", 1, 2, 3, 4, 5, 6, 7, 8);
+    printf("             #");
+    for(i=0;i<anzSpieler;i++)
+        printf(" % 5d", i+1);
+    printf("  Summe          %%\n");
 
-    for(j=0; j < 5; j++)
+    for(j=0; j < anzWins; j++)
     {
         printf("%s", bezeichnungen[j]);
-        for (tmp = 0, i=j; i < 48; i+=6)
+        for (tmp = 0, i=j; i < (anzWins+1)*anzSpieler; i+=(anzWins+1))
         {
-            printf(" % 5d", u[i]);
+            if(u[i]>=10000000)
+                printf(" % 4dM", u[i]/1000);
+            else if(u[i]>=10000)
+                printf(" % 4dk", u[i]/1000);
+            else
+                printf(" % 5d", u[i]);
             tmp += u[i];
         }
-        printf(" % 6d", tmp);
-        printf(" % 9.4f%%", 100*tmp/runden);
+        if(tmp>=100000000)
+                printf(" % 5dM", u[i]/1000);
+        else if(tmp>=100000)
+            printf(" % 5dk", tmp/1000);
+        else
+            printf(" % 6d", tmp);
+        printf(" % 8.4f%%", 100*tmp/runden);
         printf("\n");
     }
     return;
 }
 
+int is_pair(struct deck *hand)
+{
+    int i, j, n=0, l[13], m=0;
+    enum wert tmp = zwei;
+
+    for(j=0;j<13;j++)
+        l[j] = 0;
+
+    for(i=0;i<5;i++)
+        l[karten_get_card_by_index(hand, i).w]++;
+    for(j=0;j<13;j++)
+        if(l[j]>1)
+        {
+            if(!n)
+            {
+                n=l[j];
+                tmp = j;
+            }
+            else
+                m=l[j];
+        }
+    if(!n)
+        return 0;
+    if(n==4)
+        return 4;
+    if(( (m==2) && (n==3) ) || ( (m==3) && (n==2) ))
+        return 6;
+    if(n==3)
+        return 3;
+    if(n==2 && m==2)
+        return 5;
+    if(n==2 && tmp >= bube)
+        return 2;
+    if(n==2)
+        return 1;
+    return -1;
+}
 // überprüft, ob ein Fullhouse auf der Hand ist
 int is_fullhouse(struct deck *hand)
 {
@@ -209,16 +364,23 @@ int is_straight(struct deck *hand)
 {
     int i;
     karten_sortierer(&hand);
-    if(   karten_get_card_by_index(hand, 1).w == 10    \
-       && karten_get_card_by_index(hand, 2).w == bube  \
-       && karten_get_card_by_index(hand, 3).w == dame  \
-       && karten_get_card_by_index(hand, 4).w == konig \
-       && karten_get_card_by_index(hand, 0).w == ass    )
+    if(   karten_get_card_by_index(hand, 0).w == zehn  \
+       && karten_get_card_by_index(hand, 1).w == bube  \
+       && karten_get_card_by_index(hand, 2).w == dame  \
+       && karten_get_card_by_index(hand, 3).w == konig \
+       && karten_get_card_by_index(hand, 4).w == ass    )
         return 2;
 
+    if(   karten_get_card_by_index(hand, 0).w == zwei \
+       && karten_get_card_by_index(hand, 1).w == drei \
+       && karten_get_card_by_index(hand, 2).w == vier \
+       && karten_get_card_by_index(hand, 3).w == funf \
+       && karten_get_card_by_index(hand, 4).w == ass   )
+        return 1;
+
     for(i=0;i<4;i++)
-        if(    karten_get_card_by_index(hand, i).w+1 \
-            != karten_get_card_by_index(hand, i+1).w  )
+        if( (   karten_get_card_by_index(hand, i).w+1  \
+             != karten_get_card_by_index(hand, i+1).w ) )
             return 0;
     return 1;
 }
