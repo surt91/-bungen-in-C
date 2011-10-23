@@ -3,10 +3,11 @@
 void poker_start()
 {
     struct deck *stapel = NULL, *spieler = NULL;
-    int i, konto = 100, einsatz = 0;
-    char yn;
+    int i, n, konto = 100, einsatz = 0;
+    char yn, k;
     const static int anzHand = 5, anzDecks = 1, anzPerDeck = 52;
     int runde = 0;
+    int toggle[anzHand];
     setlocale(LC_ALL,"");
     initscr();
     raw();
@@ -21,7 +22,7 @@ void poker_start()
         karten_delete_stapel(&stapel);
         stapel = (struct deck *) malloc(sizeof(struct deck));
         karten_init_deck(stapel, anzDecks);
-        //~ // Mischen
+        // Mischen
         for(i=0;i<200*anzDecks;i++)
             karten_vertausche_zwei_karten(&stapel, rand()%(anzPerDeck*anzDecks+1)+1, rand()%(anzPerDeck*anzDecks+1)+1);
 
@@ -37,10 +38,47 @@ void poker_start()
         mvprintw(1, 0, "Konto                % 5d", konto);
         mvprintw(2, 0, "Einsatz              % 5d", einsatz);
         refresh();
-        move(5,0);
 
         for(i=0;i<anzHand;i++)
             karten_gebe_karte(&stapel, &spieler);
+        move(5,0);
+        karten_sortierer(&spieler);
+        karten_show(spieler);
+
+        mvprintw(BJ_BOT + 2, 0, "Welche Karten willst du Tauschen?");
+        move(BJ_BOT + 3, 0);
+        noecho();
+        for(i=0;i<anzHand;i++)
+            toggle[i] = 0;
+        do
+        {
+            k = getch();
+            if(k-'0'>0 && k-'0'<=5)
+            {
+                toggle[k-'0'-1]++;
+                toggle[k-'0'-1] %= 2;
+                if(toggle[k-'0'-1])
+                    mvprintw(5 + k-'0'-1, 5, "X");
+                else
+                    mvprintw(5 + k-'0'-1, 5, " ");
+                refresh();
+            }
+        } while(k != '\n');
+        move(BJ_BOT + 2, 0);
+        clrtoeol();
+        echo();
+        n=0;
+        for(i=0;i<anzHand;i++)
+            if(toggle[i])
+            {
+                karten_delete_by_index(&spieler, i-n);
+                n++;
+                karten_gebe_karte(&stapel, &spieler);
+                mvprintw(5 + i, 5, " ");
+            }
+
+        move(5,0);
+        karten_sortierer(&spieler);
         karten_show(spieler);
 
         konto += poker_gewinn(spieler, einsatz);
@@ -129,7 +167,7 @@ int poker_gewinn(struct deck *hand, int einsatz)
     }
     mvprintw(BJ_BOT, 0, nachricht, faktor * einsatz);
     refresh();
-    return faktor;
+    return faktor * einsatz;
 }
 void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
 {

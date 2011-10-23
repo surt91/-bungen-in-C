@@ -2,6 +2,7 @@
 
 void karten_gebe_karte(struct deck **stapel, struct deck **hand)
 {
+    // hängt eine Karte hinten an
     struct deck *tmp1, *tmp2;
     tmp2 = *stapel;
     if(*hand == NULL)
@@ -90,11 +91,15 @@ void karten_vertausche_zwei_karten(struct deck **stapel, int eins, int zwei)
         {
             tmp1 = tmp2;
             ctmp = tmp2->karte;
+            move(21,0);
+            karten_zeiger(ctmp);
         }
         if(i==zwei)
         {
             tmp1->karte = tmp2->karte;
             tmp2->karte = ctmp;
+            move(22,0);
+            karten_zeiger(tmp1->karte);
             break;
         }
         tmp2 = tmp2->next;
@@ -209,4 +214,29 @@ struct card karten_get_card_by_index(struct deck *stapel, int idx)
         stapel = stapel -> next;
     }
     return stapel -> karte;
+}
+
+void karten_delete_by_index(struct deck **hand, int idx)
+{
+    int i;
+    struct deck *tmp;
+    tmp = *hand;
+    // erste karte => idx = 0;
+    if(idx == 0)
+    {
+        *hand = tmp -> next;
+        free(tmp);
+    }
+    else
+    {
+        for(i=0; i<idx-1; i++)
+        {
+            if(tmp -> next == NULL)
+                break;
+            tmp = tmp -> next;
+        }
+        free(tmp -> next);
+        tmp -> next = tmp -> next -> next;
+    }
+    return;
 }
