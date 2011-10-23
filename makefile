@@ -5,6 +5,7 @@ OPRIM	= prim/prim.o prim/prim_aufruf.o
 OPOLY	= trivia/polynom.o trivia/polynom_aufruf.o
 OGAMES	= games/highscore.o\
 		  games/conway.o games/snake.o games/roulette.o\
+		  games/vier_gewinnt.o\
 		  games/karten/karten.o\
 		  games/karten/poker.o games/karten/blackjack.o
 

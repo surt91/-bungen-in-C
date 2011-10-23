@@ -10,6 +10,7 @@
 #include "games/conway.h"
 #include "games/snake.h"
 #include "games/roulette.h"
+#include "games/vier_gewinnt.h"
 #include "games/karten/poker.h"
 #include "games/karten/blackjack.h"
 #include "trivia/benchmark.h"

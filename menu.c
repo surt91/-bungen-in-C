@@ -112,6 +112,9 @@ int menu(int argc, char **argv)
                 case 9:
                     poker_start();
                     break;
+                case 10:
+                    vier_gewinnt_start();
+                    break;
             }
             break;
         case PRIM:
