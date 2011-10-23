@@ -121,7 +121,6 @@ void roulette_start()
                 break;
         }
         refresh();
-        //~ getch();
     }
 }
 
