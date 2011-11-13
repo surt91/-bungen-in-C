@@ -203,6 +203,9 @@ int menu(int argc, char **argv)
                     //~ aufg_TRIV_15();
                     benchmark_start();
                     break;
+                case 16:
+                    bin_uhr();
+                    break;
             }
             break;
         case CONWAY:

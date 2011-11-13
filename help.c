@@ -105,6 +105,7 @@ void help( int chap )
             printf("%d\t12\t//100 Zeichen Palindromität prüfen\n",TRIV);
             printf("%d\t13\t//dec2base36\n",TRIV);
             printf("%d\t15\t//Benchmark\n",TRIV);
+            printf("%d\t16\t//Binäre Uhr\n",TRIV);
             if(chap==TRIV) break;
         case CONWAY:
             printf("\nKapitel %d: Conways Game of Life\n\n",CONWAY);
