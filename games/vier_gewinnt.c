@@ -2,5 +2,5 @@
 
 void vier_gewinnt_start()
 {
-    printf("test");
+    printf("test\n");
 }
