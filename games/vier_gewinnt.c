@@ -3,7 +3,8 @@
 void vier_gewinnt_start()
 {
     int i, j, spieler = VG_KREIS;
-    char *spl;
+    char *spl_str="Kreis", spl_chr='O';
+
     struct vg_feld map;
     map.runde = 0;
     for(i=0;i<VG_X;i++)
@@ -18,8 +19,9 @@ void vier_gewinnt_start()
 
     while(1)
     {
+        mvprintw(1,13,"%s ist am Zug!", spl_str);
         vg_draw(&map);
-        i = vg_steuern(&map);
+        i = vg_steuern(&map, spl_chr);
         vg_setzen(&map, i, spieler);
 
         move(1,13);
@@ -27,17 +29,20 @@ void vier_gewinnt_start()
             break;
 
         if(spieler == VG_KREIS)
+        {
             spieler = VG_KREUZ;
+            spl_str = "Kreuz";
+            spl_chr = 'X';
+        }
         else
+        {
             spieler = VG_KREIS;
-
+            spl_str = "Kreis";
+            spl_chr = 'O';
+        }
     }
     vg_draw(&map);
-    if(spieler == VG_KREIS)
-        spl = "Kreis";
-    else
-        spl = "Kreuz";
-    mvprintw(1,13,"%s gewinnt!", spl);
+    mvprintw(1,13,"%s gewinnt!   ", spl_str);
     getch();
     endwin();
 }
@@ -76,12 +81,15 @@ void vg_draw(struct vg_feld *map)
     return;
 }
 
-int vg_steuern(struct vg_feld *map)
+int vg_steuern(struct vg_feld *map, char sym)
 {
     int k = '1';
-    int i = 0;
+    int i = 3;
     while(k != ' ')
     {
+        move(0,0);
+        clrtoeol();
+        mvaddch(0, i+1, sym | A_BOLD);
         move(0,i+1);
         k = getch();
         switch (k)

@@ -21,7 +21,7 @@ struct vg_feld
 
 void vier_gewinnt_start();
 void vg_draw(struct vg_feld *map);
-int vg_steuern(struct vg_feld *map);
+int vg_steuern(struct vg_feld *map, char sym);
 void vg_setzen(struct vg_feld *map, int x, int spieler);
 int vg_prufe_gewinn(struct vg_feld *map);
 int vg_vier(struct vg_feld *map, int x, int y);
