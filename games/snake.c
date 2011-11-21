@@ -241,14 +241,14 @@ void snake_draw(struct snake_map *map, int theme)
     mvprintw(map->y,   map->x+4, "Laenge: % 5d", map->length);
     mvprintw(map->y+1, map->x+4, "Punkte: % 5d", map->punkte);
     move(0,0);
-    addch('+');
+    addch(ACS_ULCORNER);
     for(i=0; i < map->x; i++)
-        addch('-');
-    addch('+');
+        addch(ACS_HLINE);
+    addch(ACS_URCORNER);
     move(1,0);
     for(j=0; j < map->y; j++)
     {
-        printw("|");
+        addch(ACS_VLINE);
         for(i=0; i < map->x; i++)
         {
             if(map->kopf[0] == i && map->kopf[1] == j)
@@ -260,13 +260,13 @@ void snake_draw(struct snake_map *map, int theme)
             else
                 addch(' ');
         }
-        addch('|');
+        addch(ACS_VLINE);
         move(j+2,0);
     }
-    addch('+');
+    addch(ACS_LLCORNER);
     for(i=0; i < map->x; i++)
-        addch('-');
-    addch('+');
+        addch(ACS_HLINE);
+    addch(ACS_LRCORNER);
     return;
 }
 
