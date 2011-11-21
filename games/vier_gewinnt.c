@@ -16,7 +16,7 @@
 void vier_gewinnt_start()
 {
     int i, j, spieler = VG_KREIS;
-    char *spl_str="Kreis", spl_chr='O';
+    char *spl_str="Kreis", spl_chr=VG_STEIN_KREIS;
 
     struct vg_feld map;
     map.runde = 0;
@@ -46,13 +46,13 @@ void vier_gewinnt_start()
         {
             spieler = VG_KREUZ;
             spl_str = "Kreuz";
-            spl_chr = 'X';
+            spl_chr = VG_STEIN_KREUZ;
         }
         else
         {
             spieler = VG_KREIS;
             spl_str = "Kreis";
-            spl_chr = 'O';
+            spl_chr = VG_STEIN_KREIS;
         }
     }
 
@@ -72,11 +72,11 @@ void vg_draw(struct vg_feld *map)
         for(i=0; i < VG_X; i++)
         {
             if(map->status[i][j] == VG_LEER)
-                addch('.');
+                addch(VG_STEIN_LEER);
             else if(map->status[i][j] == VG_KREIS)
-                addch('O');
+                addch(VG_STEIN_KREIS);
             else if(map->status[i][j] == VG_KREUZ)
-                addch('X');
+                addch(VG_STEIN_KREUZ);
             else
                 addch(' ');
         }

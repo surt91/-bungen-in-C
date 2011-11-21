@@ -10,6 +10,10 @@
 #define VG_KREIS 1
 #define VG_KREUZ 2
 
+#define VG_STEIN_KREUZ 'X'
+#define VG_STEIN_KREIS 'O'
+#define VG_STEIN_LEER  '.'
+
 #define VG_X 7
 #define VG_Y 6
 
