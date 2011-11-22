@@ -157,7 +157,7 @@ int bj_summiere_augen(struct deck *hand)
         else if(now == ass)
             n_ass++;
         else
-            summe += now;
+            summe += now + 2;
         hand = hand -> next;
     }
     if(n_ass)
@@ -216,7 +216,7 @@ int bj_gewinn(int status, int einsatz)
             nachricht = "Du hast dich überkauft! Die Bank gewinnt.";
             break;
         case BJ_BANK_BUST:
-            faktor = 0;
+            faktor = 2;
             nachricht = "Die Bank hat sich überkauft! Du gewinnst %d€.";
             break;
         case BJ_BLACKJACK:
