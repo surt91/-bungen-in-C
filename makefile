@@ -27,7 +27,7 @@ all: $(TARGET)
 	$(CC) -c $(WARNLEVEL) $(CFLAGS) $< -o $@
 
 $(TARGET): $(OBJ)
-	$(CC) $(LFLAGS) -o $(TARGET) $(OBJ)
+	$(CC) -o $(TARGET) $(OBJ) $(LFLAGS)
 
 clean:
 	rm -rf $(OBJ) $(TARGET)
