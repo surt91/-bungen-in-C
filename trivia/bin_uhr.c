@@ -26,9 +26,9 @@ void bin_uhr_anzeige(bin_uhr_zeit zeit)
         if(i!=6 && i!=13)
         {
             if(zeit & 0b1)
-                anzeige[i]='O';
+                anzeige[i]='1';
             else
-                anzeige[i]='.';
+                anzeige[i]='0';
             zeit>>=1;
         }
     }
