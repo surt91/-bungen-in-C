@@ -227,15 +227,17 @@ int roulette_gewinn(int *liste, int kugel)
 void roulette_setzen(int *besitz, int *liste, int k)
 {
     int x=0,y;
+    int tmp;
     getyx(stdscr, y, x);
     mvprintw(y+2, x, "Du hast %d€", *besitz);
     mvprintw(y+3, x, "Wieviel setzt du? ");
     refresh();
     echo();
-    scanw("%d", &liste[k]);
+    scanw("%d", &tmp);
+    liste[k] += tmp;
+    *besitz -= tmp;
     noecho();
     erase();
-    *besitz-=liste[k];
     return;
 }
 int roulette_drehen(int *liste, int *besitz)
