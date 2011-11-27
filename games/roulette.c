@@ -158,6 +158,7 @@ char roulette_menu(int *liste, int runde, int besitz)
 // berechnet wie Groß der Gewinn-Faktor ist
 int roulette_gewinn(int *liste, int kugel)
 {
+    const static char rot[37] = {0,1,0,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0,0,1,0,1,0,1,0,1};
     int i, gewinn = 0, y=2, x=ROULETTE_RIGHT;
     if(kugel)
     {
@@ -175,14 +176,14 @@ int roulette_gewinn(int *liste, int kugel)
         if(liste[UNGERADE])
             mvprintw(y++,x,"Ungerade: Dein Einsatz verdoppelt sich auf %d!", liste[UNGERADE]);
         // Rot
-        if((kugel+kugel%10)%2==0)
+        if(rot[kugel])
             liste[ROT] *= 2;
         else
             liste[ROT]  = 0;
         if(liste[ROT])
             mvprintw(y++,x,"Rot     : Dein Einsatz verdoppelt sich auf %d!", liste[ROT]);
         // Schwarz
-        if((kugel+kugel%10)%2==1)
+        if(!rot[kugel])
             liste[SCHWARZ] *= 2;
         else
             liste[SCHWARZ]  = 0;
@@ -241,7 +242,7 @@ int roulette_drehen(int *liste, int *besitz)
 {
     int kugel, gewinn, einsatz=0, i, y;
     kugel = rand()%37;
-    mvprintw(2,ROULETTE_RIGHT,"Die Kugel ist auf %d liegen geblieben!", kugel);
+    mvprintw(1,ROULETTE_RIGHT,"Die Kugel ist auf %d liegen geblieben!", kugel);
 
     for(i=0;i<=42;i++)
         einsatz += liste[i];
