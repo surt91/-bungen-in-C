@@ -8,7 +8,6 @@ geany_run_script.sh
 bin/
 obj/
 
-krypto/
 conway/
 
 *.dat

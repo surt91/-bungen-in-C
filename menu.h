@@ -15,6 +15,7 @@
 #include "games/karten/blackjack.h"
 #include "trivia/benchmark.h"
 #include "trivia/bin_uhr.h"
+#include "krypto/AES.h"
 
 //~ int menu(int argc, char **argv);
 

@@ -23,6 +23,8 @@ int menu(int argc, char **argv)
         kapitel=atoi(argv[1]);
         aufgnr =atoi(argv[2]);
     }
+    kapitel=3;
+    aufgnr =1;
     switch (kapitel)
     {
         case MAT:
@@ -226,6 +228,20 @@ int menu(int argc, char **argv)
                 case 5:
                     conway_random();
                     break;
+            }
+            break;
+        case KRYPTO:
+            switch (aufgnr)
+            {
+                case 1:
+                    AES_encrypt_start("", "");
+                    break;
+                //~ case 2:
+                    //~ AES_decrypt();
+                    //~ break;
+                //~ case 2:
+                    //~ AES_test();
+                    //~ break;
             }
             break;
     }

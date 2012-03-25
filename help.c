@@ -69,10 +69,13 @@ void help( int chap )
             printf("%d\t 9\t//Video Poker\n",GAME);
             printf("%d\t10\t//Vier Gewinnt\n",GAME);
             if(chap==GAME) break;
-        //~ case KRYPTO:
-            //~ printf("\nKapitel %d: Krypto\n\n",KRYPTO);
-            //~ printf("TODO\n");
-            //~ if(chap==KRYPTO) break;
+        case KRYPTO:
+            printf("\nKapitel %d: Krypto\n\n",KRYPTO);
+            printf("%d\t 1\t//AES encrypt\n",KRYPTO);
+            printf("%d\t 2\t//AES decrypt\n",KRYPTO);
+            printf("%d\t 3\t//AES test\n",KRYPTO);
+            printf("TODO\n");
+            if(chap==KRYPTO) break;
         case PRIM:
             printf("\nKapitel %d: Primzahlen\n\n",PRIM);
             printf("%d\t 1\t//Primfaktoren\n",PRIM);

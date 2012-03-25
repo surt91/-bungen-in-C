@@ -9,13 +9,14 @@ OGAMES	= games/highscore.o\
 		  games/vier_gewinnt.o\
 		  games/karten/karten.o\
 		  games/karten/poker.o games/karten/blackjack.o
+OKRYPTO	= krypto/AES.o
 
 OBJ 	= main.o menu.o help.o \
-		  $(OLINA) $(OTRIVIA) $(OZUFALL) $(OPRIM) $(OGAMES) $(OUHR)
+		  $(OLINA) $(OTRIVIA) $(OZUFALL) $(OPRIM) $(OGAMES) $(OUHR) $(OKRYPTO)
 
 TARGET	= Ubung
 LINK	= gcc
-CC		= gcc
+CC	= gcc
 CFLAGS	= -march=native -O2 -pipe -fomit-frame-pointer -funroll-all-loops -ffast-math -finline-functions
 LFLAGS	= -lm -lcairo -lncurses
 #~ WARNLEVEL= -Wall -pedantic
