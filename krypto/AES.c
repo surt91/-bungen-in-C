@@ -182,10 +182,10 @@ static void mixColumns(int state[4][4])
     makeColumn(state,0);
 }
 
-//static void invMixColumns(int state[4][4])
-//{
-//    makeColumn(state,1);
-//}
+static void invMixColumns(int state[4][4])
+{
+    makeColumn(state,1);
+}
 // http://www.codeplanet.eu/tutorials/cpp/51-advanced-encryption-standard.html
 //////////////////////////////////////////////////////////////////////////////
 
@@ -202,18 +202,18 @@ static void leftshift(int vektor[4],int anzahl)
     }
 }
 
-//static void rightshift(int vektor[4],int anzahl)
-//{
-//    int i, k;
-//    for(i=0;i<anzahl;i++)
-//    {
-//        k = vektor[3];
-//        vektor[3]=vektor[2];
-//        vektor[2]=vektor[1];
-//        vektor[1]=vektor[0];
-//        vektor[0]=k;
-//    }
-//}
+static void rightshift(int vektor[4],int anzahl)
+{
+    int i, k;
+    for(i=0;i<anzahl;i++)
+    {
+        k = vektor[3];
+        vektor[3]=vektor[2];
+        vektor[2]=vektor[1];
+        vektor[1]=vektor[0];
+        vektor[0]=k;
+    }
+}
 
 static void schluesselErweitern(int key[4][44])
 {
@@ -257,21 +257,22 @@ static void sub(int array[4][4])
     }
 }
 
-//static void inv_sub(int array[4][4])
-//{
-//    int zeilen, spalten;
-//    for(zeilen=0;zeilen<4;zeilen++)
-//    {
-//        for(spalten=0;spalten<4;spalten++)
-//        {
-//            array[zeilen][spalten] = inv_s[array[zeilen][spalten]];
-//        }
-//    }
-//}
+static void inv_sub(int array[4][4])
+{
+    int zeilen, spalten;
+    for(zeilen=0;zeilen<4;zeilen++)
+    {
+        for(spalten=0;spalten<4;spalten++)
+        {
+            array[zeilen][spalten] = inv_s[array[zeilen][spalten]];
+        }
+    }
+}
 
 //~ void erase_first_n_chars()
-void AES_encrypt_start(char *input_key, char *input_text)
+void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
 {
+    char *cipher, *klartext;
 //    static char message[1024 + 2]; // + 2 because of newline and null
 //    char schluessel[33];
     //~ if(!strlen(input_key) || !strlen(input_text))
@@ -298,29 +299,54 @@ void AES_encrypt_start(char *input_key, char *input_text)
         //~ printf("Der zu verschlüsselnde Text:\n%s\n",input_text);
     //~ }
     //~ AES_encrypt(input_key, input_text);
+    if(encrypt)
+    {
+        cipher = (char *) calloc(10000, sizeof(char));
+        //~ cipher = AES_encrypt("65ED361DDA84619DE6A380591E0C1E47", "abcdefghijklmnopqrstuvwxyz", cipher);
+        cipher = AES_encrypt("65ED361DDA84619DE6A380591E0C1E47", "Hallo Welt", cipher);
 
-    AES_encrypt("65ED361DDA84619DE6A380591E0C1E470\0", "Hallo Welt\0");
+        printf("%s\n", cipher);
+    }
+    else
+    {
+        klartext = (char *) calloc(10000, sizeof(char));
+        klartext = AES_decrypt("65ED361DDA84619DE6A380591E0C1E47", "e031814c1d7a136bbb01ee52861d9", klartext);
+        printf("%s\n", klartext);
+    }
 }
 
-void AES_encrypt(char *input_key, char *input_text)
+void AES_test()
 {
-    char block[16+1], *keyinput, *textinput, tmp2[16+1], *cipher;
-    char schluessel[33];
+    char *key, *text, *cipher, *klartext;
+    key = (char *) calloc(32, sizeof(char));
+    //~ key = "65ED361DDA84619DE6A380591E0C1E47";
+    key = AESKeyGen(key);
+    //~ text = "Hallo Welt";
+    text = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+    cipher = (char *) calloc(10000, sizeof(char));
+    klartext = (char *) calloc(10000, sizeof(char));
+    cipher = AES_encrypt(key, text, cipher);
+    klartext = AES_decrypt(key, cipher, klartext);
+
+    printf("Key: %s\n\n%s\n\n%s\n\n%s\n\n", key, text, cipher, klartext);
+}
+
+char *AES_encrypt(char *input_key, char *input_text, char *cipher)
+{
+    char block[16+1], tmp2[32+1], *textinput;
+    char schluessel[32+1];
     int k,zeilen,spalten,keyspalten;
     unsigned i;
     char tmp3[2+1];
     int array[4][4], tmp[4], key[4][44];
     int round;
-    char **dst;
-    char *b;
     char finished;
 
-    textinput=input_text;
+    textinput = (char *) calloc(10000+1, sizeof(char));
+    memcpy(textinput,input_text,10000);
+
     if(!strcmp(input_key,"0"))
-    {
-        printf("zufaelliger schluesel");
         input_key = AESKeyGen(schluessel);
-    }
 
     /************************************
     /////////////////////////////////////
@@ -331,22 +357,16 @@ void AES_encrypt(char *input_key, char *input_text)
     ************************************/
     //~ textinput=ersetze_uml(textinput);
 
-    keyinput = input_key;
-
     for(zeilen=0;zeilen<4;zeilen++)
-    {
         for(spalten=0;spalten<4;spalten++)
         {
-            tmp3[0] = keyinput[0];
-            tmp3[1] = keyinput[1];
+            tmp3[0] = input_key[2*(zeilen*4+spalten)];
+            tmp3[1] = input_key[2*(zeilen*4+spalten)+1];
             tmp3[2] = '\0';
-
-            keyinput = keyinput+2;
 
             k=strtol(tmp3,NULL,16);
             key[zeilen][spalten]=k;
         }
-    }
     k=0;
     // Schlüssel erweitern
     schluesselErweitern(key);
@@ -355,63 +375,54 @@ void AES_encrypt(char *input_key, char *input_text)
     finished = 0;
     while(!finished)
     {
-        for(i = 0; i<16; i++)
-        {
-            if(textinput[i]=='\0')
-                break;
-        }
         memset(block, '\0', 16);
-        memcpy(block, textinput, i-1);
-        block[16]='\0';
+        //~ memcpy(block, textinput, 16);
+        //~ block[16]='\0';
 
-        dst = &textinput;
         if(strlen(textinput)>16)
         {
             // verschiebe textinput um 16 nach links
-            for ( i = 16; textinput[i]!='\0'; i++ )
-            {
-                **dst = textinput[i];
-                dst++;
-            }
-            *dst = '\0';
+            for ( i = 0; textinput[i]!='\0'; i++ )
+                if(i<16)
+                    block[i]=textinput[i];
+                else
+                    textinput[i-16] = textinput[i];
+            textinput[i-16]='\0';
         }
         else
-        {
             finished = 1;
-        }
 
-        b=block;
-        for(i=0;i<strlen(b);i++)
+        for(i=0;i<strlen(block);i++)
         {
             memset(tmp3, '\0', 3);
-            sprintf(tmp3,"%x",b[i]);
+            sprintf(tmp3,"%x",block[i]);
+            if(strlen(tmp3)==1)
+            {
+                tmp3[1]=tmp3[0];
+                tmp3[0]='0';
+            }
             tmp2[2*i] = tmp3[0];
             tmp2[2*i+1] = tmp3[1];
         }
 
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = 0;
+        //~ for(zeilen=0;zeilen<4;zeilen++)
+            //~ for(spalten=0;spalten<4;spalten++)
+                //~ array[zeilen][spalten] = 0;
 
         for(zeilen=0;zeilen<4;zeilen++)
-        {
             for(spalten=0;spalten<4;spalten++)
             {
-                memmove(tmp3, tmp2+2*(zeilen+spalten), 2);
+                tmp3[0]=tmp2[2*(zeilen*4+spalten)];
+                tmp3[1]=tmp2[2*(zeilen*4+spalten)+1];
+                tmp3[2]='\0';
                 array[zeilen][spalten] = strtol(tmp3,NULL,16);
             }
-        }
-
         // Vorrunde
         ///////////
         //Klartext wird mit dem Schlüssel verXORt
         for(zeilen=0;zeilen<4;zeilen++)
-        {
             for(spalten=0;spalten<4;spalten++)
-            {
                 array[zeilen][spalten] ^= key[zeilen][spalten];
-            }
-        }
 
         // Hauptrunden
         //////////////
@@ -429,14 +440,10 @@ void AES_encrypt(char *input_key, char *input_text)
             for(zeilen=1;zeilen<4;zeilen++)
             {
                 for(spalten=0;spalten<4;spalten++)
-                {
                     tmp[spalten] = array[zeilen][spalten];
-                }
                 leftshift(tmp,zeilen);
                 for(spalten=0;spalten<4;spalten++)
-                {
                     array[zeilen][spalten] = tmp[spalten];
-                }
             }
 
             //spalten-Mix
@@ -446,12 +453,8 @@ void AES_encrypt(char *input_key, char *input_text)
             // mit dem erweiterten
             //128bit schlüssel
             for (keyspalten=round*4,spalten=0;keyspalten<(round*4+4);keyspalten++,spalten++)
-            {
                 for(zeilen=0;zeilen<4;zeilen++)
-                {
                     array[zeilen][spalten] ^= key[zeilen][keyspalten];
-                }
-            }
         }
 
         // Schlussrunde
@@ -467,219 +470,185 @@ void AES_encrypt(char *input_key, char *input_text)
         for(zeilen=1;zeilen<4;zeilen++)
         {
             for(spalten=0;spalten<4;spalten++)
-            {
                 tmp[spalten] = array[zeilen][spalten];
-            }
             leftshift(tmp,zeilen);
             for(spalten=0;spalten<4;spalten++)
-            {
                 array[zeilen][spalten] = tmp[spalten];
-            }
         }
 
         //mit dem Schlüssel verXORn
         for (keyspalten=40,spalten=0;keyspalten<44;keyspalten++,spalten++)
         {
             for(zeilen=0;zeilen<4;zeilen++)
-            {
                 array[zeilen][spalten] ^= key[zeilen][keyspalten];
-            }
-        }
 
         //Ausgeben
-        cipher = (char *) calloc(1000, sizeof(char));
         for(zeilen=0;zeilen<4;zeilen++)
-        {
-                for(spalten=0;spalten<4;spalten++)
-                {
-                    sprintf(tmp3,"%x",array[zeilen][spalten]);
-                    strcat(cipher, tmp3);
-                }
+            for(spalten=0;spalten<4;spalten++)
+            {
+                sprintf(tmp3,"%x",array[zeilen][spalten]);
+                strcat(cipher, tmp3);
+            }
         }
     }
-
+    return cipher;
     printf("\n%s\n",cipher);
+    printf("Key: \n%s\n",input_key);
 }
 
-//~ void AES_decrypt(string input_key, string input_text)
-//~ {
-    //~ string block,keyinput,textinput,tmp2,cipher, klartext;
-    //~ int i,k,zeilen,spalten,keyspalten;
-    //~ string temp;
-    //~ int array[4][4], tmp[4], key[4][44], roundKey[4][4];
-//~
-    //~ if(input_key.empty() || input_text.empty())
-    //~ {
-        //~ cout << "Gib den Schlüssel 128Bit ein in hex (32 Zeichen; zb '" << AESKeyGen() << "')." << endl;
-        //~ cin >> input_key;
-        //~ if(input_key.length() != 32)
-        //~ {
-            //~ while(input_key.length() != 32 && input_key != "0")
-            //~ {
-                //~ cout << "Der Schlüssel ist keine 32 Hex Zeichen (128 Bit) lang\n versuchs nochmal" << endl;
-                //~ cin >> input_key;
-            //~ }
-        //~ }
-        //~ cout << "Gib jetzt die zu entschlüsselnde Nachricht ein." << endl;
-        //~ cin >> temp;   //Weil "cin" immer an leerzeichenscheitert und "getline" sofort abbricht, hilft dieser kleine workaround aus
-        //~ getline(cin, input_text);
-        //~ input_text = temp.append(input_text);
-    //~ }
-    //~ textinput = input_text;
-//~
-    //~ for(zeilen=0;zeilen<4;zeilen++)
-    //~ {
-        //~ for(spalten=0;spalten<4;spalten++)
-        //~ {
-            //~ string tmp;
-            //~ tmp=input_key.substr(0,2);
-            //~ input_key.erase(0,2);
-            //~ k=strtol(tmp.c_str(),NULL,16);
-            //~ key[zeilen][spalten]=k;
-        //~ }
-    //~ }
-    //~ // Schlüssel erweitern
-    //~ schluesselErweitern(key);
-//~
-    //~ while(!(textinput.empty()))
-    //~ {
-        //~ int round;
-        //~ block=textinput.substr(0,32);
-        //~ textinput.erase(0,32);
-        //~ i=0;
-        //~ for(zeilen=0;zeilen<4;zeilen++)
-        //~ {
-            //~ for(spalten=0;spalten<4;spalten++)
-            //~ {
-                //~ string tmp2;
-                //~ tmp2=block.substr(0,2);
-                //~ block.erase(0,2);
-                //~ array[zeilen][spalten] = strtol(tmp2.c_str(),NULL,16);
-            //~ }
-        //~ }
-//~
-        //~ // Vorrunde
-        //~ ///////////
-        //~ //Klartext wird mit dem Schlüssel verXORt
-//~
-        //~ for (keyspalten=43,spalten=3;keyspalten>=40;keyspalten--,spalten--)
-        //~ {
-            //~ for(zeilen=0;zeilen<4;zeilen++)
-            //~ {
-                //~ array[zeilen][spalten] ^= key[zeilen][keyspalten];
-            //~ }
-        //~ }
-//~
-        //~ // Hauptrunden
-        //~ //////////////
-        //~ //substiturieren
-        //~ //line-shift
-        //~ //column-mix
-        //~ //erweiterterschlüssel-XOR
-        //~ //x9
-//~
-        //~ for(round=9;round>0;round--)
-        //~ {
-//~
-            //~ // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
-            //~ for(zeilen=1;zeilen<4;zeilen++)
-            //~ {
-                //~ for(spalten=0;spalten<4;spalten++)
-                //~ {
-                    //~ tmp[spalten] = array[zeilen][spalten];
-                //~ }
-                //~ rightshift(tmp,zeilen);
-                //~ for(spalten=0;spalten<4;spalten++)
-                //~ {
-                    //~ array[zeilen][spalten] = tmp[spalten];
-                //~ }
-            //~ }
-            //~ //mit sBox substituieren
-            //~ inv_sub(array);
-//~
-            //~ //spalten-Mix
-            //~ invMixColumns(array);
-//~
-            //~ //Spalte für Spalte XORn
-            //~ // mit dem erweitertem Schlüssel
-            //~ //128bit schlüssel
-//~
-            //~ for (keyspalten=round*4+3,spalten=3;keyspalten>=(round*4);keyspalten--,spalten--)
-            //~ {
-                //~ for(zeilen=0;zeilen<4;zeilen++)
-                //~ {
-                    //~ roundKey[zeilen][spalten]=key[zeilen][keyspalten];
-                //~ }
-            //~ }
-//~
-            //~ invMixColumns(roundKey);
-//~
-            //~ for(zeilen=0;zeilen<4;zeilen++)
-            //~ {
-                //~ for(spalten=0;spalten<4;spalten++)
-                //~ {
-                   //~ array[zeilen][spalten] ^= roundKey[zeilen][spalten];
-                //~ }
-            //~ }
-        //~ }
-//~
-        //~ // Schlussrunde
-        //~ ///////////////
-        //~ //substituieren
-        //~ //line-shift
-        //~ //Key-XOR
-//~
-        //~ //mit sBox substituieren
-        //~ inv_sub(array);
-//~
-        //~ // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
-        //~ for(zeilen=1;zeilen<4;zeilen++)
-        //~ {
-            //~ for(spalten=0;spalten<4;spalten++)
-            //~ {
-                //~ tmp[spalten] = array[zeilen][spalten];
-            //~ }
-            //~ rightshift(tmp,zeilen);
-            //~ for(spalten=0;spalten<4;spalten++)
-            //~ {
-                //~ array[zeilen][spalten] = tmp[spalten];
-            //~ }
-        //~ }
-//~
-        //~ // add roundKey XOR
-        //~ for(zeilen=0;zeilen<4;zeilen++)
-        //~ {
-            //~ for(spalten=0;spalten<4;spalten++)
-            //~ {
-                //~ array[zeilen][spalten] ^= key[zeilen][spalten];
-            //~ }
-        //~ }
-//~
-        //~ for(zeilen=0;zeilen<4;zeilen++)
-        //~ {
-            //~ for(spalten=0;spalten<4;spalten++)
-            //~ {
-                //~ klartext.append<int>(1,array[zeilen][spalten]);
-            //~ }
-        //~ }
-    //~ }
-//~
-    //~ //klartext.replace(QString ("&ouml;"), QString("ö"));
-    //~ //klartext.replace(QString ("&auml;"), QString("ä"));
-    //~ //klartext.replace(QString ("&uuml;"), QString("ü"));
-    //~ //klartext.replace(QString ("&szlig;"), QString("ß"));
-//~
-    //~ /************************************
-    //~ /////////////////////////////////////
-    //~ //klartext=inv_ersetze_uml(klartext);
-    //~ /////////////////////////////////////
-    //~ // aktivieren, wenn Umlaute und andere nicht Ascii Zeichen kodiert werden sollen
-    //~ /////////////////////////////////////
-    //~ ************************************/
+char *AES_decrypt(char *input_key, char *input_text, char *klartext)
+{
+    char block[32+1], *x, *textinput;
+    int i,k,zeilen,spalten,keyspalten;
+    char tmp3[2+1];
+    int array[4][4], tmp[4], key[4][44], roundKey[4][4];
+    int round;
+    char finished;
+
+    textinput = (char *) calloc(10000+1, sizeof(char));
+    memcpy(textinput,input_text,10000);
+
+    for(zeilen=0;zeilen<4;zeilen++)
+        for(spalten=0;spalten<4;spalten++)
+        {
+            tmp3[0] = input_key[2*(zeilen*4+spalten)];
+            tmp3[1] = input_key[2*(zeilen*4+spalten)+1];
+            tmp3[2] = '\0';
+
+            k=strtol(tmp3,NULL,16);
+            key[zeilen][spalten]=k;
+        }
+    // Schlüssel erweitern
+    schluesselErweitern(key);
+
+    finished = 0;
+    while(!finished)
+    {
+        for(i = 0; i<32; i++)
+            if(textinput[i]=='\0')
+                break;
+
+        memset(block, '\0', 32);
+
+        if(strlen(textinput)>32)
+        {
+            // verschiebe textinput um 32 nach links
+            for ( i = 0; textinput[i]!='\0'; i++ )
+            {
+                if(i<32)
+                {
+                    block[i]=textinput[i];
+                }
+                else
+                {
+                    textinput[i-32] = textinput[i];
+                }
+            }
+            textinput[i-32]='\0';
+        }
+        else
+            finished = 1;
+
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
+            {
+                tmp3[0]=block[2*(zeilen*4+spalten)];
+                tmp3[1]=block[2*(zeilen*4+spalten)+1];
+                tmp3[2]='\0';
+                array[zeilen][spalten] = strtol(tmp3,NULL,16);
+            }
+
+        // Vorrunde
+        ///////////
+        //Klartext wird mit dem Schlüssel verXORt
+
+        for (keyspalten=43,spalten=3;keyspalten>=40;keyspalten--,spalten--)
+            for(zeilen=0;zeilen<4;zeilen++)
+                array[zeilen][spalten] ^= key[zeilen][keyspalten];
+
+        // Hauptrunden
+        //////////////
+        //substiturieren
+        //line-shift
+        //column-mix
+        //erweiterterschlüssel-XOR
+        //x9
+
+        for(round=9;round>0;round--)
+        {
+
+            // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
+            for(zeilen=1;zeilen<4;zeilen++)
+            {
+                for(spalten=0;spalten<4;spalten++)
+                    tmp[spalten] = array[zeilen][spalten];
+                rightshift(tmp,zeilen);
+                for(spalten=0;spalten<4;spalten++)
+                    array[zeilen][spalten] = tmp[spalten];
+            }
+            //mit sBox substituieren
+            inv_sub(array);
+
+            //spalten-Mix
+            invMixColumns(array);
+
+            //Spalte für Spalte XORn
+            // mit dem erweitertem Schlüssel
+            //128bit schlüssel
+
+            for (keyspalten=round*4+3,spalten=3;keyspalten>=(round*4);keyspalten--,spalten--)
+                for(zeilen=0;zeilen<4;zeilen++)
+                    roundKey[zeilen][spalten]=key[zeilen][keyspalten];
+
+            invMixColumns(roundKey);
+
+            for(zeilen=0;zeilen<4;zeilen++)
+                for(spalten=0;spalten<4;spalten++)
+                   array[zeilen][spalten] ^= roundKey[zeilen][spalten];
+        }
+
+        // Schlussrunde
+        ///////////////
+        //substituieren
+        //line-shift
+        //Key-XOR
+
+        //mit sBox substituieren
+        inv_sub(array);
+
+        // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
+        for(zeilen=1;zeilen<4;zeilen++)
+        {
+            for(spalten=0;spalten<4;spalten++)
+                tmp[spalten] = array[zeilen][spalten];
+            rightshift(tmp,zeilen);
+            for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] = tmp[spalten];
+        }
+
+        // add roundKey XOR
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] ^= key[zeilen][spalten];
+
+        x = (char *) calloc(2, sizeof(char));
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
+            {
+                sprintf(x,"%c",array[zeilen][spalten]);
+                strcat(klartext,x);
+            }
+    }
+
+    /************************************
+    /////////////////////////////////////
+    //klartext=inv_ersetze_uml(klartext);
+    /////////////////////////////////////
+    // aktivieren, wenn Umlaute und andere nicht Ascii Zeichen kodiert werden sollen
+    /////////////////////////////////////
+    ************************************/
     //~ klartext=inv_ersetze_uml(klartext);
-//~
-//~ //    cout << endl << endl;
-//~ //    cout << "Nachricht:\n" << klartext<< endl;
-//~ //    cout << endl;
-    //~ cout << klartext<< endl;
-//~ }
+
+    return klartext;
+    printf("%s", klartext);
+}
