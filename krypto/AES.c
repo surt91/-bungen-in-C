@@ -447,7 +447,6 @@ void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
         //~ input_text = message;
         //~ printf("Der zu verschlüsselnde Text:\n%s\n",input_text);
     //~ }
-    //~ AES_encrypt(input_key, input_text);
     if(encrypt)
     {
         cipher = (char *) calloc(10000, sizeof(char));
@@ -455,12 +454,14 @@ void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
         cipher = AES_encrypt("65ED361DDA84619DE6A380591E0C1E47", "Hallo Welt", cipher);
 
         printf("%s\n", cipher);
+        free(cipher);
     }
     else
     {
         klartext = (char *) calloc(10000, sizeof(char));
         klartext = AES_decrypt("65ED361DDA84619DE6A380591E0C1E47", "e031814c1d7a136bbb01ee52861d9", klartext);
         printf("%s\n", klartext);
+        free(klartext);
     }
 }
 
@@ -478,6 +479,11 @@ void AES_test()
     klartext = AES_decrypt(key, cipher, klartext);
 
     printf("Key      : %s\n\nIn       : %s\n\nencrypted: %s\n\ndecrypted: %s\n\n", key, text, cipher, klartext);
+    if(!strcmp(text,klartext))
+        printf("Test erfolgreich!\n");
+    free(key);
+    free(cipher);
+    free(klartext);
 }
 
 char *AES_encrypt(char *input_key, char *input_text, char *cipher)
@@ -494,15 +500,6 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 
     if(!strcmp(input_key,"0"))
         input_key = AESKeyGen(schluessel);
-
-    /************************************
-    /////////////////////////////////////
-    //textinput=ersetze_uml(textinput);
-    /////////////////////////////////////
-    // aktivieren, wenn Umlaute und andere nicht Ascii Zeichen kodiert werden sollen
-    /////////////////////////////////////
-    ************************************/
-    //~ textinput=ersetze_uml(textinput);
 
     for(zeilen=0;zeilen<4;zeilen++)
         for(spalten=0;spalten<4;spalten++)
@@ -521,12 +518,13 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
     // Verschlüsselungsalgorithmus, bis kein Text mehr in der Warteschlange ist:
     while(1)
     {
-        memset(block, '\0', 16);
+        memset(block, 0, 16);
+        memset(tmp2 , 0, 32);
+        memset(array, 0, 16);
 
-        printf("v: %s\n",textinput);
+        // verschiebe erste 16 chars von textinput nach block
         if(strlen(textinput)>0)
         {
-            // verschiebe textinput um 16 nach links
             for ( i = 0; textinput[i]!='\0'; i++ )
                 if(i<16)
                     block[i]=textinput[i];
@@ -536,7 +534,6 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
                 textinput[i-16]='\0';
             else
                 textinput[0]='\0';
-            printf("n: %s\n",textinput);
         }
         else
             break;
@@ -548,10 +545,6 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
             tmp2[2*i] = tmp3[0];
             tmp2[2*i+1] = tmp3[1];
         }
-
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = 0;
 
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
@@ -572,9 +565,8 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
                 strcat(cipher, tmp3);
             }
     }
+    free(textinput);
     return cipher;
-    printf("\n%s\n",cipher);
-    printf("Key: \n%s\n",input_key);
 }
 
 char *AES_decrypt(char *input_key, char *input_text, char *klartext)
@@ -603,11 +595,8 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
 
     while(1)
     {
-        for(i = 0; i<32; i++)
-            if(textinput[i]=='\0')
-                break;
-
-        memset(block, '\0', 32);
+        memset(block, 0, 32);
+        memset(array, 0, 16);
 
         if(strlen(textinput)>0)
         {
@@ -629,10 +618,6 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
 
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = 0;
-
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
             {
                 tmp3[0]=block[2*(zeilen*4+spalten)];
                 tmp3[1]=block[2*(zeilen*4+spalten)+1];
@@ -649,16 +634,6 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
                 strcat(klartext,tmp3);
             }
     }
-
-    /************************************
-    /////////////////////////////////////
-    //klartext=inv_ersetze_uml(klartext);
-    /////////////////////////////////////
-    // aktivieren, wenn Umlaute und andere nicht Ascii Zeichen kodiert werden sollen
-    /////////////////////////////////////
-    ************************************/
-    //~ klartext=inv_ersetze_uml(klartext);
-
+    free(textinput);
     return klartext;
-    printf("%s", klartext);
 }
