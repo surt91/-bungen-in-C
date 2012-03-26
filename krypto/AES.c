@@ -268,6 +268,156 @@ static void inv_sub(int array[4][4])
     }
 }
 
+static void decrypt_rounds(int array[4][4], int key[4][44])
+{
+    int zeilen,spalten,keyspalten;
+    int tmp[4];
+    int round;
+    int roundKey[4][4];
+    // Vorrunde
+    ///////////
+    //Klartext wird mit dem Schlüssel verXORt
+
+    for (keyspalten=43,spalten=3;keyspalten>=40;keyspalten--,spalten--)
+        for(zeilen=0;zeilen<4;zeilen++)
+            array[zeilen][spalten] ^= key[zeilen][keyspalten];
+
+    // Hauptrunden
+    //////////////
+    //substiturieren
+    //line-shift
+    //column-mix
+    //erweiterterschlüssel-XOR
+    //x9
+
+    for(round=9;round>0;round--)
+    {
+
+        // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
+        for(zeilen=1;zeilen<4;zeilen++)
+        {
+            for(spalten=0;spalten<4;spalten++)
+                tmp[spalten] = array[zeilen][spalten];
+            rightshift(tmp,zeilen);
+            for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] = tmp[spalten];
+        }
+        //mit sBox substituieren
+        inv_sub(array);
+
+        //spalten-Mix
+        invMixColumns(array);
+
+        //Spalte für Spalte XORn
+        // mit dem erweitertem Schlüssel
+        //128bit schlüssel
+
+        for (keyspalten=round*4+3,spalten=3;keyspalten>=(round*4);keyspalten--,spalten--)
+            for(zeilen=0;zeilen<4;zeilen++)
+                roundKey[zeilen][spalten]=key[zeilen][keyspalten];
+
+        invMixColumns(roundKey);
+
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
+               array[zeilen][spalten] ^= roundKey[zeilen][spalten];
+    }
+
+    // Schlussrunde
+    ///////////////
+    //substituieren
+    //line-shift
+    //Key-XOR
+
+    //mit sBox substituieren
+    inv_sub(array);
+
+    // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
+    for(zeilen=1;zeilen<4;zeilen++)
+    {
+        for(spalten=0;spalten<4;spalten++)
+            tmp[spalten] = array[zeilen][spalten];
+        rightshift(tmp,zeilen);
+        for(spalten=0;spalten<4;spalten++)
+            array[zeilen][spalten] = tmp[spalten];
+    }
+
+    // add roundKey XOR
+    for(zeilen=0;zeilen<4;zeilen++)
+        for(spalten=0;spalten<4;spalten++)
+            array[zeilen][spalten] ^= key[zeilen][spalten];
+}
+
+static void encrypt_rounds(int array[4][4], int key[4][44])
+{
+    int zeilen,spalten,keyspalten;
+    int tmp[4];
+    int round;
+    // Vorrunde
+    ///////////
+    //Klartext wird mit dem Schlüssel verXORt
+    for(zeilen=0;zeilen<4;zeilen++)
+        for(spalten=0;spalten<4;spalten++)
+            array[zeilen][spalten] ^= key[zeilen][spalten];
+
+    // Hauptrunden
+    //////////////
+    //substiturieren
+    //line-shift
+    //column-shift
+    //erweiterterschlüssel-XOR
+    //9 mal
+    for(round=1;round<=9;round++)
+    {
+        //mit sBox substituieren
+        sub(array);
+
+        // Array Zeilen um ihren Index nach links verschieben (zyklisch)
+        for(zeilen=1;zeilen<4;zeilen++)
+        {
+            for(spalten=0;spalten<4;spalten++)
+                tmp[spalten] = array[zeilen][spalten];
+            leftshift(tmp,zeilen);
+            for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] = tmp[spalten];
+        }
+
+        //spalten-Mix
+        mixColumns(array);
+
+        //Spalte für Spalte XORn
+        // mit dem erweiterten
+        //128bit schlüssel
+        for (keyspalten=round*4,spalten=0;keyspalten<(round*4+4);keyspalten++,spalten++)
+            for(zeilen=0;zeilen<4;zeilen++)
+                array[zeilen][spalten] ^= key[zeilen][keyspalten];
+    }
+
+    // Schlussrunde
+    ///////////////
+    //substituieren
+    //line-shift
+    //Key-XOR
+
+    //mit sBox substituieren
+    sub(array);
+
+    // Array Zeilen um ihren Index nach links verschieben (zyklisch)
+    for(zeilen=1;zeilen<4;zeilen++)
+    {
+        for(spalten=0;spalten<4;spalten++)
+            tmp[spalten] = array[zeilen][spalten];
+        leftshift(tmp,zeilen);
+        for(spalten=0;spalten<4;spalten++)
+            array[zeilen][spalten] = tmp[spalten];
+    }
+
+    //mit dem Schlüssel verXORn
+    for (keyspalten=40,spalten=0;keyspalten<44;keyspalten++,spalten++)
+        for(zeilen=0;zeilen<4;zeilen++)
+            array[zeilen][spalten] ^= key[zeilen][keyspalten];
+}
+
 //~ void erase_first_n_chars()
 void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
 {
@@ -320,8 +470,8 @@ void AES_test()
     key = (char *) calloc(32, sizeof(char));
     //~ key = "65ED361DDA84619DE6A380591E0C1E47";
     key = AESKeyGen(key);
-    text = "Hallo Welt";
-    //~ text = "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz";
+    //~ text = "Hallo Welt";
+    text = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     cipher = (char *) calloc(10000, sizeof(char));
     klartext = (char *) calloc(10000, sizeof(char));
     cipher = AES_encrypt(key, text, cipher);
@@ -334,11 +484,10 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 {
     char block[16+1], tmp2[32+1], *textinput;
     char schluessel[32+1];
-    int k,zeilen,spalten,keyspalten;
+    int k,zeilen,spalten;
     unsigned i;
     char tmp3[2+1];
-    int array[4][4], tmp[4], key[4][44];
-    int round;
+    int array[4][4], key[4][44];
 
     textinput = (char *) calloc(10000+1, sizeof(char));
     memcpy(textinput,input_text,10000);
@@ -374,20 +523,20 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
     {
         memset(block, '\0', 16);
 
+        printf("v: %s\n",textinput);
         if(strlen(textinput)>0)
         {
             // verschiebe textinput um 16 nach links
             for ( i = 0; textinput[i]!='\0'; i++ )
                 if(i<16)
-                {
                     block[i]=textinput[i];
-                }
                 else
                     textinput[i-16] = textinput[i];
             if(strlen(textinput)>16)
                 textinput[i-16]='\0';
             else
                 textinput[0]='\0';
+            printf("n: %s\n",textinput);
         }
         else
             break;
@@ -402,75 +551,18 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] = 0;
+
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
             {
                 tmp3[0]=tmp2[2*(zeilen*4+spalten)];
                 tmp3[1]=tmp2[2*(zeilen*4+spalten)+1];
                 tmp3[2]='\0';
                 array[zeilen][spalten] = strtol(tmp3,NULL,16);
             }
-        // Vorrunde
-        ///////////
-        //Klartext wird mit dem Schlüssel verXORt
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] ^= key[zeilen][spalten];
 
-        // Hauptrunden
-        //////////////
-        //substiturieren
-        //line-shift
-        //column-shift
-        //erweiterterschlüssel-XOR
-        //9 mal
-        for(round=1;round<=9;round++)
-        {
-            //mit sBox substituieren
-            sub(array);
-
-            // Array Zeilen um ihren Index nach links verschieben (zyklisch)
-            for(zeilen=1;zeilen<4;zeilen++)
-            {
-                for(spalten=0;spalten<4;spalten++)
-                    tmp[spalten] = array[zeilen][spalten];
-                leftshift(tmp,zeilen);
-                for(spalten=0;spalten<4;spalten++)
-                    array[zeilen][spalten] = tmp[spalten];
-            }
-
-            //spalten-Mix
-            mixColumns(array);
-
-            //Spalte für Spalte XORn
-            // mit dem erweiterten
-            //128bit schlüssel
-            for (keyspalten=round*4,spalten=0;keyspalten<(round*4+4);keyspalten++,spalten++)
-                for(zeilen=0;zeilen<4;zeilen++)
-                    array[zeilen][spalten] ^= key[zeilen][keyspalten];
-        }
-
-        // Schlussrunde
-        ///////////////
-        //substituieren
-        //line-shift
-        //Key-XOR
-
-        //mit sBox substituieren
-        sub(array);
-
-        // Array Zeilen um ihren Index nach links verschieben (zyklisch)
-        for(zeilen=1;zeilen<4;zeilen++)
-        {
-            for(spalten=0;spalten<4;spalten++)
-                tmp[spalten] = array[zeilen][spalten];
-            leftshift(tmp,zeilen);
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = tmp[spalten];
-        }
-
-        //mit dem Schlüssel verXORn
-        for (keyspalten=40,spalten=0;keyspalten<44;keyspalten++,spalten++)
-            for(zeilen=0;zeilen<4;zeilen++)
-                array[zeilen][spalten] ^= key[zeilen][keyspalten];
+        encrypt_rounds(array, key);
 
         //Ausgeben
         for(zeilen=0;zeilen<4;zeilen++)
@@ -487,11 +579,10 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 
 char *AES_decrypt(char *input_key, char *input_text, char *klartext)
 {
-    char block[32+1], *x, *textinput;
-    int i,k,zeilen,spalten,keyspalten;
+    char block[32+1], *textinput;
+    int i,k,zeilen,spalten;
     char tmp3[2+1];
-    int array[4][4], tmp[4], key[4][44], roundKey[4][4];
-    int round;
+    int array[4][4], key[4][44];
 
     textinput = (char *) calloc(10000+1, sizeof(char));
     memcpy(textinput,input_text,10000);
@@ -506,6 +597,7 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
             k=strtol(tmp3,NULL,16);
             key[zeilen][spalten]=k;
         }
+
     // Schlüssel erweitern
     schluesselErweitern(key);
 
@@ -537,6 +629,10 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
 
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
+                array[zeilen][spalten] = 0;
+
+        for(zeilen=0;zeilen<4;zeilen++)
+            for(spalten=0;spalten<4;spalten++)
             {
                 tmp3[0]=block[2*(zeilen*4+spalten)];
                 tmp3[1]=block[2*(zeilen*4+spalten)+1];
@@ -544,85 +640,13 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
                 array[zeilen][spalten] = strtol(tmp3,NULL,16);
             }
 
-        // Vorrunde
-        ///////////
-        //Klartext wird mit dem Schlüssel verXORt
+        decrypt_rounds(array, key);
 
-        for (keyspalten=43,spalten=3;keyspalten>=40;keyspalten--,spalten--)
-            for(zeilen=0;zeilen<4;zeilen++)
-                array[zeilen][spalten] ^= key[zeilen][keyspalten];
-
-        // Hauptrunden
-        //////////////
-        //substiturieren
-        //line-shift
-        //column-mix
-        //erweiterterschlüssel-XOR
-        //x9
-
-        for(round=9;round>0;round--)
-        {
-
-            // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
-            for(zeilen=1;zeilen<4;zeilen++)
-            {
-                for(spalten=0;spalten<4;spalten++)
-                    tmp[spalten] = array[zeilen][spalten];
-                rightshift(tmp,zeilen);
-                for(spalten=0;spalten<4;spalten++)
-                    array[zeilen][spalten] = tmp[spalten];
-            }
-            //mit sBox substituieren
-            inv_sub(array);
-
-            //spalten-Mix
-            invMixColumns(array);
-
-            //Spalte für Spalte XORn
-            // mit dem erweitertem Schlüssel
-            //128bit schlüssel
-
-            for (keyspalten=round*4+3,spalten=3;keyspalten>=(round*4);keyspalten--,spalten--)
-                for(zeilen=0;zeilen<4;zeilen++)
-                    roundKey[zeilen][spalten]=key[zeilen][keyspalten];
-
-            invMixColumns(roundKey);
-
-            for(zeilen=0;zeilen<4;zeilen++)
-                for(spalten=0;spalten<4;spalten++)
-                   array[zeilen][spalten] ^= roundKey[zeilen][spalten];
-        }
-
-        // Schlussrunde
-        ///////////////
-        //substituieren
-        //line-shift
-        //Key-XOR
-
-        //mit sBox substituieren
-        inv_sub(array);
-
-        // Array Zeilen um ihren Index nach rechts verschieben (zyklisch)
-        for(zeilen=1;zeilen<4;zeilen++)
-        {
-            for(spalten=0;spalten<4;spalten++)
-                tmp[spalten] = array[zeilen][spalten];
-            rightshift(tmp,zeilen);
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = tmp[spalten];
-        }
-
-        // add roundKey XOR
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] ^= key[zeilen][spalten];
-
-        x = (char *) calloc(2, sizeof(char));
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
             {
-                sprintf(x,"%c",array[zeilen][spalten]);
-                strcat(klartext,x);
+                sprintf(tmp3,"%c",array[zeilen][spalten]);
+                strcat(klartext,tmp3);
             }
     }
 
