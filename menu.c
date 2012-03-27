@@ -91,9 +91,9 @@ int menu(int argc, char **argv)
                 //~ case 2:
                     //~ aufg_GAME_2();
                     //~ break;
-                //~ case 3:
-                    //~ aufg_GAME_3();
-                    //~ break;
+                case 3:
+                    poker_monte_carlo_start();
+                    break;
                 case 4:
                     aufg_GAME_4();
                     break;

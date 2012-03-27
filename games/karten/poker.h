@@ -19,6 +19,7 @@ int is_straight_flush(struct deck *hand);
 int is_royal_flush(struct deck *hand);
 int poker_gewinn(struct deck *hand, int einsatz);
 
+void poker_monte_carlo_start();
 void poker_monte_carlo(int anzahl, int leute, int **ergebnis);
 void poker_monte_carlo_darstellen(int *u, int spieler);
 

@@ -7,7 +7,9 @@ void poker_start()
     char yn, k;
     const static int anzHand = 5, anzDecks = 1, anzPerDeck = 52;
     int runde = 0;
-    int toggle[anzHand];
+    int *toggle;
+    toggle = (int *) calloc(anzHand, sizeof(int));
+
     setlocale(LC_ALL,"");
     initscr();
     raw();
@@ -169,15 +171,40 @@ int poker_gewinn(struct deck *hand, int einsatz)
     refresh();
     return faktor * einsatz;
 }
+void poker_monte_carlo_start()
+{
+    int runden, spieler;
+    int *u;
+    printf("Wieviele Runden?\n");
+    scanf("%d",&runden);
+    printf("Wieviele Mitspieler?\n");
+    scanf("%d",&spieler);
+    poker_monte_carlo(runden, spieler, &u);
+    poker_monte_carlo_darstellen(u, spieler);
+}
 void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
 {
     struct deck *stapel = NULL, *spieler[leute];
-    int i, j, n;
+    int i, j, n, flag=0;
     const static int anzHand = 5, anzDeck = 1, anzPerDeck = 52;
-    int flush[leute], straight[leute], royal_flush[leute];
-    int fullhouse[leute], runden[leute], straight_flush[leute];
-    int pair[leute], three_of_a_kind[leute], two_pair[leute];
-    int four_of_a_kind[leute], flag=0;
+    //~ int flush[leute], straight[leute], royal_flush[leute];
+    //~ int fullhouse[leute], runden[leute], straight_flush[leute];
+    //~ int pair[leute], three_of_a_kind[leute], two_pair[leute];
+    //~ int four_of_a_kind[leute];
+    int *flush, *straight, *royal_flush, *fullhouse, *runden, *pair,
+        *straight_flush, *three_of_a_kind, *two_pair, *four_of_a_kind;
+
+    //~ *spieler        = (struct deck *) calloc(leute, sizeof(struct deck));
+    flush           = (int *) calloc(leute, sizeof(int));
+    straight        = (int *) calloc(leute, sizeof(int));
+    royal_flush     = (int *) calloc(leute, sizeof(int));
+    straight_flush  = (int *) calloc(leute, sizeof(int));
+    three_of_a_kind = (int *) calloc(leute, sizeof(int));
+    two_pair        = (int *) calloc(leute, sizeof(int));
+    pair            = (int *) calloc(leute, sizeof(int));
+    four_of_a_kind  = (int *) calloc(leute, sizeof(int));
+    fullhouse       = (int *) calloc(leute, sizeof(int));
+    runden          = (int *) calloc(leute, sizeof(int));
 
     for(j=0; j<leute; j++)
     {
@@ -282,6 +309,7 @@ void poker_monte_carlo_darstellen(int *u, int anzSpieler)
           *straight_flush  = " Straight Flush", \
           *royal_flush     = "    Royal Flush";
 
+    //~ *bezeichnungen = (char *) calloc(anzWins, sizeof(char));
     bezeichnungen[0] = pair;
     bezeichnungen[1] = two_pair;
     bezeichnungen[2] = three_of_a_kind;

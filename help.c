@@ -59,7 +59,7 @@ void help( int chap )
         case GAME:
             printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);
             printf("%d\t 1\t//Roulette\n",GAME);
-            printf("%d\t 2\t//Pokerhand\n",GAME);
+            //~ printf("%d\t 2\t//Pokerhand\n",GAME);
             printf("%d\t 3\t//Viele Pokerrunden\n",GAME);
             printf("%d\t 4\t//Münzwurf\n",GAME);
             printf("%d\t 5\t//Geburtstagsproblem\n",GAME);
