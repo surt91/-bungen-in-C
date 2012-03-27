@@ -106,9 +106,8 @@ static char * AESKeyGen(char *schluessel)
 {
     int i;
     //~ srand ( time(NULL) );
-    for(i=0; i<32; i++){
+    for(i=0; i<32; i++)
         schluessel[i] = hextable[rand() % 15];
-    }
     schluessel[32] = '\0';
     return schluessel;
 }
@@ -163,16 +162,12 @@ static void makeColumn(int state[4][4], char inv)
     for (i = 0; i < 4; i++)
     {
         for (j = 0; j < 4; j++)
-        {
             column[j] = state[j][i];
-        }
 
         inv ? mixColumn(column,1) : mixColumn(column,0);
 
         for (j = 0; j < 4; j++)
-        {
             state[j][i] = column[j];
-        }
     }
 }
 
@@ -221,26 +216,16 @@ static void schluesselErweitern(int key[4][44])
     for(spalten=4;spalten<44;)
     {
         for(zeilen=0;zeilen<4;zeilen++)
-        {
             tmp[zeilen] = key[zeilen][spalten-1];
-        }
         leftshift(tmp,1);
         for(n=0;n<4;n++)
-        {
             tmp[n] = s[tmp[n]];
-        }
         for(zeilen=0;zeilen<4;zeilen++)
-        {
             key[zeilen][spalten] = key[zeilen][spalten-4] ^ tmp[zeilen] ^ rcon[zeilen][(spalten/4)-1];
-        }
         spalten++;
         for(k=0;k<3;k++,spalten++)
-        {
             for(zeilen=0;zeilen<4;zeilen++)
-            {
                 key[zeilen][spalten] = key[zeilen][spalten-4] ^ key[zeilen][spalten-1];
-            }
-        }
     }
 }
 
@@ -248,24 +233,16 @@ static void sub(int array[4][4])
 {
     int zeilen, spalten;
     for(zeilen=0;zeilen<4;zeilen++)
-    {
         for(spalten=0;spalten<4;spalten++)
-        {
             array[zeilen][spalten] = s[array[zeilen][spalten]];
-        }
-    }
 }
 
 static void inv_sub(int array[4][4])
 {
     int zeilen, spalten;
     for(zeilen=0;zeilen<4;zeilen++)
-    {
         for(spalten=0;spalten<4;spalten++)
-        {
             array[zeilen][spalten] = inv_s[array[zeilen][spalten]];
-        }
-    }
 }
 
 static void decrypt_rounds(int array[4][4], int key[4][44])
@@ -418,48 +395,98 @@ static void encrypt_rounds(int array[4][4], int key[4][44])
             array[zeilen][spalten] ^= key[zeilen][keyspalten];
 }
 
-//~ void erase_first_n_chars()
+void parse_key(char *input_key, int key[4][44])
+{
+    int zeilen, spalten, k;
+    char tmp3[2+1];
+    for(zeilen=0;zeilen<4;zeilen++)
+    for(spalten=0;spalten<4;spalten++)
+    {
+        tmp3[0] = input_key[2*(zeilen*4+spalten)];
+        tmp3[1] = input_key[2*(zeilen*4+spalten)+1];
+        tmp3[2] = '\0';
+
+        k=strtol(tmp3,NULL,16);
+        key[zeilen][spalten]=k;
+    }
+}
+
+int move_n_to_block(char *textinput, char *block, int n)
+{
+    int i;
+    if(strlen(textinput)>0)
+    {
+        for ( i = 0; textinput[i]!='\0'; i++ )
+            if(i<n)
+                block[i]=textinput[i];
+            else
+                textinput[i-n] = textinput[i];
+        if(strlen(textinput)>n)
+            textinput[i-n]='\0';
+        else
+            textinput[0]='\0';
+        return 0;
+    }
+    else
+        return 1;
+}
 void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
 {
-    char *cipher, *klartext;
-//    static char message[1024 + 2]; // + 2 because of newline and null
-//    char schluessel[33];
-    //~ if(!strlen(input_key) || !strlen(input_text))
-    //~ {
-        //~ printf("Gib den Schlüssel 128 Bit ein in hex (32 Zeichen; zb '%s') oder '0' für einen zufälligen Schlüssel.", AESKeyGen(schluessel));
-        //~ fgets(input_key, 32, stdin);
-        //~ printf("%s\n",input_key);
-        //~ if(strlen(input_key) != 32)
-        //~ {
-            //~ while(strlen(input_key) != 32 && ! strcmp(input_key, "0"))
-            //~ {
-                //~ printf("Der Schlüssel ist keine 32 Hex Zeichen (128 Bit) lang\n versuchs nochmal, oder gebe '0'' ein für einen automatisch generierten Schlüssel\n");
-                //~ scanf("%s", input_key);
-            //~ }
-        //~ }
-        //~ if(input_key=="0")
-        //~ {
-            //~ input_key = AESKeyGen(schluessel);
-            //~ printf("zufälliger Schlüssel:\n%s\n", input_key);
-        //~ }
-        //~ printf("Gib jetzt die zu verschlüsselnde Nachricht ein.\n");
-        //~ fgets(message, sizeof(message), stdin);
-        //~ input_text = message;
-        //~ printf("Der zu verschlüsselnde Text:\n%s\n",input_text);
-    //~ }
+    char *cipher, *klartext, *keyinput, *textinput;
+    char *message;
+    char schluessel[33];
+    message = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
+    textinput = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
+    keyinput = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
+    memcpy(keyinput, input_key, 32+2);
+    memcpy(textinput, input_text, AES_MAX_TEXTLENGTH);
+    if(!strlen(keyinput))
+    {
+        printf("Gib den Schlüssel 128 Bit ein in hex (32 Zeichen; zb '%s') oder '0' für einen zufälligen Schlüssel.\n", AESKeyGen(schluessel));
+        fgets(keyinput, 32+2, stdin);
+        keyinput[32]='\0';
+        if(!strcmp(keyinput, "0\n"))
+        {
+            keyinput = AESKeyGen(schluessel);
+            printf("zufälliger Schlüssel\n");
+        }
+        else if(strlen(keyinput) != 32)
+        {
+            while(strlen(keyinput) != 32)
+            {
+                printf("Der Schlüssel ist keine 32 Hex Zeichen (128 Bit) lang\n versuchs nochmal, oder gebe '0' ein für einen automatisch generierten Schlüssel\n");
+                fgets(keyinput, 32+2, stdin);
+                keyinput[32]='\0';
+            }
+        }
+
+        printf("Dein Schluessel: %s\n",keyinput);
+    }
     if(encrypt)
     {
-        cipher = (char *) calloc(10000, sizeof(char));
-        //~ cipher = AES_encrypt("65ED361DDA84619DE6A380591E0C1E47", "abcdefghijklmnopqrstuvwxyz", cipher);
-        cipher = AES_encrypt("65ED361DDA84619DE6A380591E0C1E47", "Hallo Welt", cipher);
-
+        if(!strlen(textinput))
+        {
+            printf("Gib jetzt die zu verschlüsselnde Nachricht ein.\n");
+            fgets(message, AES_MAX_TEXTLENGTH, stdin);
+            memcpy(textinput, message, AES_MAX_TEXTLENGTH);
+            printf("Der zu verschlüsselnde Text:\n%s\n",textinput);
+        }
+        cipher = (char *) calloc(AES_MAX_TEXTLENGTH*2, sizeof(char));
+        cipher = AES_encrypt(keyinput, textinput, cipher);
         printf("%s\n", cipher);
         free(cipher);
     }
     else
     {
-        klartext = (char *) calloc(10000, sizeof(char));
-        klartext = AES_decrypt("65ED361DDA84619DE6A380591E0C1E47", "e031814c1d7a136bbb01ee52861d9", klartext);
+        if(!strlen(textinput))
+        {
+            printf("Gib jetzt die zu entschlüsselnde Nachricht ein.\n");
+            fgets(message, AES_MAX_TEXTLENGTH, stdin);
+            memcpy(textinput, message, AES_MAX_TEXTLENGTH);
+            printf("Der zu entschlüsselnde Text:\n%s\n",textinput);
+        }
+        klartext = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
+        klartext = AES_decrypt(keyinput, textinput, klartext);
         printf("%s\n", klartext);
         free(klartext);
     }
@@ -473,8 +500,8 @@ void AES_test()
     key = AESKeyGen(key);
     //~ text = "Hallo Welt";
     text = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    cipher = (char *) calloc(10000, sizeof(char));
-    klartext = (char *) calloc(10000, sizeof(char));
+    cipher = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
+    klartext = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
     cipher = AES_encrypt(key, text, cipher);
     klartext = AES_decrypt(key, cipher, klartext);
 
@@ -488,30 +515,16 @@ void AES_test()
 
 char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 {
-    char block[16+1], tmp2[32+1], *textinput;
-    char schluessel[32+1];
-    int k,zeilen,spalten;
-    unsigned i;
+    char block[16+1], *textinput;
+    int zeilen,spalten;
     char tmp3[2+1];
     int array[4][4], key[4][44];
 
-    textinput = (char *) calloc(10000+1, sizeof(char));
-    memcpy(textinput,input_text,10000);
+    textinput = (char *) calloc(AES_MAX_TEXTLENGTH+1, sizeof(char));
+    memcpy(textinput,input_text,AES_MAX_TEXTLENGTH);
 
-    if(!strcmp(input_key,"0"))
-        input_key = AESKeyGen(schluessel);
+    parse_key(input_key, key);
 
-    for(zeilen=0;zeilen<4;zeilen++)
-        for(spalten=0;spalten<4;spalten++)
-        {
-            tmp3[0] = input_key[2*(zeilen*4+spalten)];
-            tmp3[1] = input_key[2*(zeilen*4+spalten)+1];
-            tmp3[2] = '\0';
-
-            k=strtol(tmp3,NULL,16);
-            key[zeilen][spalten]=k;
-        }
-    k=0;
     // Schlüssel erweitern
     schluesselErweitern(key);
 
@@ -519,39 +532,17 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
     while(1)
     {
         memset(block, 0, 16);
-        memset(tmp2 , 0, 32);
         memset(array, 0, 16);
 
         // verschiebe erste 16 chars von textinput nach block
-        if(strlen(textinput)>0)
-        {
-            for ( i = 0; textinput[i]!='\0'; i++ )
-                if(i<16)
-                    block[i]=textinput[i];
-                else
-                    textinput[i-16] = textinput[i];
-            if(strlen(textinput)>16)
-                textinput[i-16]='\0';
-            else
-                textinput[0]='\0';
-        }
-        else
+        if(move_n_to_block(textinput, block, 16))
             break;
-
-        for(i=0;i<strlen(block);i++)
-        {
-            memset(tmp3, '\0', 3);
-            sprintf(tmp3,"%02x",block[i]);
-            tmp2[2*i] = tmp3[0];
-            tmp2[2*i+1] = tmp3[1];
-        }
 
         for(zeilen=0;zeilen<4;zeilen++)
             for(spalten=0;spalten<4;spalten++)
             {
-                tmp3[0]=tmp2[2*(zeilen*4+spalten)];
-                tmp3[1]=tmp2[2*(zeilen*4+spalten)+1];
-                tmp3[2]='\0';
+                memset(tmp3, '\0', 3);
+                sprintf(tmp3,"%02x",block[zeilen*4+spalten]);
                 array[zeilen][spalten] = strtol(tmp3,NULL,16);
             }
 
@@ -572,23 +563,14 @@ char *AES_encrypt(char *input_key, char *input_text, char *cipher)
 char *AES_decrypt(char *input_key, char *input_text, char *klartext)
 {
     char block[32+1], *textinput;
-    int i,k,zeilen,spalten;
+    int zeilen,spalten;
     char tmp3[2+1];
     int array[4][4], key[4][44];
 
-    textinput = (char *) calloc(10000+1, sizeof(char));
-    memcpy(textinput,input_text,10000);
+    textinput = (char *) calloc(AES_MAX_TEXTLENGTH+1, sizeof(char));
+    memcpy(textinput,input_text,AES_MAX_TEXTLENGTH);
 
-    for(zeilen=0;zeilen<4;zeilen++)
-        for(spalten=0;spalten<4;spalten++)
-        {
-            tmp3[0] = input_key[2*(zeilen*4+spalten)];
-            tmp3[1] = input_key[2*(zeilen*4+spalten)+1];
-            tmp3[2] = '\0';
-
-            k=strtol(tmp3,NULL,16);
-            key[zeilen][spalten]=k;
-        }
+    parse_key(input_key,key);
 
     // Schlüssel erweitern
     schluesselErweitern(key);
@@ -598,22 +580,7 @@ char *AES_decrypt(char *input_key, char *input_text, char *klartext)
         memset(block, 0, 32);
         memset(array, 0, 16);
 
-        if(strlen(textinput)>0)
-        {
-            // verschiebe textinput um 32 nach links
-            for ( i = 0; textinput[i]!='\0'; i++ )
-            {
-                if(i<32)
-                    block[i]=textinput[i];
-                else
-                    textinput[i-32] = textinput[i];
-            }
-            if(strlen(textinput)>32)
-                textinput[i-32]='\0';
-            else
-                textinput[0]='\0';
-        }
-        else
+        if(move_n_to_block(textinput, block, 32))
             break;
 
         for(zeilen=0;zeilen<4;zeilen++)
