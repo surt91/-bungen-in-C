@@ -55,6 +55,8 @@ void help( int chap )
             //~ printf("%d\t15\t//Bench: Linpack :D\n",MAT);
             printf("%d\t16\t//gespeicherte Matrix anzeigen\n",MAT);
             printf("%d\t17\t//Matrix speichern\n",MAT);
+            printf("%d\t30\t//Runge-Kutta Testfall: dx/dt=t^2, T=4s\n",MAT);
+            printf("%d\t30\t//Runge Kutta Lorenz Modell: 20s\n",MAT);
             if(chap==MAT) break;
         case GAME:
             printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);
