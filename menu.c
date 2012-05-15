@@ -79,6 +79,9 @@ int menu(int argc, char **argv)
                 case 17:
                     aufg_MAT_17();
                     break;
+                case 30:
+                    runge_kutta_test();
+                    break;
             }
             break;
         case GAME:

@@ -16,6 +16,7 @@
 #include "trivia/benchmark.h"
 #include "trivia/bin_uhr.h"
 #include "krypto/AES.h"
+#include "numeric/runge_kutta.h"
 
 //~ int menu(int argc, char **argv);
 
