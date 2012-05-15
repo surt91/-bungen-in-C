@@ -35,36 +35,31 @@ double * rk4(double *z0, double tau, double T, int dim)
 double * rk4_step(double *z, double t, double tau, int dim)
 {
     int i;
-    double *ztmp, *H1, *H2, *H3, *H4, *zout;
+    double *ztmp, *Hs[4];
 
-    H1 = (double *) calloc(dim, sizeof(double));
-    //~ if(H1 == NULL) alloc_fail();
-    H2 = (double *) calloc(dim, sizeof(double));
-    //~ if(H2 == NULL) alloc_fail();
-    H3 = (double *) calloc(dim, sizeof(double));
-    //~ if(H3 == NULL) alloc_fail();
-    H4 = (double *) calloc(dim, sizeof(double));
-    //~ if(H4 == NULL) alloc_fail();
+    for(i=0;i<4;i++)
+    {
+        Hs[i] = (double *) calloc(dim, sizeof(double));
+        //~ if(Hs[i] == NULL) alloc_fail();
+    }
     ztmp = (double *) calloc(dim, sizeof(double));
     //~ if(ztmp == NULL) alloc_fail();
-    zout = (double *) calloc(dim, sizeof(double));
-    //~ if(zout == NULL) alloc_fail();
 
-    H1=H(z, t, dim);
+    Hs[0]=H(z, t, dim);
     for(i=0;i<dim;i++)
-        ztmp[i] = z[i]+tau/2*H1[i];
-    H2=H(ztmp, t+tau/2, dim);
+        ztmp[i] = z[i]+tau/2*Hs[0][i];
+    Hs[1]=H(ztmp, t+tau/2, dim);
     for(i=0;i<dim;i++)
-        ztmp[i] = z[i]+tau/2*H2[i];
-    H3=H(ztmp, t+tau/2, dim);
+        ztmp[i] = z[i]+tau/2*Hs[1][i];
+    Hs[2]=H(ztmp, t+tau/2, dim);
     for(i=0;i<dim;i++)
-        ztmp[i] = z[i]+tau  *H3[i];
-    H4=H(ztmp, t+tau, dim);
+        ztmp[i] = z[i]+tau  *Hs[2][i];
+    Hs[3]=H(ztmp, t+tau, dim);
 
     for(i=0;i<dim;i++)
-        zout[i] = z[i] + tau/6*(H1[i]+2*H2[i]+2*H3[i]+H4[i]);
+        ztmp[i] = z[i] + tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
 
-    return zout;
+    return ztmp;
 }
 
 double * H(double *r, double t, int dim)
