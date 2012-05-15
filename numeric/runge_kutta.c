@@ -2,14 +2,15 @@
 
 double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
 {
-    double *zout, *z_seq, *t_seq, t;
+    double *zout, *z_seq, t;
+    //~ double *t_seq;
     int j, n, N;
 
     N = T/tau;
 
     z_seq = (double *) calloc(dim * N, sizeof(double));
     //~ if(z_seq == NULL) alloc_fail();
-    t_seq = (double *) calloc(N, sizeof(double));
+    //~ t_seq = (double *) calloc(N, sizeof(double));
     //~ if(t_seq == NULL) alloc_fail();
     zout = (double *) calloc(dim, sizeof(double));
     //~ if(zout == NULL) alloc_fail();
@@ -27,8 +28,9 @@ double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
 
         for(j=0;j<dim;j++)
             z_seq[j * N + n] = zout[j];
-        t_seq[n] = t;
+        //~ t_seq[n] = t;
     }
+    free(zout);
     return z_seq;
 }
 
@@ -59,6 +61,8 @@ double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim)
     for(i=0;i<dim;i++)
         ztmp[i] = z[i] + tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
 
+    for(i=0;i<4;i++)
+        free(Hs[i])
     return ztmp;
 }
 
@@ -125,4 +129,9 @@ void runge_kutta_lorenz()
             printf("% 3.6g   ",z_seq[j * N + i]);
         printf("\n");
     }
+}
+
+void main()
+{
+    runge_kutta_lorenz();
 }
