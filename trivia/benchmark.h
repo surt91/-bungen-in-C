@@ -3,7 +3,7 @@
 
 #include <time.h>
 
-#include "../lina/mat.h"
+#include "../numeric/mat.h"
 #include "../zufall/random.h"
 #include "../prim/prim.h"
 #include "../games/karten/poker.h"

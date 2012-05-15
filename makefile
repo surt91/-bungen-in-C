@@ -1,4 +1,4 @@
-OLINA	= lina/mat.o lina/mat_aufruf.o
+ONUM	= numeric/mat.o numeric/mat_aufruf.o numeric/runge_kutta.o
 OTRIVIA	= trivia/trivia.o trivia/trivia_aufruf.o trivia/benchmark.o
 OUHR	= trivia/bin_uhr.o
 OZUFALL	= zufall/random.o zufall/random_aufruf.o
@@ -12,7 +12,7 @@ OGAMES	= games/highscore.o\
 OKRYPTO	= krypto/AES.o
 
 OBJ 	= main.o menu.o help.o \
-		  $(OLINA) $(OTRIVIA) $(OZUFALL) $(OPRIM) $(OGAMES) $(OUHR) $(OKRYPTO)
+		  $(ONUM) $(OTRIVIA) $(OZUFALL) $(OPRIM) $(OGAMES) $(OUHR) $(OKRYPTO)
 
 TARGET	= Ubung
 LINK	= gcc

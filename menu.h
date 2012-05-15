@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-#include "lina/mat_aufruf.h"
+#include "numeric/mat_aufruf.h"
 #include "trivia/trivia_aufruf.h"
 #include "zufall/random_aufruf.h"
 #include "prim/prim_aufruf.h"
