@@ -82,6 +82,9 @@ int menu(int argc, char **argv)
                 case 30:
                     runge_kutta_test();
                     break;
+                case 31:
+                    runge_kutta_lorenz();
+                    break;
             }
             break;
         case GAME:
