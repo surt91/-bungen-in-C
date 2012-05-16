@@ -30,7 +30,7 @@ double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
             z_seq[j * N + n] = zout[j];
         //~ t_seq[n] = t;
     }
-    free(zout);
+    //~ free(zout);
     return z_seq;
 }
 
@@ -61,8 +61,8 @@ double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim)
     for(i=0;i<dim;i++)
         ztmp[i] = z[i] + tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
 
-    for(i=0;i<4;i++)
-        free(Hs[i])
+    //~ for(i=0;i<4;i++)
+        //~ free(Hs[i]);
     return ztmp;
 }
 
@@ -115,9 +115,10 @@ void runge_kutta_test()
         printf("\n");
     }
 }
+
 void runge_kutta_lorenz()
 {
-    double z0[]={1,1,20}, tau = 0.01, T = 20, *z_seq;
+    double z0[]={1,1,20}, tau = 0.001, T = 40, *z_seq;
     int dim=3, j, i, N;
 
     N = T/tau;
@@ -131,7 +132,13 @@ void runge_kutta_lorenz()
     }
 }
 
-void main()
+double runge_kutta_benchmark(double tau, double T)
 {
-    runge_kutta_lorenz();
+    double z0[]={1,1,20}, *z_seq;
+    int dim=3, N;
+
+    N = T/tau;
+
+    z_seq = rk4(z0, tau, rk_lorenz_func, T, dim);
+    return z_seq[2 * N + N - 1];
 }
