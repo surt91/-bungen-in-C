@@ -83,6 +83,9 @@ int menu(int argc, char **argv)
                     runge_kutta_test();
                     break;
                 case 31:
+                    runge_kutta_adaptiv_test();
+                    break;
+                case 32:
                     runge_kutta_lorenz();
                     break;
             }
