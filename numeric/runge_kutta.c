@@ -1,6 +1,6 @@
 #include "runge_kutta.h"
 
-double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
+double * rk4(double *z0, double tau, double * (*dgl)(),double T,int dim)
 {
     double *zout, *z_seq, t;
     int j, n, N;
@@ -30,7 +30,8 @@ double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
     return z_seq;
 }
 
-double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int dim, double r_desired)
+double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(),
+                                    double T, int dim, double r_desired)
 {
     double *zout, *z_t_seq, t=0, *tmp;
     int j, n=0, N=1000;
@@ -50,7 +51,7 @@ double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int di
         if(n>N-2)
         {
             N+=1000;
-            tmp = (double*) realloc (z_t_seq, (dim+1) * N * sizeof(double));
+            tmp = (double*) realloc(z_t_seq, (dim+1)*N* sizeof(double));
             if (tmp != NULL) z_t_seq=tmp;
             else alloc_fail();
         }
@@ -77,7 +78,8 @@ double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int di
     return z_t_seq;
 }
 
-double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim)
+double * rk4_step(double *z, double t, double tau, double *  (*dgl)(),
+                                                                int dim)
 {
     int i;
     double *ztmp, *Hs[4];
@@ -102,14 +104,15 @@ double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim)
     Hs[3]=dgl(ztmp, t+tau, dim);
 
     for(i=0;i<dim;i++)
-        ztmp[i] = z[i] + tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
+        ztmp[i] = z[i]+ tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
 
     for(i=0;i<4;i++)
         free(Hs[i]);
     return ztmp;
 }
 
-double rk4_get_new_tau(double *z, double t, double tau, double * (*dgl)(), int dim, double r_desired)
+double rk4_get_new_tau(double *z, double t, double tau,
+                           double * (*dgl)(), int dim, double r_desired)
 {
     int i;
     double S = 0.9, tau_neu, r, tmp1, tmp2;
