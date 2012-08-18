@@ -3,17 +3,14 @@
 double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
 {
     double *zout, *z_seq, t;
-    //~ double *t_seq;
     int j, n, N;
 
     N = T/tau;
 
     z_seq = (double *) calloc(dim * N, sizeof(double));
-    //~ if(z_seq == NULL) alloc_fail();
-    //~ t_seq = (double *) calloc(N, sizeof(double));
-    //~ if(t_seq == NULL) alloc_fail();
+    if(z_seq == NULL) alloc_fail();
     zout = (double *) calloc(dim, sizeof(double));
-    //~ if(zout == NULL) alloc_fail();
+    if(zout == NULL) alloc_fail();
 
     for(j=0;j<dim;j++)
         z_seq[j * N + 0] = z0[j];
@@ -28,7 +25,6 @@ double * rk4(double *z0, double tau, double * (*dgl)(), double T, int dim)
 
         for(j=0;j<dim;j++)
             z_seq[j * N + n] = zout[j];
-        //~ t_seq[n] = t;
     }
     //~ free(zout);
     return z_seq;
@@ -40,11 +36,9 @@ double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int di
     int j, n=0, N=1000;
 
     z_t_seq = (double *) calloc((dim+1) * N, sizeof(double));
-    //~ if(z_seq == NULL) alloc_fail();
-    //~ t_seq = (double *) calloc(N, sizeof(double));
-    //~ if(t_seq == NULL) alloc_fail();
+    if(z_t_seq == NULL) alloc_fail();
     zout = (double *) calloc(dim, sizeof(double));
-    //~ if(zout == NULL) alloc_fail();
+    if(zout == NULL) alloc_fail();
 
     for(j=0;j<dim;j++)
         z_t_seq[0 * (dim+1) + j] = z0[j];
@@ -56,7 +50,9 @@ double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int di
         if(n>N-2)
         {
             N+=1000;
-            z_t_seq = (double*) realloc (z_t_seq, (dim+1) * N * sizeof(double));
+            tmp = (double*) realloc (z_t_seq, (dim+1) * N * sizeof(double));
+            if (tmp != NULL) z_t_seq=tmp;
+            else alloc_fail();
         }
         for(j=0;j<dim;j++)
             zout[j] = z_t_seq[(n-1) * (dim+1) + j];
@@ -84,10 +80,10 @@ double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim)
     for(i=0;i<4;i++)
     {
         Hs[i] = (double *) calloc(dim, sizeof(double));
-        //~ if(Hs[i] == NULL) alloc_fail();
+        if(Hs[i] == NULL) alloc_fail();
     }
     ztmp = (double *) calloc(dim, sizeof(double));
-    //~ if(ztmp == NULL) alloc_fail();
+    if(ztmp == NULL) alloc_fail();
 
     Hs[0]=dgl(z, t, dim);
     for(i=0;i<dim;i++)
@@ -114,8 +110,11 @@ double rk4_get_new_tau(double *z, double t, double tau, double * (*dgl)(), int d
     double S = 0.9, tau_neu, r, tmp1, tmp2;
     double *z1, *z2, *z_tmp;
     z_tmp = (double *) calloc(dim, sizeof(double));
+    if(z_tmp == NULL) alloc_fail();
     z1    = (double *) calloc(dim, sizeof(double));
+    if(z1 == NULL) alloc_fail();
     z2    = (double *) calloc(dim, sizeof(double));
+    if(z2 == NULL) alloc_fail();
 
     z1 = rk4_step(z,t,tau,dgl,dim);
     z_tmp = rk4_step(z,t,tau/2,dgl,dim);
@@ -143,11 +142,10 @@ double rk4_get_new_tau(double *z, double t, double tau, double * (*dgl)(), int d
 
 double * rk_test_func(double *r, double t, int dim)
 {
-    // t^2
     int i;
     double *out;
     out = (double *) calloc(dim, sizeof(double));
-    //~ if(out == NULL) alloc_fail();
+    if(out == NULL) alloc_fail();
 
     for(i=0;i<dim;i++)
         out[i] = 2*t;
@@ -161,7 +159,7 @@ double * rk_lorenz_func(double *r, double t, int dim)
     double sigma, r_param, b;
     double x, y, z, *out;
     out = (double *) calloc(dim, sizeof(double));
-    //~ if(out == NULL) alloc_fail();
+    if(out == NULL) alloc_fail();
     sigma   = 10;
     r_param = 28;
     b       = 8/3;

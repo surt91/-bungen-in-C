@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include "../error.h"
 
 double * rk4_step(double *z, double t, double tau, double * (*dgl)(), int dim);
 double * H(double *z, double t, int dim);
