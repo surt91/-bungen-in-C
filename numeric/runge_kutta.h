@@ -12,6 +12,8 @@ double * H(double *z, double t, int dim);
 double rk4_get_new_tau(double *z, double t, double tau, double * (*dgl)(), int dim, double r_desired);
 double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(), double T, int dim, double r_desired);
 
+double * rk4a_interpolate(double *zt_seq, int dim, int freq);
+
 void rk4_print(double *z_seq, int dim, int T, double tau);
 void rk4a_print(double *z_t_seq, int dim);
 

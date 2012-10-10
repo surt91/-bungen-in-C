@@ -225,13 +225,56 @@ void rk4a_print(double *zt_seq, int dim)
 }
 
 
+double * rk4a_interpolate(double *zt_seq, int dim, int freq)
 {
+    double T, t1=0, t2=0, t_start, *tmp, *tmp2, *z1, *z2, *zt_out;
+    int n = 0, m=0, j, N = 1000;
+
+    z1 = (double *) calloc(dim, sizeof(double));
+    if(z1 == NULL) alloc_fail();
+    z2 = (double *) calloc(dim, sizeof(double));
+    if(z2 == NULL) alloc_fail();
+    tmp = (double *) calloc(dim, sizeof(double));
+    if(tmp == NULL) alloc_fail();
+
+    zt_out = (double *) calloc((dim+1) * N, sizeof(double));
+    if(zt_out == NULL) alloc_fail();
+
+    t_start = zt_seq[0 + dim];
+
+    T = 1/freq;
+    do
     {
-        printf("%g   ",i*tau);
+        n++;
+        if(t1 > m*T && t2-t_start > T/2)
+        {
+            for(j=0;j<dim;j++)
+                zt_out[m * (dim+1) + j] = tmp[j]/(t2-t_start);
+            zt_out[m * (dim+1) + dim] = m*T;
+            m++;
+
+            t_start = zt_seq[n * (dim+1) + dim];
+
+            if(m>N-2)
+            {
+                N+=1000;
+                tmp2 = (double*) realloc(zt_out, (dim+1)*N* sizeof(double));
+                if (tmp != NULL) zt_out=tmp2;
+                else alloc_fail();
+            }
+        }
+        t2 = t1;
+        t1 = zt_seq[n * (dim+1) + dim];
         for(j=0;j<dim;j++)
-            printf("%g   ",z_seq[j * N + i]);
-        printf("\n");
-    }
+        {
+            z2[j] = z1[j];
+            z1[j] = zt_seq[n * (dim+1) + j];
+
+            tmp[j] = (z1[j] + z2[j]) / 2 * (t2-t1);
+        }
+    } while(zt_seq[n * (dim +1) + dim] != 0);
+    free(z1); free(z2); free(tmp);
+    return zt_out;
 }
 
 void runge_kutta_lorenz()
