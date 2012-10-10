@@ -30,20 +30,20 @@ double * rk4(double *z0, double tau, double * (*dgl)(),double T,int dim)
     return z_seq;
 }
 
-double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(),
+double * rk4a(double *z0, double tau, double * (*dgl)(),
                                     double T, int dim, double r_desired)
 {
-    double *zout, *z_t_seq, t=0, *tmp;
+    double *zout, *zt_seq, t=0, *tmp;
     int j, n=0, N=1000;
 
-    z_t_seq = (double *) calloc((dim+1) * N, sizeof(double));
-    if(z_t_seq == NULL) alloc_fail();
+    zt_seq = (double *) calloc((dim+1) * N, sizeof(double));
+    if(zt_seq == NULL) alloc_fail();
     zout = (double *) calloc(dim, sizeof(double));
     if(zout == NULL) alloc_fail();
 
     for(j=0;j<dim;j++)
-        z_t_seq[0 * (dim+1) + j] = z0[j];
-    z_t_seq[0 * (dim+1) + dim] = 0;
+        zt_seq[0 * (dim+1) + j] = z0[j];
+    zt_seq[0 * (dim+1) + dim] = 0;
 
     while(t<T)
     {
@@ -51,31 +51,31 @@ double * rk4_adaptiv(double *z0, double tau, double * (*dgl)(),
         if(n>N-2)
         {
             N+=1000;
-            tmp = (double*) realloc(z_t_seq, (dim+1)*N* sizeof(double));
-            if (tmp != NULL) z_t_seq=tmp;
+            tmp = (double*) realloc(zt_seq, (dim+1)*N* sizeof(double));
+            if (tmp != NULL) zt_seq=tmp;
             else alloc_fail();
         }
         for(j=0;j<dim;j++)
-            zout[j] = z_t_seq[(n-1) * (dim+1) + j];
+            zout[j] = zt_seq[(n-1) * (dim+1) + j];
 
         tau = rk4_get_new_tau(zout, t, tau, dgl, dim, r_desired);
         t += tau;
 
         zout = rk4_step(zout,t,tau,dgl,dim);
 
-        z_t_seq[n * (dim+1) + dim] = t;
+        zt_seq[n * (dim+1) + dim] = t;
         for(j=0;j<dim;j++)
-            z_t_seq[n * (dim+1) + j] = zout[j];
+            zt_seq[n * (dim+1) + j] = zout[j];
     }
     free(zout);
 
-    z_t_seq[(n +1)* (dim+1) + dim] = 0;
+    zt_seq[(n +1)* (dim+1) + dim] = 0;
 
-    tmp = (double*) realloc (z_t_seq, (dim+1) * (n+2) * sizeof(double));
-    if (tmp != NULL) z_t_seq=tmp;
+    tmp = (double*) realloc (zt_seq, (dim+1) * (n+2) * sizeof(double));
+    if (tmp != NULL) zt_seq=tmp;
     else alloc_fail();
 
-    return z_t_seq;
+    return zt_seq;
 }
 
 double * rk4_step(double *z, double t, double tau, double *  (*dgl)(),
@@ -191,24 +191,11 @@ void runge_kutta_test()
 
 void runge_kutta_adaptiv_test()
 {
-    double z0[]={0,0}, tau = 0.01, T = 2, *z_seq;
+    double z0[]={0,0}, tau = 0.01, T = 2, *zt_seq;
     int dim=1;
 
-    z_seq = rk4_adaptiv(z0, tau, rk_test_func, T, dim, 0.0002);
-    rk4a_print(z_seq, dim);
-}
-
-void rk4a_print(double *z_t_seq, int dim)
-{
-    int n=0, j;
-    do
-    {
-        printf("%g   ",z_t_seq[n * (dim +1) + dim]);
-        for(j=0;j<dim;j++)
-            printf("%g   ",z_t_seq[n * (dim +1) + j]);
-        printf("\n");
-        n++;
-    } while(z_t_seq[n * (dim +1) + dim] != 0);
+    zt_seq = rk4a(z0, tau, rk_test_func, T, dim, 0.0002);
+    rk4a_print(zt_seq, dim);
 }
 
 void rk4_print(double *z_seq, int dim, int T, double tau)
@@ -224,6 +211,29 @@ void rk4_print(double *z_seq, int dim, int T, double tau)
     }
 }
 
+void rk4a_print(double *zt_seq, int dim)
+{
+    int n=0, j;
+    do
+    {
+        printf("%g   ",zt_seq[n * (dim +1) + dim]);
+        for(j=0;j<dim;j++)
+            printf("%g   ",zt_seq[n * (dim +1) + j]);
+        printf("\n");
+        n++;
+    } while(zt_seq[n * (dim +1) + dim] != 0);
+}
+
+
+{
+    {
+        printf("%g   ",i*tau);
+        for(j=0;j<dim;j++)
+            printf("%g   ",z_seq[j * N + i]);
+        printf("\n");
+    }
+}
+
 void runge_kutta_lorenz()
 {
     double z0[]={1,1,20}, tau = 0.001, T = 40, *z_seq;
@@ -231,6 +241,15 @@ void runge_kutta_lorenz()
 
     z_seq = rk4(z0, tau, rk_lorenz_func, T, dim);
     rk4_print(z_seq, dim, T, tau);
+}
+
+void runge_kutta_lorenz_adaptiv()
+{
+    double z0[]={1,1,20}, tau = 0.001, T = 40, r_desired = 1e-6, *zt_seq;
+    int dim=3;
+
+    zt_seq = rk4a(z0, tau, rk_lorenz_func, T, dim, r_desired);
+    rk4a_print(zt_seq, dim);
 }
 
 double runge_kutta_benchmark(double tau, double T)
