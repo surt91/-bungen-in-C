@@ -91,6 +91,9 @@ int menu(int argc, char **argv)
                 case 33:
                     runge_kutta_lorenz_adaptiv();
                     break;
+                case 34:
+                    runge_kutta_lorenz_ensemble_adaptiv();
+                    break;
             }
             break;
         case GAME:

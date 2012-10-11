@@ -7,7 +7,7 @@
 #include "../zufall/random.h"
 #include "../prim/prim.h"
 #include "../games/karten/poker.h"
-#include "../numeric/runge_kutta.h"
+#include "../numeric/rk4_lorenz.h"
 
 void benchmark_start();
 int benchmark_save(double ma, double pi, double pr, double po, double dg);
