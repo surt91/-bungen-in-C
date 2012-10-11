@@ -1,6 +1,6 @@
 #include "runge_kutta.h"
 
-double * rk4(double *z0, double tau, double * (*dgl)(),double T,int dim)
+double * rk4(double *z0, double tau, void (*dgl)(),double T,int dim)
 {
     double *zout, *z_seq, t;
     int j, n, N;
@@ -21,7 +21,7 @@ double * rk4(double *z0, double tau, double * (*dgl)(),double T,int dim)
         for(j=0;j<dim;j++)
             zout[j] = z_seq[j * N + n-1];
 
-        zout = rk4_step(zout,t,tau,dgl,dim);
+        rk4_step(zout,t,tau,dgl,dim);
 
         for(j=0;j<dim;j++)
             z_seq[j * N + n] = zout[j];
@@ -30,7 +30,7 @@ double * rk4(double *z0, double tau, double * (*dgl)(),double T,int dim)
     return z_seq;
 }
 
-double * rk4a(double *z0, double tau, double * (*dgl)(),
+double * rk4a(double *z0, double tau, void (*dgl)(),
                                     double T, int dim, double r_desired)
 {
     double *zout, *zt_seq, t=0, *tmp;
@@ -61,7 +61,7 @@ double * rk4a(double *z0, double tau, double * (*dgl)(),
         tau = rk4_get_new_tau(zout, t, tau, dgl, dim, r_desired);
         t += tau;
 
-        zout = rk4_step(zout,t,tau,dgl,dim);
+        rk4_step(zout,t,tau,dgl,dim);
 
         zt_seq[n * (dim+1) + dim] = t;
         for(j=0;j<dim;j++)
@@ -78,7 +78,7 @@ double * rk4a(double *z0, double tau, double * (*dgl)(),
     return zt_seq;
 }
 
-double * rk4_step(double *z, double t, double tau, double *  (*dgl)(),
+void rk4_step(double *z, double t, double tau, void (*dgl)(),
                                                                 int dim)
 {
     int i;
@@ -92,27 +92,27 @@ double * rk4_step(double *z, double t, double tau, double *  (*dgl)(),
     ztmp = (double *) calloc(dim, sizeof(double));
     if(ztmp == NULL) alloc_fail();
 
-    Hs[0]=dgl(z, t, dim);
+    dgl(z, t, dim, Hs[0]);
     for(i=0;i<dim;i++)
         ztmp[i] = z[i]+tau/2*Hs[0][i];
-    Hs[1]=dgl(ztmp, t+tau/2, dim);
+    dgl(ztmp, t+tau/2, dim, Hs[1]);
     for(i=0;i<dim;i++)
         ztmp[i] = z[i]+tau/2*Hs[1][i];
-    Hs[2]=dgl(ztmp, t+tau/2, dim);
+    dgl(ztmp, t+tau/2, dim, Hs[2]);
     for(i=0;i<dim;i++)
         ztmp[i] = z[i]+tau  *Hs[2][i];
-    Hs[3]=dgl(ztmp, t+tau, dim);
+    dgl(ztmp, t+tau, dim, Hs[3]);
 
     for(i=0;i<dim;i++)
-        ztmp[i] = z[i]+ tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
+        z[i] = z[i]+ tau/6*(Hs[0][i]+2*Hs[1][i]+2*Hs[2][i]+Hs[3][i]);
 
     for(i=0;i<4;i++)
         free(Hs[i]);
-    return ztmp;
+    free(ztmp);
 }
 
 double rk4_get_new_tau(double *z, double t, double tau,
-                           double * (*dgl)(), int dim, double r_desired)
+                           void (*dgl)(), int dim, double r_desired)
 {
     int i;
     double S = 0.9, tau_neu, r, tmp1, tmp2;
@@ -122,9 +122,15 @@ double rk4_get_new_tau(double *z, double t, double tau,
     z2    = (double *) calloc(dim, sizeof(double));
     if(z2 == NULL) alloc_fail();
 
-    z1 = rk4_step(z,t,tau,dgl,dim);
-    z2 = rk4_step(z,t,tau/2,dgl,dim);
-    z2 = rk4_step(z2,t,tau/2,dgl,dim);
+    for(i=0;i<dim;i++)
+    {
+        z1[i]=z[i];
+        z2[i]=z[i];
+    }
+
+    rk4_step(z1,t,tau,dgl,dim);
+    rk4_step(z2,t,tau/2,dgl,dim);
+    rk4_step(z2,t,tau/2,dgl,dim);
 
     tmp1 = 0; tmp2 = 0;
     for(i=0;i<dim;i++)
@@ -147,17 +153,12 @@ double rk4_get_new_tau(double *z, double t, double tau,
     return tau_neu;
 }
 
-double * rk_test_func(double *r, double t, int dim)
+void rk_test_func(double *r, double t, int dim, double *out)
 {
     int i;
-    double *out;
-    out = (double *) calloc(dim, sizeof(double));
-    if(out == NULL) alloc_fail();
 
     for(i=0;i<dim;i++)
         out[i] = 2*t;
-
-    return out;
 }
 
 void runge_kutta_test()
