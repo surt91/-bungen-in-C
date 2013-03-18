@@ -18,6 +18,7 @@
 #include "krypto/AES.h"
 #include "numeric/runge_kutta.h"
 #include "numeric/rk4_lorenz.h"
+#include "numeric/fft.h"
 
 //~ int menu(int argc, char **argv);
 

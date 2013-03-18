@@ -60,6 +60,7 @@ void help( int chap )
             printf("%d\t32\t//Runge Kutta Lorenz Modell: 20s\n",MAT);
             printf("%d\t33\t//Runge Kutta Lorenz Modell, adaptiv: 20s\n",MAT);
             printf("%d\t34\t//Runge Kutta Lorenz Modell, adaptiv, Ensemble: 20s\n",MAT);
+            printf("%d\t35\t//DFT Test\n",MAT);
             if(chap==MAT) break;
         case GAME:
             printf("\nKapitel %d: Spiele und Zufall\n\n",GAME);
