@@ -5,13 +5,15 @@
 double complex *dft(double complex *x, int N)
 {
     int k, n;
-    double complex *X;
+    double complex *X, W;
     X = (double complex *) calloc(N, sizeof(double complex));
     if(X == NULL) alloc_fail();
 
+    W = cexp(-2*PI*_Complex_I/N);
+
     for(k=0;k<N;k++)
         for(n=0;n<N;n++)
-            X[k] += x[n]*cexp(-2*PI*_Complex_I*n*k/N);
+            X[k] += x[n]*cpow(W,n*k);
 
     return X;
 }
