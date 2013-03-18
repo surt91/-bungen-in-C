@@ -97,6 +97,9 @@ int menu(int argc, char **argv)
                 case 35:
                     dft_test();
                     break;
+                case 36:
+                    fft_test();
+                    break;
             }
             break;
         case GAME:
