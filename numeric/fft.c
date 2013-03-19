@@ -70,7 +70,7 @@ double complex *fft(double complex *x, int N)
     return x;
 }
 
-double complex *dft(double complex *x, int N)
+void dft(double complex *x, int N)
 {
     int k, n;
     double complex *X, W;
@@ -83,7 +83,11 @@ double complex *dft(double complex *x, int N)
         for(n=0;n<N;n++)
             X[k] += x[n]*cpow(W,n*k);
 
-    return X;
+    for(n=0;n<N;n++)
+        x[n]=X[n];
+    free(X);
+
+    return;
 }
 
 void dft_test()
@@ -98,7 +102,7 @@ void dft_test()
     for(i=0;i<N;i++)
         x[i] = i*3+1;
 
-    x = dft(x,N);
+    dft(x,N);
     for(i=0;i<N;i++)
         printf("%.2f + %.2f i\n",creal(x[i]), cimag(x[i]));
 
