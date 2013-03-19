@@ -22,6 +22,7 @@ void benchmark_start()
     printf("Benchmark des Systems durch das Verteilen und auswerten von je 250.000 Pokerhände an 8 Spieler (10.000.000 verteilte Karten) \n");
     po = poker_benchmark(&u);
     poker_monte_carlo_darstellen(u, 8);
+    free(u);
     printf("Time: %4.2f s \n\n", po);
 
     printf("Benchmark des Systems durch das Lösen eines Lorenz Modells mit einem Runge-Kutta 4ten Grades. T=3000s, tau=0.0005s\n");
@@ -75,7 +76,7 @@ double prim_benchmark(unsigned *w)
     array = (short *) calloc(max, sizeof(short));
     begin = clock();
     primzahl(max, array);
-    prim_array_bereinigen(array, max, w);
+    array = prim_array_bereinigen(array, max, w);
     end = clock();
     free(array);
 

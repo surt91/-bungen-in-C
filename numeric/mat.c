@@ -348,7 +348,7 @@ struct mat matrix_dgf(struct mat matrix_out)
     double tmp;
 
     matrix_out = matrix_gnf(matrix_out);
-    for(i=matrix_out.zeilen;i>=0;i--)
+    for(i=matrix_out.zeilen-1;i>=0;i--)
         for(j=0;j<matrix_out.spalten;j++)
         {
             tmp=matrix_out.matrix[i* matrix_out.spalten+j];

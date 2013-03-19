@@ -290,6 +290,21 @@ void poker_monte_carlo(int anzahl, int leute, int **ergebnis)
         (*ergebnis)[10 * j + 8] = royal_flush[j];
         (*ergebnis)[10 * j + 9] = runden[j];
     }
+
+    for(j=0; j<leute; j++)
+        karten_delete_stapel(&(spieler[j]));
+    karten_delete_stapel(&stapel);
+
+    free(flush);
+    free(straight);
+    free(royal_flush);
+    free(straight_flush);
+    free(three_of_a_kind);
+    free(two_pair);
+    free(pair);
+    free(four_of_a_kind);
+    free(fullhouse);
+    free(runden);
 }
 
 void poker_monte_carlo_darstellen(int *u, int anzSpieler)

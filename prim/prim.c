@@ -99,11 +99,11 @@ void prim_ermitteln(unsigned long max)
         scanf("%lu", &max);
         printf("\n\n");
     }
-    array = (short *) calloc(max, sizeof(short));
+    array = (short *) calloc(max+1, sizeof(short));
     primzahl(max, array);
-    prim_liste = prim_array_bereinigen(array, max, &laenge);
+    prim_liste = prim_array_bereinigen(array, max+1, &laenge);
     prim_ausgabe(prim_liste, laenge);
-    free(array);
+    //~ free(array);
     free(prim_liste);
 }
 // Primzahlenermittlung mit Array
@@ -113,7 +113,7 @@ void primzahl(unsigned max, short *a)
     short *c;
     pot=sqrt(max);
     wurzpot=sqrt(pot);
-    c = (short *) calloc(pot, sizeof(short));
+    c = (short *) calloc(pot+1, sizeof(short));
 
     a[0]=1; a[1]=1;
     c[0]=1; c[1]=1;
@@ -151,6 +151,7 @@ unsigned *prim_array_bereinigen(short *alt_array, unsigned alt_array_laenge, uns
             n++;
         }
     }
+    free(alt_array);
     return neu_array;
 }
 unsigned prim_max(unsigned *prim_liste, unsigned letzte)
@@ -180,7 +181,7 @@ int ist_prim_array(test)
     array = (short *) calloc(test, sizeof(short));
     primzahl(test, array);
     prim_liste = prim_array_bereinigen(array, test, &laenge);
-    free(array);
+    //~ free(array);
     if(prim_max(prim_liste, laenge) == test)
         return 1;
     else

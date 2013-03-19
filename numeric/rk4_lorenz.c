@@ -70,11 +70,13 @@ void runge_kutta_lorenz_ensemble_adaptiv()
 
 double runge_kutta_benchmark(double tau, double T)
 {
-    double z0[]={1,1,20}, *z_seq;
+    double z0[]={1,1,20}, *z_seq, ret;
     int dim=3, N;
 
     N = T/tau;
 
     z_seq = rk4(z0, tau, rk_lorenz_func, T, dim);
-    return z_seq[2 * N + N - 1];
+    ret = z_seq[2 * N + N - 1];
+    free(z_seq);
+    return ret;
 }

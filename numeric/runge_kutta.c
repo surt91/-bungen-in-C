@@ -170,6 +170,7 @@ void runge_kutta_test()
 
     z_seq = rk4(z0, tau, rk_test_func, T, dim);
     rk4_print(z_seq, dim, T, tau);
+    free(z_seq);
 }
 
 void runge_kutta_adaptiv_test()
@@ -179,6 +180,7 @@ void runge_kutta_adaptiv_test()
 
     zt_seq = rk4a(z0, tau, rk_test_func, T, dim, 0.0002);
     rk4a_print(zt_seq, dim);
+    free(zt_seq);
 }
 
 void rk4_print(double *z_seq, int dim, int T, double tau)
