@@ -54,6 +54,7 @@ double * rk4a(double *z0, double tau, void (*dgl)(),
             tmp = (double*) realloc(zt_seq, (dim+1)*N* sizeof(double));
             if (tmp != NULL) zt_seq=tmp;
             else alloc_fail();
+            free(tmp);
         }
         for(j=0;j<dim;j++)
             zout[j] = zt_seq[(n-1) * (dim+1) + j];
@@ -74,6 +75,7 @@ double * rk4a(double *z0, double tau, void (*dgl)(),
     tmp = (double*) realloc (zt_seq, (dim+1) * (n+2) * sizeof(double));
     if (tmp != NULL) zt_seq=tmp;
     else alloc_fail();
+    free(tmp);
 
     return zt_seq;
 }
