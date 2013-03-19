@@ -20,6 +20,7 @@ void conway_gleiter()
     conway_set_status(2, 1, map, 1);
     conway_set_status(1, 0, map, 1);
     conway_main(map);
+    free(map.status);
     return;
 }
 
@@ -37,6 +38,7 @@ void conway_random()
                 conway_set_status(i, j, map, state);
             }
     conway_main(map);
+    free(map.status);
     return;
 }
 
@@ -70,6 +72,7 @@ void conway_pulsator()
     conway_set_status(11,  9, map, 1);
     conway_set_status(13,  9, map, 1);
     conway_main(map);
+    free(map.status);
     return;
 }
 
@@ -95,6 +98,7 @@ void conway_HWSS()
     conway_set_status(6, 5, map, 1);
     conway_set_status(6, 4, map, 1);
     conway_main(map);
+    free(map.status);
     return;
 }
 
@@ -115,6 +119,7 @@ void conway_stabil()
     conway_set_status( 9,  7, map, 1);
     conway_set_status(10,  7, map, 1);
     conway_main(map);
+    free(map.status);
     return;
 }
 
@@ -152,6 +157,7 @@ void conway_main(struct conway_map map)
         for(m=0; m<tmp.y*tmp.x;m++)
             map.status[m] = tmp.status[m];
     }
+    free(tmp.status);
     return;
 }
 
