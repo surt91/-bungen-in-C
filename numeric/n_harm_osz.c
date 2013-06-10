@@ -59,7 +59,6 @@ void n_harm_osz_print_cairo(r_type r, int t)
 
     surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CAIRO_XSCALE*CAIRO_SCALE, CAIRO_YSCALE*CAIRO_SCALE);
     cr = cairo_create (surface);
-    //~ cairo_scale (cr, CAIRO_SCALE, CAIRO_SCALE);
 
     /* weißer Hintergrund */
     cairo_set_source_rgb (cr, 1, 1, 1);
@@ -68,7 +67,6 @@ void n_harm_osz_print_cairo(r_type r, int t)
     /* Drawing code goes here */
     for(i=0; i < r.N ; i++)
     {
-        //~ cairo_set_source_rgb (cr, VMIN(fabs(r.vx[i])), VMIN(fabs(r.vy[i])), VMIN(fabs(r.vz[i])));
         cairo_set_source_rgb (cr, VMIN(fabs(r.vx[i]/VMAX)), VMIN(fabs(r.vy[i]/VMAX)), VMIN(fabs(r.vz[i]/VMAX)));
         cairo_rectangle (cr, (int) (r.x[i]*CAIRO_SCALE*0.8+0.1*CAIRO_XSCALE*CAIRO_SCALE), (int) (r.y[i]*CAIRO_SCALE*0.8+0.1*CAIRO_YSCALE*CAIRO_SCALE), 1*SCALE, 1*SCALE);
         cairo_fill (cr);
@@ -99,12 +97,8 @@ void n_harm_osz_main()
         //initialisiere Startpunkte
         r.x[n] = rand()/ ((double) RAND_MAX) * CAIRO_XSCALE;
         r.y[n] = rand()/ ((double) RAND_MAX) * CAIRO_YSCALE;
-        //~ r.z[n] = rand()/ ((double) RAND_MAX);
         r.z[n] = 0;
         //initialisiere Startgeschwindigkeiten
-        //~ r.vx[n] = rand()/ ((double) RAND_MAX);
-        //~ r.vy[n] = rand()/ ((double) RAND_MAX);
-        //~ r.vz[n] = rand()/ ((double) RAND_MAX);
         r.vx[n] = 0;
         r.vy[n] = 0;
         r.vz[n] = 0;
