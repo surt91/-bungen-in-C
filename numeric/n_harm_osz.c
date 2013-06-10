@@ -2,7 +2,7 @@
 
 #define CAIRO_XSCALE 16
 #define CAIRO_YSCALE 9
-#define CAIRO_SCALE 12
+#define CAIRO_SCALE 120
 #define SCALE 10
 #define VMAX 50.0
 
@@ -57,9 +57,9 @@ void n_harm_osz_print_cairo(r_type r, int t)
 
     sprintf(filename, "n_harm_osz/n_harm_osz_%04d.png", t);
 
-    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CAIRO_XSCALE*SCALE*CAIRO_SCALE, CAIRO_YSCALE*SCALE*CAIRO_SCALE);
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CAIRO_XSCALE*CAIRO_SCALE, CAIRO_YSCALE*CAIRO_SCALE);
     cr = cairo_create (surface);
-    cairo_scale (cr, CAIRO_SCALE, CAIRO_SCALE);
+    //~ cairo_scale (cr, CAIRO_SCALE, CAIRO_SCALE);
 
     /* weißer Hintergrund */
     cairo_set_source_rgb (cr, 1, 1, 1);
@@ -70,7 +70,7 @@ void n_harm_osz_print_cairo(r_type r, int t)
     {
         //~ cairo_set_source_rgb (cr, VMIN(fabs(r.vx[i])), VMIN(fabs(r.vy[i])), VMIN(fabs(r.vz[i])));
         cairo_set_source_rgb (cr, VMIN(fabs(r.vx[i]/VMAX)), VMIN(fabs(r.vy[i]/VMAX)), VMIN(fabs(r.vz[i]/VMAX)));
-        cairo_rectangle (cr, (int) (r.x[i]*SCALE), (int) (r.y[i]*SCALE), 1, 1);
+        cairo_rectangle (cr, (int) (r.x[i]*CAIRO_SCALE*0.8+0.1*CAIRO_XSCALE*CAIRO_SCALE), (int) (r.y[i]*CAIRO_SCALE*0.8+0.1*CAIRO_YSCALE*CAIRO_SCALE), 1*SCALE, 1*SCALE);
         cairo_fill (cr);
     }
 
