@@ -100,6 +100,9 @@ int menu(int argc, char **argv)
                 case 36:
                     fft_test();
                     break;
+                case 37:
+                    n_harm_osz_main();
+                    break;
             }
             break;
         case GAME:
