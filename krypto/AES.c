@@ -115,12 +115,12 @@ static char * AESKeyGen(char *schluessel)
  * Fast multiply two numbers in the GF(2^8) finite field defined
  * using a logarithm and exponentiation table.
  */
-static uint8_t galois_fast_multiplication(uint8_t a, uint8_t b)
+inline static uint8_t galois_fast_multiplication(uint8_t a, uint8_t b)
 {
     return ((a && b) ? exptable[(logtable[a] + logtable[b]) % 255] : 0);
 }
 
-static void mixColumn(uint8_t *column, char inv)
+inline static void mixColumn(uint8_t *column)
 {
     uint8_t cpy[4];
     int i;
@@ -129,28 +129,58 @@ static void mixColumn(uint8_t *column, char inv)
         cpy[i] = column[i];
     }
 
-    column[0] = galois_fast_multiplication(cpy[0], inv ? 0x0e : 0x02) ^
-                galois_fast_multiplication(cpy[3], inv ? 0x09 : 0x01) ^
-                galois_fast_multiplication(cpy[2], inv ? 0x0d : 0x01) ^
-                galois_fast_multiplication(cpy[1], inv ? 0x0b : 0x03);
+    column[0] = galois_fast_multiplication(cpy[0], 0x02) ^
+                galois_fast_multiplication(cpy[3], 0x01) ^
+                galois_fast_multiplication(cpy[2], 0x01) ^
+                galois_fast_multiplication(cpy[1], 0x03);
 
-    column[1] = galois_fast_multiplication(cpy[1], inv ? 0x0e : 0x02) ^
-                galois_fast_multiplication(cpy[0], inv ? 0x09 : 0x01) ^
-                galois_fast_multiplication(cpy[3], inv ? 0x0d : 0x01) ^
-                galois_fast_multiplication(cpy[2], inv ? 0x0b : 0x03);
+    column[1] = galois_fast_multiplication(cpy[1], 0x02) ^
+                galois_fast_multiplication(cpy[0], 0x01) ^
+                galois_fast_multiplication(cpy[3], 0x01) ^
+                galois_fast_multiplication(cpy[2], 0x03);
 
-    column[2] = galois_fast_multiplication(cpy[2], inv ? 0x0e : 0x02) ^
-                galois_fast_multiplication(cpy[1], inv ? 0x09 : 0x01) ^
-                galois_fast_multiplication(cpy[0], inv ? 0x0d : 0x01) ^
-                galois_fast_multiplication(cpy[3], inv ? 0x0b : 0x03);
+    column[2] = galois_fast_multiplication(cpy[2], 0x02) ^
+                galois_fast_multiplication(cpy[1], 0x01) ^
+                galois_fast_multiplication(cpy[0], 0x01) ^
+                galois_fast_multiplication(cpy[3], 0x03);
 
-    column[3] = galois_fast_multiplication(cpy[3], inv ? 0x0e : 0x02) ^
-                galois_fast_multiplication(cpy[2], inv ? 0x09 : 0x01) ^
-                galois_fast_multiplication(cpy[1], inv ? 0x0d : 0x01) ^
-                galois_fast_multiplication(cpy[0], inv ? 0x0b : 0x03);
+    column[3] = galois_fast_multiplication(cpy[3], 0x02) ^
+                galois_fast_multiplication(cpy[2], 0x01) ^
+                galois_fast_multiplication(cpy[1], 0x01) ^
+                galois_fast_multiplication(cpy[0], 0x03);
 }
 
-static void makeColumn(char state[4][4], char inv)
+inline static void inv_mixColumn(uint8_t *column)
+{
+    uint8_t cpy[4];
+    int i;
+
+    for(i = 0; i < 4; i++) {
+        cpy[i] = column[i];
+    }
+
+    column[0] = galois_fast_multiplication(cpy[0], 0x0e) ^
+                galois_fast_multiplication(cpy[3], 0x09) ^
+                galois_fast_multiplication(cpy[2], 0x0d) ^
+                galois_fast_multiplication(cpy[1], 0x0b);
+
+    column[1] = galois_fast_multiplication(cpy[1], 0x0e) ^
+                galois_fast_multiplication(cpy[0], 0x09) ^
+                galois_fast_multiplication(cpy[3], 0x0d) ^
+                galois_fast_multiplication(cpy[2], 0x0b);
+
+    column[2] = galois_fast_multiplication(cpy[2], 0x0e) ^
+                galois_fast_multiplication(cpy[1], 0x09) ^
+                galois_fast_multiplication(cpy[0], 0x0d) ^
+                galois_fast_multiplication(cpy[3], 0x0b);
+
+    column[3] = galois_fast_multiplication(cpy[3], 0x0e) ^
+                galois_fast_multiplication(cpy[2], 0x09) ^
+                galois_fast_multiplication(cpy[1], 0x0d) ^
+                galois_fast_multiplication(cpy[0], 0x0b);
+}
+
+static void mixColumns(char state[4][4])
 {
     int i, j;
     uint8_t column[4];
@@ -160,21 +190,28 @@ static void makeColumn(char state[4][4], char inv)
         for (j = 0; j < 4; j++)
             column[j] = state[j][i];
 
-        inv ? mixColumn(column,1) : mixColumn(column,0);
+        mixColumn(column);
 
         for (j = 0; j < 4; j++)
             state[j][i] = column[j];
     }
 }
 
-static void mixColumns(char state[4][4])
-{
-    makeColumn(state,0);
-}
-
 static void invMixColumns(char state[4][4])
 {
-    makeColumn(state,1);
+    int i, j;
+    uint8_t column[4];
+
+    for (i = 0; i < 4; i++)
+    {
+        for (j = 0; j < 4; j++)
+            column[j] = state[j][i];
+
+        inv_mixColumn(column);
+
+        for (j = 0; j < 4; j++)
+            state[j][i] = column[j];
+    }
 }
 
 static void leftshift(int vektor[4],int anzahl)
@@ -389,7 +426,7 @@ static void encrypt_rounds(char array[4][4], int key[4][44])
             array[zeilen][spalten] ^= key[zeilen][keyspalten];
 }
 
-void parse_key(char *input_key, int key[4][44])
+void parse_key(const char *input_key, int key[4][44])
 {
     int zeilen, spalten, k;
     char tmp3[2+1];
@@ -467,12 +504,11 @@ void parse_key(char *input_key, int key[4][44])
     //~ }
 //~ }
 
-char *AES_encrypt(char *input_key, char *input_text, int N, char *cipher)
+char *AES_encrypt(const char *input_key, const char *input_text, const int N, char *cipher)
 {
-    char block[16];
-    int zeilen,spalten, i;
     char array[4][4];
     int  key[4][44];
+    int i;
 
     parse_key(input_key, key);
 
@@ -482,28 +518,20 @@ char *AES_encrypt(char *input_key, char *input_text, int N, char *cipher)
     // Verschlüsselungsalgorithmus, bis kein Text mehr in der Warteschlange ist:
     for(i=0;i<N/16;i++)
     {
-        memcpy(block, input_text + i*16, 16);
-
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = block[zeilen*4+spalten];
+        memcpy(array, input_text + i*16, 16);
 
         encrypt_rounds(array, key);
 
-        //Ausgeben
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                cipher[zeilen*4+spalten+16*i] = array[zeilen][spalten];
+        memcpy(cipher + i*16, array, 16);
     }
     return cipher;
 }
 
-char *AES_decrypt(char *input_key, char *input_text, int N, char *klartext)
+char *AES_decrypt(const char *input_key, const char *input_text, const int N, char *klartext)
 {
-    char block[16];
-    int zeilen,spalten, i;
     char array[4][4];
     int key[4][44];
+    int i;
 
     parse_key(input_key,key);
 
@@ -512,22 +540,16 @@ char *AES_decrypt(char *input_key, char *input_text, int N, char *klartext)
 
     for(i=0;i<N/16;i++)
     {
-        memcpy(block, input_text + i*16, 16);
-
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                array[zeilen][spalten] = block[zeilen*4+spalten];
+        memcpy(array, input_text + i*16, 16);
 
         decrypt_rounds(array, key);
 
-        for(zeilen=0;zeilen<4;zeilen++)
-            for(spalten=0;spalten<4;spalten++)
-                klartext[zeilen*4+spalten+16*i] = array[zeilen][spalten];
+        memcpy(klartext + i*16, array, 16);
     }
     return klartext;
 }
 
-char dehex(char in)
+char dehex(const char in)
 {
     switch (in)
     {
@@ -568,7 +590,7 @@ char dehex(char in)
     }
 }
 
-char *AES_armor16(char *cipher, int N, char *armored)
+char *AES_armor16(const char *cipher, const int N, char *armored)
 {
     int zeilen,spalten, i;
     for(i=0;i<N/16;i++)
@@ -581,7 +603,7 @@ char *AES_armor16(char *cipher, int N, char *armored)
 
     return armored;
 }
-char *AES_dearmor16(char *armored, int N, char *dearmored)
+char *AES_dearmor16(const char *armored, const int N, char *dearmored)
 {
     int zeilen,spalten, i;
     for(i=0;i<N/16;i++)
@@ -592,7 +614,7 @@ char *AES_dearmor16(char *armored, int N, char *dearmored)
     return dearmored;
 }
 
-void AES_file_op(char *in_file, char *out_file, char *key, int decrypt)
+void AES_file_op(const char *in_file, const char *out_file, const char *key, const int decrypt)
 {
     // http://www.linuxquestions.org/questions/programming-9/c-howto-read-binary-file-into-buffer-172985/
     FILE *file;
@@ -635,15 +657,12 @@ void AES_file_op(char *in_file, char *out_file, char *key, int decrypt)
 
     if(decrypt)
     {
-        printf("Decrypt\n");
         out_buffer = AES_decrypt(key, buffer, fileLen, out_buffer);
     }
     else
     {
-        printf("Encrypt\n");
         out_buffer = AES_encrypt(key, buffer, fileLen, out_buffer);
     }
-    printf("%s\n", out_buffer);
 
     file = fopen(out_file, "wb");
     if (!file)
@@ -658,15 +677,14 @@ void AES_file_op(char *in_file, char *out_file, char *key, int decrypt)
     free(out_buffer);
     free(buffer);
 }
-void AES_encrypt_file(char *in_file, char *out_file, char *key)
+void AES_encrypt_file(const char *in_file, const char *out_file, const char *key)
 {
     AES_file_op(in_file, out_file, key, 0);
 }
-void AES_decrypt_file(char *in_file, char *out_file, char *key)
+void AES_decrypt_file(const char *in_file, const char *out_file, const char *key)
 {
     AES_file_op(in_file, out_file, key, 1);
 }
-void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
 
 int AES_test()
 {
