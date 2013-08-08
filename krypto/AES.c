@@ -592,7 +592,82 @@ char *AES_dearmor16(char *armored, int N, char *dearmored)
     return dearmored;
 }
 
+void AES_file_op(char *in_file, char *out_file, char *key, int decrypt)
+{
+    // http://www.linuxquestions.org/questions/programming-9/c-howto-read-binary-file-into-buffer-172985/
+    FILE *file;
+    char *buffer;
+    unsigned long fileLen;
+    int tmp;
+    char *out_buffer;
+
+    //Open file
+    file = fopen(in_file, "rb");
+    if (!file)
+    {
+        fprintf(stderr, "Unable to open file %s", in_file);
+        return;
+    }
+
+    //Get file length
+    fseek(file, 0, SEEK_END);
+    fileLen=ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    tmp = fileLen % 16;
+    if(tmp)
+        fileLen += 16-tmp;
+
+    //Allocate memory
+    buffer=(char *)calloc(fileLen, sizeof(char));
+    if (!buffer)
+    {
+        fprintf(stderr, "Memory error!");
+        fclose(file);
+        return;
+    }
+
+    //Read file contents into buffer
+    fread(buffer, fileLen, 1, file);
+    fclose(file);
+
+    out_buffer = (char *) calloc(fileLen, sizeof(char));
+
+    if(decrypt)
+    {
+        printf("Decrypt\n");
+        out_buffer = AES_decrypt(key, buffer, fileLen, out_buffer);
+    }
+    else
+    {
+        printf("Encrypt\n");
+        out_buffer = AES_encrypt(key, buffer, fileLen, out_buffer);
+    }
+    printf("%s\n", out_buffer);
+
+    file = fopen(out_file, "wb");
+    if (!file)
+    {
+        fprintf(stderr, "Unable to open file %s", out_file);
+        return;
+    }
+
+    fwrite(out_buffer, 1, fileLen, file);
+    fclose(file);
+
+    free(out_buffer);
+    free(buffer);
+}
+void AES_encrypt_file(char *in_file, char *out_file, char *key)
+{
+    AES_file_op(in_file, out_file, key, 0);
+}
+void AES_decrypt_file(char *in_file, char *out_file, char *key)
+{
+    AES_file_op(in_file, out_file, key, 1);
+}
 void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
+
 int AES_test()
 {
     char *key, *text, *cipher, *klartext, *armored16, *dearmored16, *dearmdecrypt;
@@ -605,7 +680,7 @@ int AES_test()
 
     //~ text = "Hallo Welt";
     text = "Hallo Welt 1234";
-    text = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    text = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\n";
 
     // Length wird auf nächste volle 16 gerundet
     length = strlen(text);
@@ -631,6 +706,10 @@ int AES_test()
         printf("Test erfolgreich!\n");
         status = 0;
     }
+
+    //~ AES_encrypt_file("test.txt", "test.aes", key);
+    //~ AES_decrypt_file("test.aes", "test2.txt", key);
+
     free(key);
     free(cipher);
     free(klartext);
