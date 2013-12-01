@@ -63,7 +63,7 @@ static const int rcon[4][10] =
     { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }
 };
 
-static const int exptable[511] =
+static const int exptable[] =
  {  0x01, 0x03, 0x05, 0x0f, 0x11, 0x33, 0x55, 0xff, 0x1a, 0x2e, 0x72, 0x96, 0xa1, 0xf8, 0x13, 0x35,
     0x5f, 0xe1, 0x38, 0x48, 0xd8, 0x73, 0x95, 0xa4, 0xf7, 0x02, 0x06, 0x0a, 0x1e, 0x22, 0x66, 0xaa,
     0xe5, 0x34, 0x5c, 0xe4, 0x37, 0x59, 0xeb, 0x26, 0x6a, 0xbe, 0xd9, 0x70, 0x90, 0xab, 0xe6, 0x31,
@@ -98,7 +98,7 @@ static const int exptable[511] =
     0x12, 0x36, 0x5a, 0xee, 0x29, 0x7b, 0x8d, 0x8c, 0x8f, 0x8a, 0x85, 0x94, 0xa7, 0xf2, 0x0d, 0x17,
     0x39, 0x4b, 0xdd, 0x7c, 0x84, 0x97, 0xa2, 0xfd, 0x1c, 0x24, 0x6c, 0xb4, 0xc7, 0x52, 0xf6, 0x01 };
 
-static const int logtable[256] =
+static const int logtable[] =
  {  0x00, 0xff, 0x19, 0x01, 0x32, 0x02, 0x1a, 0xc6, 0x4b, 0xc7, 0x1b, 0x68, 0x33, 0xee, 0xdf, 0x03,
     0x64, 0x04, 0xe0, 0x0e, 0x34, 0x8d, 0x81, 0xef, 0x4c, 0x71, 0x08, 0xc8, 0xf8, 0x69, 0x1c, 0xc1,
     0x7d, 0xc2, 0x1d, 0xb5, 0xf9, 0xb9, 0x27, 0x6a, 0x4d, 0xe4, 0xa6, 0x72, 0x9a, 0xc9, 0x09, 0x78,
@@ -116,7 +116,8 @@ static const int logtable[256] =
     0x44, 0x11, 0x92, 0xd9, 0x23, 0x20, 0x2e, 0x89, 0xb4, 0x7c, 0xb8, 0x26, 0x77, 0x99, 0xe3, 0xa5,
     0x67, 0x4a, 0xed, 0xde, 0xc5, 0x31, 0xfe, 0x18, 0x0d, 0x63, 0x8c, 0x80, 0xc0, 0xf7, 0x70, 0x07 };
 
-static const char hextable[16] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+static const char hextable[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+static const char table64[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '#', '+'};
 
 static char * AESKeyGen(char *schluessel)
 {
@@ -459,68 +460,6 @@ void parse_key(const char *input_key, int key[4][44])
     }
 }
 
-//~ void AES_get_key_and_text(char *input_key, char *input_text, int encrypt)
-//~ {
-    //~ char *cipher, *klartext, *keyinput, *textinput;
-    //~ char *message;
-    //~ char schluessel[33];
-    //~ message = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
-    //~ textinput = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
-    //~ keyinput = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
-    //~ memcpy(keyinput, input_key, 32+2);
-    //~ memcpy(textinput, input_text, AES_MAX_TEXTLENGTH);
-    //~ if(!strlen(keyinput))
-    //~ {
-        //~ printf("Gib den Schlüssel 128 Bit ein in hex (32 Zeichen; zb '%s') oder '0' für einen zufälligen Schlüssel.\n", AESKeyGen(schluessel));
-        //~ fgets(keyinput, 32+2, stdin);
-        //~ keyinput[32]='\0';
-        //~ if(!strcmp(keyinput, "0\n"))
-        //~ {
-            //~ keyinput = AESKeyGen(schluessel);
-            //~ printf("zufälliger Schlüssel\n");
-        //~ }
-        //~ else if(strlen(keyinput) != 32)
-        //~ {
-            //~ while(strlen(keyinput) != 32)
-            //~ {
-                //~ printf("Der Schlüssel ist keine 32 Hex Zeichen (128 Bit) lang\n versuchs nochmal, oder gebe '0' ein für einen automatisch generierten Schlüssel\n");
-                //~ fgets(keyinput, 32+2, stdin);
-                //~ keyinput[32]='\0';
-            //~ }
-        //~ }
-//~
-        //~ printf("Dein Schluessel: %s\n",keyinput);
-    //~ }
-    //~ if(encrypt)
-    //~ {
-        //~ if(!strlen(textinput))
-        //~ {
-            //~ printf("Gib jetzt die zu verschlüsselnde Nachricht ein.\n");
-            //~ fgets(message, AES_MAX_TEXTLENGTH, stdin);
-            //~ memcpy(textinput, message, AES_MAX_TEXTLENGTH);
-            //~ printf("Der zu verschlüsselnde Text:\n%s\n",textinput);
-        //~ }
-        //~ cipher = (char *) calloc(AES_MAX_TEXTLENGTH*2, sizeof(char));
-        //~ cipher = AES_encrypt(keyinput, textinput, cipher);
-        //~ printf("%s\n", cipher);
-        //~ free(cipher);
-    //~ }
-    //~ else
-    //~ {
-        //~ if(!strlen(textinput))
-        //~ {
-            //~ printf("Gib jetzt die zu entschlüsselnde Nachricht ein.\n");
-            //~ fgets(message, AES_MAX_TEXTLENGTH, stdin);
-            //~ memcpy(textinput, message, AES_MAX_TEXTLENGTH);
-            //~ printf("Der zu entschlüsselnde Text:\n%s\n",textinput);
-        //~ }
-        //~ klartext = (char *) calloc(AES_MAX_TEXTLENGTH, sizeof(char));
-        //~ klartext = AES_decrypt(keyinput, textinput, klartext);
-        //~ printf("%s\n", klartext);
-        //~ free(klartext);
-    //~ }
-//~ }
-
 char *AES_encrypt(const char *input_key, const char *input_text, const int N, char *cipher)
 {
     char array[4][4];
@@ -742,8 +681,8 @@ int AES_test()
         status = 0;
     }
 
-    //~ AES_encrypt_file("test.txt", "test.aes", key);
-    //~ AES_decrypt_file("test.aes", "test2.txt", key);
+    AES_encrypt_file("test5.mp4", "test5.aes", key);
+    AES_decrypt_file("test5.aes", "test5.mp4", key);
 
     free(key);
     free(cipher);

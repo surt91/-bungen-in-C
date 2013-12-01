@@ -255,12 +255,12 @@ int menu(int argc, char **argv)
         case KRYPTO:
             switch (aufgnr)
             {
-                case 1:
-                    AES_get_key_and_text("", "", 1);
-                    break;
-                case 2:
-                    AES_get_key_and_text("", "", 0);
-                    break;
+                //~ case 1:
+                    //~ AES_get_key_and_text("", "", 1);
+                    //~ break;
+                //~ case 2:
+                    //~ AES_get_key_and_text("", "", 0);
+                    //~ break;
                 case 3:
                     AES_test();
                     break;

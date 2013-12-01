@@ -79,8 +79,8 @@ void help( int chap )
             if(chap==GAME) break;
         case KRYPTO:
             printf("\nKapitel %d: Krypto\n\n",KRYPTO);
-            printf("%d\t 1\t//AES encrypt\n",KRYPTO);
-            printf("%d\t 2\t//AES decrypt\n",KRYPTO);
+            //~ printf("%d\t 1\t//AES encrypt\n",KRYPTO);
+            //~ printf("%d\t 2\t//AES decrypt\n",KRYPTO);
             printf("%d\t 3\t//AES test\n",KRYPTO);
             printf("TODO\n");
             if(chap==KRYPTO) break;
