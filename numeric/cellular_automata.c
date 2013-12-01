@@ -1,5 +1,5 @@
 #include "cellular_automata.h"
-#define CAIRO_SCALE 15
+#define CAIRO_SCALE 1
 
 // returns 0, if every entry is 0, else 1
 int ca_get_next_status(uint8_t *status, int x, uint8_t rule)
@@ -9,6 +9,8 @@ int ca_get_next_status(uint8_t *status, int x, uint8_t rule)
     uint8_t *tmp_status;
     uint8_t l,c,r;
     uint8_t pack;
+
+    int periodic_boundary = 1;
 
     tmp_status = (uint8_t *) calloc(x, sizeof(uint8_t));
 
@@ -25,16 +27,25 @@ int ca_get_next_status(uint8_t *status, int x, uint8_t rule)
 
     for(i=0;i<x;i++)
     {
-        // periodische RB
         if(i-1 >= 0)
             l = status[i-1];
         else
-            l = status[x-1];
+        {
+            if(periodic_boundary)
+                l = status[x-1];
+            else
+                l = 0;
+        }
         c = status[i];
         if(i+1 < x)
             r = status[i+1];
         else
-            r = status[0];
+        {
+            if(periodic_boundary)
+                r = status[0];
+            else
+                r = 0;
+        }
 
         // pack bytes
         pack = ((l & 1) << 2) | ((c & 1) << 1) | (r & 1);
@@ -100,14 +111,69 @@ void ca_print_on_stdout(uint8_t *out, int x, int y)
     }
 }
 
-void ca_main(uint8_t rule, int x, int y, uint8_t *out)
+int ca_paint(uint8_t *out, int x, int y, char *filename)
+{
+    int i, j;
+    cairo_surface_t *surface;
+    cairo_t *cr;
+
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, CAIRO_SCALE*x, CAIRO_SCALE*y);
+    cr = cairo_create (surface);
+    cairo_scale (cr, CAIRO_SCALE, CAIRO_SCALE);
+
+    /* weißer Hintergrund */
+    cairo_set_source_rgb (cr, 1, 1, 1);
+    //~ cairo_set_source_rgb (cr, 0, 0, 0);
+    cairo_paint (cr);
+
+    /* Drawing code goes here */
+    //~ cairo_set_source_rgb (cr, 0, 0, 0);
+    cairo_set_source_rgb (cr, 0, 1, 0);
+    for(j=0; j < y; j++)
+        for(i=0; i < x ; i++)
+            if(out[i+x*j])
+                cairo_rectangle (cr, i, j, 1, 1);
+    cairo_fill (cr);
+
+    /* Write output and clean up */
+    cairo_surface_write_to_png (surface, filename);
+    cairo_destroy (cr);
+    cairo_surface_destroy (surface);
+
+    return 0;
+}
+
+void ca_init_status_random(uint8_t *status, int x)
+{
+    int i;
+    for(i=0;i<x;i++)
+    {
+        status[i] = !(rand()%100);
+    }
+}
+
+void ca_init_status_seed(uint8_t *status, int x)
+{
+    int i;
+    for(i=0;i<x;i++)
+    {
+        status[i] = 0;
+    }
+    status[x/2] = 1;
+}
+
+void ca_main(uint8_t rule, int x, int y, uint8_t *out, int random_seed)
 {
     int i;
 
     uint8_t *status;
 
-    status = (uint8_t *) calloc( x, sizeof(uint8_t));
-    status[x/2] = 1;
+    status = (uint8_t *) malloc(x * sizeof(uint8_t));
+
+    if(random_seed)
+        ca_init_status_random(status, x);
+    else
+        ca_init_status_seed(status, x);
 
     for(i=0;i<y;i++)
     {
@@ -118,18 +184,34 @@ void ca_main(uint8_t rule, int x, int y, uint8_t *out)
     free(status);
 }
 
-void ca_90()
+void ca_every_rule()
 {
     uint8_t *out;
 
-    int x = 201;
-    int y = 100;
+    int x = 2001;
+    int y = 1000;
+
+    uint8_t rule;
+    char filename[40];
+
+    int i;
+    int random;
 
     out = (uint8_t *) calloc( x * y, sizeof(uint8_t));
 
-    ca_main(90, x, y, out);
+    for(random=0;random<=1;random++)
+        for(i=0;i<256;i++)
+        {
+            rule = i;
+            if(random)
+                sprintf(filename, "wolfram/wolfram_random_seed_rule_%03d.png", rule);
+            else
+                sprintf(filename, "wolfram/wolfram_rule_%03d.png", rule);
 
-    ca_print_on_stdout(out, x, y);
+            ca_main(rule, x, y, out, random);
+
+            ca_paint(out, x, y, filename);
+        }
 
     free(out);
 }

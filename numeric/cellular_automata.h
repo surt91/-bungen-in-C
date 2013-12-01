@@ -7,14 +7,6 @@
 #include <stdint.h>
 #include <cairo/cairo.h>
 
-typedef struct
-{
-    uint8_t rule;
-    uint8_t *status;
-    int x;
-    int gen;
-} ca_line_t;
-
-void ca_90();
+void ca_every_rule();
 
 #endif //CELLULAR_AUTOMATA_H

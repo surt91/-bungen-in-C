@@ -251,7 +251,7 @@ int menu(int argc, char **argv)
                     conway_random();
                     break;
                 case 6:
-                    ca_90();
+                    ca_every_rule();
                     break;
             }
             break;
