@@ -1,6 +1,6 @@
 ONUM	= numeric/mat.o numeric/mat_aufruf.o numeric/runge_kutta.o \
 		  numeric/plot_time_series.o numeric/rk4_lorenz.o \
-		  numeric/fft.o numeric/n_harm_osz.o
+		  numeric/fft.o numeric/n_harm_osz.o \
 OTRIVIA	= trivia/trivia.o trivia/trivia_aufruf.o trivia/benchmark.o
 OUHR	= trivia/bin_uhr.o
 OZUFALL	= zufall/random.o zufall/random_aufruf.o

@@ -124,7 +124,7 @@ void help( int chap )
             printf("%d\t 2\t//HWSS, 100x20, 200Gen\n",CONWAY);
             printf("%d\t 3\t//Pulsator, 30x30, 15Gen\n",CONWAY);
             printf("%d\t 4\t//stabil, 19x19, 19Gen\n",CONWAY);
-            printf("%d\t 3\t//Ramdom, 100x100, 300Gen\n",CONWAY);
+            printf("%d\t 5\t//Ramdom, 100x100, 300Gen\n",CONWAY);
             if(chap==CONWAY) break;
     }
 }
