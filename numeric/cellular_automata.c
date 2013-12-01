@@ -80,7 +80,6 @@ int ca_get_next_status(uint8_t *status, int x, uint8_t rule)
             case 0b110:
                 if(rule & 1<<6)
                     tmp_status[i] = 1;
-
                 break;
             case 0b111:
                 if(rule & 1<<7)
@@ -123,12 +122,10 @@ int ca_paint(uint8_t *out, int x, int y, char *filename)
 
     /* weißer Hintergrund */
     cairo_set_source_rgb (cr, 1, 1, 1);
-    //~ cairo_set_source_rgb (cr, 0, 0, 0);
     cairo_paint (cr);
 
     /* Drawing code goes here */
-    //~ cairo_set_source_rgb (cr, 0, 0, 0);
-    cairo_set_source_rgb (cr, 0, 1, 0);
+    cairo_set_source_rgb (cr, 0, 0, 0);
     for(j=0; j < y; j++)
         for(i=0; i < x ; i++)
             if(out[i+x*j])
@@ -229,8 +226,11 @@ void ca_cli()
     printf("Rule? ");
     scanf("%d", &tmp);
 
-    if(tmp>255)
+    if(tmp > 255 || tmp < 0)
+    {
+        printf("Rules must be 8bit integers, i.e. between 0 and 255.");
         return;
+    }
     else
         rule = (uint8_t) tmp;
 
