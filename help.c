@@ -126,6 +126,7 @@ void help( int chap )
             printf("%d\t 4\t//stabil, 19x19, 19Gen\n",CONWAY);
             printf("%d\t 5\t//Ramdom, 100x100, 300Gen\n",CONWAY);
             printf("%d\t 6\t//Wolfram every Rule\n",CONWAY);
+            printf("%d\t 7\t//Wolfram CLI\n",CONWAY);
             if(chap==CONWAY) break;
     }
 }

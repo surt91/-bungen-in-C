@@ -215,3 +215,30 @@ void ca_every_rule()
 
     free(out);
 }
+
+void ca_cli()
+{
+    uint8_t *out;
+
+    int x = 81;
+    int y = 40;
+
+    uint8_t rule;
+    int tmp;
+
+    printf("Rule? ");
+    scanf("%d", &tmp);
+
+    if(tmp>255)
+        return;
+    else
+        rule = (uint8_t) tmp;
+
+    out = (uint8_t *) calloc( x * y, sizeof(uint8_t));
+
+    ca_main(rule, x, y, out, 0);
+
+    ca_print_on_stdout(out, x, y);
+
+    free(out);
+}

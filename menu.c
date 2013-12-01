@@ -253,6 +253,9 @@ int menu(int argc, char **argv)
                 case 6:
                     ca_every_rule();
                     break;
+                case 7:
+                    ca_cli();
+                    break;
             }
             break;
         case KRYPTO:
