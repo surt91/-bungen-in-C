@@ -250,6 +250,9 @@ int menu(int argc, char **argv)
                 case 5:
                     conway_random();
                     break;
+                case 6:
+                    ca_90();
+                    break;
             }
             break;
         case KRYPTO:

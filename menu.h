@@ -20,6 +20,7 @@
 #include "numeric/rk4_lorenz.h"
 #include "numeric/fft.h"
 #include "numeric/n_harm_osz.h"
+#include "numeric/cellular_automata.h"
 
 //~ int menu(int argc, char **argv);
 
